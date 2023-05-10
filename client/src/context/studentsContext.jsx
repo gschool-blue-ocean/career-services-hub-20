@@ -29,6 +29,7 @@ export function StudentsContextProvider ({children}) {
         fetchData();
     }, []);
 
+
     return(
         <StudentsContext.Provider value={{studentsData}}>
             {children}

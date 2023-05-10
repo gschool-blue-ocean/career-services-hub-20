@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import { StudentsContext } from '../../context/studentsContext';
+import AddStudent from './AddStudentCard';
 import StudentCard from './StudentCard';
 import './StudentCardList.css'
 
@@ -42,6 +43,7 @@ console.log(students);
     return (
         <>
             <div className='student-card-container'>
+                <AddStudent />
                 {filterStudents != null ? filteredStudents.map((student) => {
                     console.log(student);
                 return(
