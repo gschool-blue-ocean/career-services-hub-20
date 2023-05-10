@@ -25,10 +25,9 @@ const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI
         </div>
         <div className='student-tracker-modal-milestones'>
             {student.milestones.map((milestone)=> {
-                {console.log(milestone);}
                 return (
-                <div className='student-tracker-modal-individual-milestone'>
-                    <label for={milestone.mile_name}>{milestone.mile_name}:</label>
+                <div className='student-tracker-modal-individual-milestone' key={milestone.mile_id}>
+                    <label htmlFor={milestone.mile_name}>{milestone.mile_name}:</label>
                     <select id={milestone.mile_name} name={milestone.mile_name}>
                     {/* <span className='student-tracker-modal-individual-milestone-name'>{milestone.mile_name}:</span> */}
                     {/* <span className='student-tracker-modal-individual-milestone-progress'> {milestone.progress_stat}</span> */}
@@ -48,13 +47,13 @@ const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI
         </div>
 
             <div className='student-tracker-modal-career-status'>
-                    <label for='career-status'>Career Status:</label>
+                    <label htmlFor='career-status'>Career Status:</label>
                     <select name='Career Status'>
                     <option value={student.career_status}>{student.career_status}</option>
                     {careerStatusOptions.map((option) =>{
                         if (option != student.career_status){
                             return (
-                                <option value={option}>{option}</option>
+                                <option key={option} value={option}>{option}</option>
                             )
                         }   
                     })}
@@ -63,13 +62,13 @@ const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI
                 </div>
 
                 <div className='student-tracker-modal-course-status'>
-                    <label for='course-status'>Course Status:</label>
+                    <label htmlFor='course-status'>Course Status:</label>
                     <select name='Course Status'>
                     <option value={student.course_status}>{student.course_status}</option>
                     {courseStatusOptions.map((option) =>{
                         if (option != student.course_status){
                             return (
-                                <option value={option}>{option}</option>
+                                <option key={option} value={option}>{option}</option>
                             )
                         }   
                     })}
@@ -78,13 +77,13 @@ const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI
                 </div>
 
                 <div className='student-tracker-modal-clearance-status'>
-                    <label for='clearance-status'>Clearance Status:</label>
+                    <label htmlFor='clearance-status'>Clearance Status:</label>
                     <select name='Clearance Status'>
                     <option value={student.sec_clearance}>{student.sec_clearance}</option>
                     {clearanceStatusOptions.map((option) =>{
                         if (option != student.sec_clearance){
                             return (
-                                <option value={option}>{option}</option>
+                                <option key={option} value={option}>{option}</option>
                             )
                         }   
                     })}

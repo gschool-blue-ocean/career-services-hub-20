@@ -1,5 +1,5 @@
 .student-card {
-    
+    color: white;
     height: fit-content;
     width: 150px;
     border: none;
@@ -26,7 +26,6 @@
     cursor: pointer;
     transform: scale(1.05);
     background-color:rgb(68, 66, 66);
-    color: white;
 
     transition: ease 0.4s;
 }

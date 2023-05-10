@@ -12,6 +12,10 @@
     align-content: center;
 }
 
+#add-card:hover > #add-card-name{
+    color: white;
+}
+
 #add-card:hover{
     cursor: pointer;
     transform: scale(1.05);
@@ -22,13 +26,13 @@
 }
 
 #add-card-name {
+    color: black;
     display:block;
     font-size: 70px;;
     margin:5%;
     border:none;
     border-radius:10px;
     white-space: nowrap;
-    padding-top: 5%;
     padding-left: 26%;
     background: none;   
 }
