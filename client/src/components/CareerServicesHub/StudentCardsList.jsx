@@ -6,7 +6,7 @@ import './StudentCardList.css'
 export default function StudentCardslist ({ currentCohort, currentClearance, currentStatus, milestoneDocument, currentMilestonStatus }) {
 const studentContext = useContext(StudentsContext);
 const students = studentContext.studentsData;
-console.log(students);
+//console.log(students);
 
     // Filter the list of students based on the current cohort or clearance level
     const filterStudents = (students, currentCohort, currentClearance, currentStatus, milestoneDocument, currentMilestonStatus) => {
@@ -43,7 +43,7 @@ console.log(students);
         <>
             <div className='student-card-container'>
                 {filterStudents != null ? filteredStudents.map((student) => {
-                    console.log(student);
+                    {/* console.log(student); */}
                 return(
                     <div key={student.student_id}>
                         <StudentCard  student={student}/>
