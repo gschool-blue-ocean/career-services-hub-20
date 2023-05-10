@@ -9,6 +9,7 @@ import Export from './Export';
 import '../filter.css';
 import Filter_Modal from './Filter_Modal';
 import Filter from './Filter_Com';
+import SearchBar from './SearchFunction/Search';
 
 export default function CareerServicesHub() {
 
@@ -30,6 +31,11 @@ export default function CareerServicesHub() {
   const managersContext = useContext(ManagersContext);
   const managers = managersContext.managersData;
   console.log(managers);
+
+  const handleSearch = (searchTerm) => {
+    console.log('Search Term:', searchTerm);
+    // Perform your search logic here
+  };
 
   return (
     <div>
@@ -63,6 +69,7 @@ export default function CareerServicesHub() {
           />
         </Filter_Modal>
       </div>
+      <SearchBar onSearch={handleSearch} />
       <StudentCardsList
         currentCohort={currentCohort}
         currentClearance={currentClearance}
