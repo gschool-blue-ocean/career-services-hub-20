@@ -79,9 +79,9 @@ app.patch("/students/:id", async (req, res, next) => {
 app.delete("/students/:id", async (req, res, next) => {
   const id = req.params.id;
 
-   await db.query("DELETE FROM milestone WHERE milestone.student_id = $1", [id])
+  await db.query("DELETE FROM milestone WHERE milestone.student_id = $1", [id])
 
-   await db.query("DELETE FROM student WHERE student.student_id = $1", [id])
+  await db.query("DELETE FROM student WHERE student.student_id = $1", [id])
     .catch(next);
   res.send('Sucessfully Deleted Student Record!');
 })

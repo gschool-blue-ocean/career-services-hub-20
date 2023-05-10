@@ -24,7 +24,6 @@ const App = () => {
   const handleLogin = (info) => {
     setShowTransition(true);
     setLoggedInfo(info);
-    navigate("/mainpage");
   };
 
   return (
