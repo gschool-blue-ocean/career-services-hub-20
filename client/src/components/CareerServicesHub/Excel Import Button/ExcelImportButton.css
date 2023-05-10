@@ -3,5 +3,6 @@
 }
 
 .modal-on{
-    display: grid;
+    display: flex;
+    position: fixed;
 }

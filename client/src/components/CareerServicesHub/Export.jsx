@@ -6,7 +6,6 @@ function Export({ currentCohort, setCurrentCohort }) {
 
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
-  console.log(students);
 
   const fields = ['cohort', 'student_first', 'student_last', 'sec_clearance', 'career_status', 'course_status'];
   const milestoneFields = [{ name: 'mile_name' }, { name: 'progress_stat' }];
@@ -34,6 +33,7 @@ function Export({ currentCohort, setCurrentCohort }) {
     <div>
       <button
         onClick={onExportToCsv}
+        className='header-buttons'
       >
         Export to CSV
       </button>

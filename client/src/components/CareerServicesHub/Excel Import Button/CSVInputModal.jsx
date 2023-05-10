@@ -99,7 +99,7 @@ export default function CSVInput({ handleButtonClick }) {
                   <option>Select a Career Service Manager</option>
                       {managers.map((manager) => {
                         return(
-                          <option value={manager.tscm_id}>{manager.tscm_first}, {manager.tscm_last} </option>
+                          <option value={manager.tscm_id} key={manager.tscm_id}>{manager.tscm_first}, {manager.tscm_last} </option>
                         )
                       })}
                 </select> 
