@@ -3,6 +3,7 @@ import { EventsContext } from '../../context/eventsContext';
 import { StudentsContext } from '../../context/studentsContext';
 import { ManagersContext } from '../../context/managersContext';
 import StudentCardsList from './StudentCardsList';
+import './CareerServicesHub.css'
 
 import ExcelImportButton from './Excel Import Button/ExcelImportButton'
 import Export from './Export';
@@ -32,16 +33,17 @@ export default function CareerServicesHub() {
   console.log(managers);
 
   return (
-    <div>
-      < ExcelImportButton />
-      <Export 
-        currentCohort={currentCohort}
-        setCurrentCohort={setCurrentCohort}
-      />
-      <div className='filt_wrapper'>
+    <div>      
+      <div className='filt-wrapper'>
+        < ExcelImportButton />
+        <Export 
+          currentCohort={currentCohort}
+          setCurrentCohort={setCurrentCohort}
+        />
         <button 
           id='filterBtn'
           onClick={() => setFilterOpen(true)}
+          className='header-buttons'
         >
           Filter
         </button>
