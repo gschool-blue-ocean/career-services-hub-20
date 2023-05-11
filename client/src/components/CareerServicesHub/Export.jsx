@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import exportFromJSON from 'export-from-json';
 import { StudentsContext } from '../../context/studentsContext';
 
-function Export({ currentCohort, setCurrentCohort }) {
+function Export({ currentCohort, currentClearance, currentStatus, milestoneDocument, currentMilestonStatus, filterStudents}) {
 
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
@@ -12,8 +12,10 @@ function Export({ currentCohort, setCurrentCohort }) {
   const milestoneColumns = milestoneFields.map(field => `milestones.${field.name}`);
   const allFields = fields.concat(milestoneColumns);
 
+  const filteredStudents = filterStudents(students, currentCohort, currentClearance, currentStatus, milestoneDocument, currentMilestonStatus);
+
   const onExportToCsv = () => {
-    const selectedCohort = students.filter(student => student.cohort === currentCohort)
+    const selectedStudents = filteredStudents
       .flatMap(student => {
         return student.milestones.map(milestone => ({
           ...student,
@@ -22,7 +24,7 @@ function Export({ currentCohort, setCurrentCohort }) {
         }))
     });
 
-    const data = selectedCohort;
+    const data = selectedStudents;
     const fileName = `${currentCohort}_report`;
     const exportType = exportFromJSON.types.csv;
 

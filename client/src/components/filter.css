@@ -15,8 +15,8 @@
 
 .filt_modal{
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 36%;
+    left: 70%;
     height: 50%;
     width: 50%;
     transform: translate(-50%, -50%);
