@@ -8,8 +8,8 @@ const students = studentContext.studentsData;
 
 const milestoneProgressOptions = ['Un-Satisfactory', 'In-Progress', 'Completed'];
 const careerStatusOptions = ['Searching', 'Hired', 'Not Started'];
-const courseStatusOptions = ['Student', 'Graduate']
-const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI']
+const courseStatusOptions = ['Student', 'Graduate'];
+const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI'];
 
   return (
     <>
@@ -29,8 +29,6 @@ const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI
                 <div className='student-tracker-modal-individual-milestone' key={milestone.mile_id}>
                     <label htmlFor={milestone.mile_name}>{milestone.mile_name}:</label>
                     <select id={milestone.mile_name} name={milestone.mile_name}>
-                    {/* <span className='student-tracker-modal-individual-milestone-name'>{milestone.mile_name}:</span> */}
-                    {/* <span className='student-tracker-modal-individual-milestone-progress'> {milestone.progress_stat}</span> */}
                     <option value={milestone.progress_stat}>{milestone.progress_stat}</option>
                     {milestoneProgressOptions.map((option) =>{
                         if (option != milestone.progress_stat){

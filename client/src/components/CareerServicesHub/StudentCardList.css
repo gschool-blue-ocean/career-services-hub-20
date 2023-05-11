@@ -2,7 +2,7 @@
   display: grid;
   width: 90vw;
   height: 50vh;
-  /* background: linear-gradient(rgb(21, 4, 89) 22%, rgb(247, 130, 24) 100%); */
+  background: rgba(126, 125, 125, 0.247);
   overflow: auto;
 
   padding: 15px;
