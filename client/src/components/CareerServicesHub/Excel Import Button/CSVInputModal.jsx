@@ -82,10 +82,10 @@ export default function CSVInput({ handleButtonClick }) {
 
   return (
     <>
-      <div className='modal-backdrop'>
+      <div className='modal-backdrop' onClick={handleButtonClick}>
+      </div>  
         <div className = 'import-modal-container'>
           <span className='exit-button' onClick={handleButtonClick}> X </span>
-          <h2 className='import-modal-header'> Bulk Add Students </h2>
           <div className='import-modal-description-container'>
             <span className='import-modal-description-text'> Please choose a MCSP/Career Service Manager and upload a .csv file with information about the students</span>
             <a className='import-modal-description-text'> Click here for a excel template </a>
@@ -112,8 +112,7 @@ export default function CSVInput({ handleButtonClick }) {
           <div className={resultsToggle ? 'container-on' : 'container-off'}>
               <ImportResults handleButtonClick={handleButtonClick} newStudents={newStudents} importManager={importManager} importMCSP={importMCSP}/>
           </div>
-        </div>        
-      </div>  
+        </div>  
     </>
     
   )
