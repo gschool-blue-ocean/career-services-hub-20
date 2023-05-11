@@ -6,7 +6,7 @@ import { EventsContextProvider } from '../../context/eventsContext'
 import { StudentsContextProvider } from '../../context/studentsContext'
 import { ManagersContextProvider } from '../../context/managersContext'
 import CareerServicesHub from '../CareerServicesHub/CareerServicesHub'
-import LogInPage from '../logIn/logInPage';
+import LogInPage from "../logIn/loginPage";
 
 const App = () => {
   const [loggedInfo, setLoggedInfo] = useState("");
@@ -23,7 +23,6 @@ const App = () => {
   const handleLogin = (info) => {
     setShowTransition(true);
     setLoggedInfo(info);
-    navigate("/mainpage");
   };
 
   return (
@@ -31,8 +30,9 @@ const App = () => {
       <EventsContextProvider>
         <StudentsContextProvider>
           <ManagersContextProvider>
-            <Routes>
-              <Route
+            {/* <Routes> */}
+            <CareerServicesHub />
+              {/* <Route
                 path="/"
                 element={
                   loggedInfo ? (
@@ -42,8 +42,8 @@ const App = () => {
                   )
                 }
               />
-              <Route path="/mainpage" element={<CareerServicesHub />} />
-            </Routes>
+              <Route path="/mainpage" element={<CareerServicesHub />} /> */}
+            {/* </Routes> */}
           </ManagersContextProvider>
         </StudentsContextProvider>
       </EventsContextProvider>

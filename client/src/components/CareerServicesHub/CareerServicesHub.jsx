@@ -10,6 +10,7 @@ import Export from './Export';
 import '../filter.css';
 import Filter_Modal from './Filter_Modal';
 import Filter from './Filter_Com';
+import SearchBar from './SearchFunction/Search';
 
 export default function CareerServicesHub() {
 
@@ -20,18 +21,23 @@ export default function CareerServicesHub() {
   const [currentMilestonStatus, setCurrentMilestonStatus] = useState('');
   const [milestoneDocument, setMilestoneDocument] = useState('');
   const [educationStatus, setEducationStatus] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const eventContext = useContext(EventsContext);
   const events = eventContext.eventsData;
-  console.log(events);
+  console.log('events', events);
 
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
-  console.log(students);
+  console.log('students', students);
 
   const managersContext = useContext(ManagersContext);
   const managers = managersContext.managersData;
-  console.log(managers);
+  console.log('managers', managers);
+
+  const handleSearch = (searchTerm) => {
+    setSearchTerm(searchTerm);
+};
 
   // Filter the list of students based on the current cohort or clearance level
   const filterStudents = (students, currentCohort, currentClearance, currentStatus, milestoneDocument, currentMilestonStatus) => {
@@ -42,7 +48,7 @@ export default function CareerServicesHub() {
     let filteredStudent = students;
 
     if (currentCohort) {
-     filteredStudent = filteredStudent.filter(student => student.cohort === currentCohort);
+      filteredStudent = filteredStudent.filter(student => student.cohort === currentCohort);
     }
 
     if (currentClearance){
@@ -64,6 +70,14 @@ export default function CareerServicesHub() {
         }));
       });
     }
+
+    if (searchTerm) {
+      setSearchTerm(searchTerm.toLowerCase());
+      filteredStudent = filteredStudent.filter(student =>
+          student.student_first.toLowerCase().includes(searchTerm) ||
+          student.student_last.toLowerCase().includes(searchTerm)
+      );
+  }
 
     return filteredStudent;
 
@@ -108,6 +122,7 @@ export default function CareerServicesHub() {
             setEducationStatus={setEducationStatus}
           />
         </Filter_Modal>
+        <SearchBar onSearch={handleSearch} />
       </div>
       <StudentCardsList
         currentCohort={currentCohort}

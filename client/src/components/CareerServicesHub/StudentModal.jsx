@@ -11,7 +11,7 @@ const careerStatusOptions = ['Searching', 'Hired', 'Not Started'];
 const courseStatusOptions = ['Student', 'Graduate']
 const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI']
 
-  return (
+    return (
     <>
     <div onClick={handleModalToggle} className='student-backdrop'>
     </div>
