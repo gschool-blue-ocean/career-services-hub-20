@@ -18,6 +18,7 @@ CREATE TABLE student (
   sec_clearance TEXT,
   career_status TEXT,
   course_status TEXT,
+  college_degree TEXT,
   tscm_id INTEGER NOT NULL,
   FOREIGN KEY (tscm_id) REFERENCES service_manager (tscm_id)
 );
