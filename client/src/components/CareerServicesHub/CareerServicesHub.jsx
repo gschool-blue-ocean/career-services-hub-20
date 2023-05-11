@@ -70,8 +70,8 @@ export default function CareerServicesHub() {
             setMilestoneDocument={setMilestoneDocument}
           />
         </Filter_Modal>
+        <SearchBar onSearch={handleSearch} />
       </div>
-      <SearchBar onSearch={handleSearch} />
       <StudentCardsList
         currentCohort={currentCohort}
         currentClearance={currentClearance}
