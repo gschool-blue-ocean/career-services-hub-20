@@ -14,7 +14,6 @@ export function StudentsContextProvider ({children}) {
 
                 for (const student of students) {
                     const milestonesResponse = await fetch(`https://career-services-server.onrender.com/students/${student.student_id}/milestones`);
-                    console.log(milestonesResponse)
                     const milestones = await milestonesResponse.json();
                     student.milestones = milestones;
                     fullStudents.push(student);
