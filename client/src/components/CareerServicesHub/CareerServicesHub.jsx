@@ -7,7 +7,7 @@ import './CareerServicesHub.css'
 
 import ExcelImportButton from './Excel Import Button/ExcelImportButton'
 import Export from './Export';
-import '../filter.css';
+import './filter.css';
 import Filter_Modal from './Filter_Modal';
 import Filter from './Filter_Com';
 import SearchBar from './SearchFunction/Search';
