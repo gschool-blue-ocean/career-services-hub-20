@@ -19,6 +19,7 @@ export default function CareerServicesHub() {
   const [currentStatus, setCurrentStatus] = useState('');
   const [currentMilestonStatus, setCurrentMilestonStatus] = useState('');
   const [milestoneDocument, setMilestoneDocument] = useState('');
+  const [educationStatus, setEducationStatus] = useState('');
 
   const eventContext = useContext(EventsContext);
   const events = eventContext.eventsData;
@@ -32,13 +33,53 @@ export default function CareerServicesHub() {
   const managers = managersContext.managersData;
   console.log(managers);
 
+  // Filter the list of students based on the current cohort or clearance level
+  const filterStudents = (students, currentCohort, currentClearance, currentStatus, milestoneDocument, currentMilestonStatus) => {
+    if(!students){
+        return [];
+    }
+
+    let filteredStudent = students;
+
+    if (currentCohort) {
+     filteredStudent = filteredStudent.filter(student => student.cohort === currentCohort);
+    }
+
+    if (currentClearance){
+      filteredStudent = filteredStudent.filter(student => student.sec_clearance === currentClearance);
+    }
+
+    if (currentStatus){
+      filteredStudent = filteredStudent.filter(student => student.course_status === currentStatus);
+    }
+    
+    if (milestoneDocument && currentMilestonStatus) {
+      filteredStudent = filteredStudent.flatMap(student => {
+        return student.milestones.filter(milestone => {
+          return milestone.mile_name === milestoneDocument && milestone.progress_stat === currentMilestonStatus;
+        }).map(milestone => ({
+          ...student,
+          mile_name: milestone.mile_name,
+          progress_stat: milestone.progress_stat,
+        }));
+      });
+    }
+
+    return filteredStudent;
+
+  };
+
   return (
     <div>      
       <div className='filt-wrapper'>
         < ExcelImportButton />
         <Export 
           currentCohort={currentCohort}
-          setCurrentCohort={setCurrentCohort}
+          currentClearance={currentClearance}
+          currentStatus={currentStatus}
+          milestoneDocument={milestoneDocument}
+          currentMilestonStatus={currentMilestonStatus}
+          filterStudents={filterStudents}
         />
         <button 
           id='filterBtn'
@@ -50,6 +91,7 @@ export default function CareerServicesHub() {
         <Filter_Modal
           filterOpen={filterOpen}
           onClose={() => setFilterOpen(false)}
+          filterStudents={filterStudents}
         >
           <Filter 
             currentCohort={currentCohort}
@@ -62,6 +104,8 @@ export default function CareerServicesHub() {
             setCurrentMilestonStatus={setCurrentMilestonStatus}
             milestoneDocument={milestoneDocument}
             setMilestoneDocument={setMilestoneDocument}
+            educationStatus={educationStatus}
+            setEducationStatus={setEducationStatus}
           />
         </Filter_Modal>
       </div>
@@ -71,6 +115,7 @@ export default function CareerServicesHub() {
         currentStatus={currentStatus}
         milestoneDocument={milestoneDocument}
         currentMilestonStatus={currentMilestonStatus}
+        filterStudents={filterStudents}
       />
     </div>
   )
