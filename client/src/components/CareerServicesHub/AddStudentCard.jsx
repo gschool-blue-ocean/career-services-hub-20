@@ -16,7 +16,7 @@ function AddStudent() {
     }
   
     return (
-      <div onClick={handleAddStudentModalToggle} className="btnWrapper" id="add-card">
+      <div className="btnWrapper" id="add-card">
         <button onClick={handleAddStudentModalToggle} id="add-card-name">
           &#x271A;
         </button>
