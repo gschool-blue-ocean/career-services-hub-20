@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import '../filter.css';
+import './filter.css';
 
 function Filter({ currentCohort, setCurrentCohort, currentClearance, setCurrentClearance, currentStatus, setCurrentStatus,
             currentMilestonStatus, setCurrentMilestonStatus, milestoneDocument, setMilestoneDocument, educationStatus, setEducationStatus }) {
