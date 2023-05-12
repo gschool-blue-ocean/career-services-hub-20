@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef } from "react";
 import "./AddStudentCard.css";
-import { ManagersContext } from "../../context/managersContext";
-import { StudentsContext } from "../../context/studentsContext";
+import { ManagersContext } from "../../../context/managersContext";
+import { StudentsContext } from "../../../context/studentsContext";
 
 function AddStudentInfo({ setAddStudent }) {
   const [currentClearance, setCurrentClearance] = useState("");

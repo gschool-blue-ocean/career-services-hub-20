@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
-import { StudentsContext } from '../../context/studentsContext';
-import AddStudent from './AddStudentCard';
+import { StudentsContext } from '../../../context/studentsContext';
+import AddStudent from '../AddStudentCard/AddStudentCard';
 import StudentCard from './StudentCard';
 import './StudentCardList.css'
 

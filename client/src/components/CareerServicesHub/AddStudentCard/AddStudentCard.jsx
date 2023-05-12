@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
-import { StudentsContext } from "../../context/studentsContext";
-import StudentCard from "./StudentCard";
+import { StudentsContext } from "../../../context/studentsContext";
 import "./AddStudentCard.css";
 import Add_Student_Modal from "./AddStudentModal";
 import AddStudentInfo from "./AddStudentInfo";
