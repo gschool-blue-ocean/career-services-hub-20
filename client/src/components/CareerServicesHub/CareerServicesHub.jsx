@@ -5,12 +5,9 @@ import { ManagersContext } from '../../context/managersContext';
 import StudentCardsList from './StudentCards/StudentCardsList';
 import './CareerServicesHub.css'
 
-import ExcelImportButton from './Excel Import Button/ExcelImportButton'
 import Export from './Export';
 import './filter.css';
-import Filter_Modal from './Filter_Modal';
 import Filter from './Filter_Com';
-import SearchBar from './SearchFunction/Search';
 import galvanizeLogo from '../logIn/galvanizeLogo.webp';
 
 export default function CareerServicesHub() {
@@ -31,6 +28,7 @@ export default function CareerServicesHub() {
   const [narrativeStatus, setNarrativeStatus] = useState('');
   const [hunterAccess, setHunterAccess] = useState('');
   const [currentAccess, setCurrentAccess] = useState('');
+  const [selectedManager, setSelectedManager] = useState({tscm_first: '', tscm_last: '' });
   const [currentFirstManager, setCurrentFirstManager] = useState('');
   const [currentLastManager, setCurrentLastManager] = useState('');
 
@@ -46,9 +44,7 @@ export default function CareerServicesHub() {
   const managers = managersContext.managersData;
   console.log('managers', managers);
 
-  const handleSearch = (searchTerm) => {
-    setSearchTerm(searchTerm);
-};
+  
 
   // Filter the list of students based on the current filter
   const filterStudents = (students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance, educationStatus, currentManager) => {
@@ -157,42 +153,14 @@ export default function CareerServicesHub() {
 
   };
 
+  const handleClear = () => {
+    setCurrentCohort('Select a MCSP');
+  }
+
   return (
-    <div>      
-      <img src={galvanizeLogo} ></img>
-      <div className='filt-wrapper'>
-        < ExcelImportButton />
-        <Export 
-          filterStudents={filterStudents}
-          currentCohort={currentCohort}
-          coverLetter={coverLetter}
-          currentCoverStatus={currentCoverStatus}
-          studentResume={studentResume}
-          currentResumeStatus={currentResumeStatus}
-          linkedAccount={linkedAccount}
-          linkedAccountStatus={linkedAccountStatus}
-          personalNarrative={personalNarrative}
-          narrativeStatus={narrativeStatus}
-          hunterAccess={hunterAccess}
-          currentAccess={currentAccess}
-          currentStatus={currentStatus}
-          currentClearance={currentClearance}
-          educationStatus={educationStatus}
-          currentFirstManager={currentFirstManager}
-          currentLastManager={currentLastManager}
-        />
-        <button 
-          id='filterBtn'
-          onClick={() => setFilterOpen(true)}
-          className='header-buttons'
-        >
-          Filter
-        </button>
-        <Filter_Modal
-          filterOpen={filterOpen}
-          onClose={() => setFilterOpen(false)}
-          filterStudents={filterStudents}
-        >
+    <div className='body_container'>      
+        <div className='left_container'>
+          <img src={galvanizeLogo} ></img>
           <Filter 
             currentCohort={currentCohort}
             setCurrentCohort={setCurrentCohort}
@@ -217,33 +185,61 @@ export default function CareerServicesHub() {
             setHunterAccess={setHunterAccess}
             currentAccess={currentAccess}
             setCurrentAccess={setCurrentAccess}
-            currentFirstManager={currentFirstManager}
-            setCurrentFirstManager={setCurrentFirstManager}
-            currentLastManager={currentLastManager}
-            setCurrentLastManager={setCurrentLastManager}
+            selectedManager={selectedManager}
+            setSelectedManager={setSelectedManager}
+            setSearchTerm={setSearchTerm}
+            searchTerm={searchTerm}
           />
-        </Filter_Modal>
-        <SearchBar onSearch={handleSearch} />
+          <Export 
+            filterStudents={filterStudents}
+            currentCohort={currentCohort}
+            coverLetter={coverLetter}
+            currentCoverStatus={currentCoverStatus}
+            studentResume={studentResume}
+            currentResumeStatus={currentResumeStatus}
+            linkedAccount={linkedAccount}
+            linkedAccountStatus={linkedAccountStatus}
+            personalNarrative={personalNarrative}
+            narrativeStatus={narrativeStatus}
+            hunterAccess={hunterAccess}
+            currentAccess={currentAccess}
+            currentStatus={currentStatus}
+            currentClearance={currentClearance}
+            educationStatus={educationStatus}
+            currentFirstManager={currentFirstManager}
+            currentLastManager={currentLastManager}
+          />
+          <button
+            onChange={() => handleClear}
+          >
+            Clear Filter
+          </button>
+        </div>
+        <div className='right_container'>
+          <StudentCardsList
+            filterStudents={filterStudents}
+            currentCohort={currentCohort}
+            coverLetter={coverLetter}
+            currentCoverStatus={currentCoverStatus}
+            studentResume={studentResume}
+            currentResumeStatus={currentResumeStatus}
+            linkedAccount={linkedAccount}
+            linkedAccountStatus={linkedAccountStatus}
+            personalNarrative={personalNarrative}
+            narrativeStatus={narrativeStatus}
+            hunterAccess={hunterAccess}
+            currentAccess={currentAccess}
+            currentStatus={currentStatus}
+            currentClearance={currentClearance}
+            educationStatus={educationStatus}
+            currentFirstManager={currentFirstManager}
+            currentLastManager={currentLastManager}
+          />
+        </div>
+      <div className='filt-wrapper'>
+        
+        
       </div>
-      <StudentCardsList
-        filterStudents={filterStudents}
-        currentCohort={currentCohort}
-        coverLetter={coverLetter}
-        currentCoverStatus={currentCoverStatus}
-        studentResume={studentResume}
-        currentResumeStatus={currentResumeStatus}
-        linkedAccount={linkedAccount}
-        linkedAccountStatus={linkedAccountStatus}
-        personalNarrative={personalNarrative}
-        narrativeStatus={narrativeStatus}
-        hunterAccess={hunterAccess}
-        currentAccess={currentAccess}
-        currentStatus={currentStatus}
-        currentClearance={currentClearance}
-        educationStatus={educationStatus}
-        currentFirstManager={currentFirstManager}
-        currentLastManager={currentLastManager}
-      />
     </div>
   )
 }

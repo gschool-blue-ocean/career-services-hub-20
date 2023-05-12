@@ -2,6 +2,7 @@ import React, { useContext, useState, useRef } from "react";
 import "./AddStudentCard.css";
 import { ManagersContext } from "../../../context/managersContext";
 import { StudentsContext } from "../../../context/studentsContext";
+import ExcelImportButton from '../Excel Import Button/ExcelImportButton';
 
 function AddStudentInfo({ setAddStudent }) {
   const [currentClearance, setCurrentClearance] = useState("");
@@ -92,6 +93,7 @@ function AddStudentInfo({ setAddStudent }) {
 
   return (
     <div className="add-container">
+      < ExcelImportButton />
       <div className="add-subcontainer">
         <h1 id="add-text">Select MCSP</h1>
         <span>
