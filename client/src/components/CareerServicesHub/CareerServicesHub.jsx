@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import { EventsContext } from '../../context/eventsContext';
 import { StudentsContext } from '../../context/studentsContext';
 import { ManagersContext } from '../../context/managersContext';
-import StudentCardsList from './StudentCardsList';
+import StudentCardsList from './StudentCards/StudentCardsList';
 import './CareerServicesHub.css'
 
 import ExcelImportButton from './Excel Import Button/ExcelImportButton'
