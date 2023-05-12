@@ -15,6 +15,20 @@ function AddStudent() {
       setAddStudent(newAddStudent);
     }
   
+      // return (
+      //   <div className="btnWrapper" id="add-card">
+      //     <button onClick={() => setAddStudent(true)} id="add-card-name">
+      //       &#x271A;
+      //     </button>
+      //     <Add_Student_Modal
+      //       addStudent={addStudent}
+      //       onClose={() => setAddStudent(false)}
+      //     >
+      //       <AddStudentInfo setAddStudent={setAddStudent} />
+      //     </Add_Student_Modal>
+      //   </div>
+      // );
+
     return (
       <div className="btnWrapper" id="add-card">
         <button onClick={handleAddStudentModalToggle} id="add-card-name">
