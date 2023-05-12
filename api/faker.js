@@ -12,8 +12,8 @@ const db = new Pool({
 const cohorts = ['MCSP-16', 'MCSP-17', 'MCSP-18', 'MCSP-19', 'MCSP-20', 'MCSP-21', 'MCSP-22'];
 const careerStatus = ['Searching', 'Hired', 'Not Started'];
 const courseStatus = ['Student', 'Graduate'];
-const secClearance = ['Unknown', 'None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI'];
-const collegeDegree = ['Unknown', 'None', 'Associate in CS/STEM', 'Associate Not in CS/STEM', 'Bachelor in CS/STEM', 'Bachelor Not in CS/STEM', 'Masters in CS/STEM', 'Masters Not in CS/STEM']
+const secClearance = ['Undetermined', 'None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI'];
+const collegeDegree = ['Undetermined', 'None', 'Associate in CS/STEM', 'Associate Not in CS/STEM', 'Bachelor in CS/STEM', 'Bachelor Not in CS/STEM', 'Masters in CS/STEM', 'Masters Not in CS/STEM']
 
 const SEED_CAREER_MANAGER = 7;
 const SEED_STUDENT_ROWS = 200;
@@ -24,7 +24,7 @@ const seedStudents = async () => {
     for (let i = 0; i < SEED_STUDENT_ROWS; i++){
         let randomNumber = Math.floor(Math.random() * 3);  // Generates a random number between 0-2
         let randomNumber2 = Math.floor(Math.random() * 2); // Generates a random number between 0-1
-        let randomNumber3 = Math.floor(Math.random() * 4); // Generates a random number between 0-3
+        let randomNumber3 = Math.floor(Math.random() * 5); // Generates a random number between 0-4
         let randomNumber4 = Math.floor(Math.random() * 9); // Generates a random number between 0-8
 
         studentList.push({
