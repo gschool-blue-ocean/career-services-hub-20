@@ -4,6 +4,7 @@ import './filter.css';
 import { StudentsContext } from '../../context/studentsContext';
 import { ManagersContext } from '../../context/managersContext';
 
+
 function Filter({ currentCohort, setCurrentCohort, setCoverLetter, setCurrentCoverStatus, currentCoverStatus, setStudentResume, currentResumeStatus, setCurrentResumeStatus,setLinkedAccount, linkedAccountStatus, setLinkedAccountStatus, setPersonalNarrative, narrativeStatus, setNarrativeStatus, setHunterAccess, currentAccess, setCurrentAccess, currentStatus, setCurrentStatus, currentClearance, setCurrentClearance, educationStatus, setEducationStatus, currentFirstManager, setCurrentFirstManager, currentLastManager, setCurrentLastManager }) {
   
   const studentContext = useContext(StudentsContext);

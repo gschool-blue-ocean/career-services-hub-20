@@ -11,6 +11,7 @@ import './filter.css';
 import Filter_Modal from './Filter_Modal';
 import Filter from './Filter_Com';
 import SearchBar from './SearchFunction/Search';
+import galvanizeLogo from '../logIn/galvanizeLogo.webp';
 
 export default function CareerServicesHub() {
 
@@ -158,6 +159,7 @@ export default function CareerServicesHub() {
 
   return (
     <div>      
+      <img src={galvanizeLogo} ></img>
       <div className='filt-wrapper'>
         < ExcelImportButton />
         <Export 

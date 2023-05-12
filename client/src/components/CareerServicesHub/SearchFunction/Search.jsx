@@ -6,11 +6,11 @@ const SearchBar = ({ onSearch }) => {
 
     const handleChange = (event) => {
         setSearchTerm(event.target.value);
+        onSearch(event.target.value)
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        onSearch(searchTerm);
     };
 
     return (
