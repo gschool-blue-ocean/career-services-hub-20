@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 
 import './filter.css';
 import { StudentsContext } from '../../context/studentsContext';
@@ -6,7 +6,7 @@ import { ManagersContext } from "../../context/managersContext";
 import SearchBar from './SearchFunction/Search';
 
 
-function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, setCoverLetter, setCurrentCoverStatus, currentCoverStatus, setStudentResume, currentResumeStatus, setCurrentResumeStatus,setLinkedAccount, linkedAccountStatus, setLinkedAccountStatus, setPersonalNarrative, narrativeStatus, setNarrativeStatus, setHunterAccess, currentAccess, setCurrentAccess, currentStatus, setCurrentStatus, currentClearance, setCurrentClearance, educationStatus, setEducationStatus, selectedManager, setSelectedManager }) {
+function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, setCoverLetter, setCurrentCoverStatus, currentCoverStatus, setStudentResume, currentResumeStatus, setCurrentResumeStatus,setLinkedAccount, linkedAccountStatus, setLinkedAccountStatus, setPersonalNarrative, narrativeStatus, setNarrativeStatus, setHunterAccess, currentAccess, setCurrentAccess, currentStatus, setCurrentStatus, currentClearance, setCurrentClearance, educationStatus, setEducationStatus, setSelectedManager, setSelectedManagerFull }) {
   
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
@@ -52,28 +52,27 @@ function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, se
 
   const handleManagerChange = (e) => {
     const selectedManagerId = parseInt(e.target.value)
-    console.log('Selected manager ID:', selectedManagerId);
-    console.log('Managers:', managers);
+    // console.log('Selected manager ID:', selectedManagerId);
+    // console.log('Managers:', managers);
 
     const selectManager = managers.find(manager => manager.tscm_id === selectedManagerId);
-
+    // console.log('Selected manager first name:', selectManager.tscm_first);
+    // console.log('Selected manager last name:', selectManager.tscm_last);
     
 
     if (selectManager) {
-      setSelectedManager({
-        tscm_first: selectManager.tscm_first,
-        tscm_last: selectManager.tscm_last,
-      });
-      console.log('Current manager', selectedManager);
-    } else {
-      console.log(`No Manager found with tscm_id ${selectedManagerId}`);
+      setSelectedManager(selectManager.tscm_first);
     }
 
   }
 
   return (
     <div id='filt_container' >
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar 
+        onSearch={handleSearch} 
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
       <div id='filt_subcontainer' >
         <h1 id='filt_title' >Select a MCSP</h1>
           <select
@@ -268,8 +267,9 @@ function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, se
         <select
           ref={managerInputRef}
           onChange={handleManagerChange}
+          id='manager-select'
         >
-          <option>Select a Career Service Manager</option>
+          <option>Career Service Manager</option>
           {managers.map((manager) => {
             return (
               <option key={managers.tscm_id} value={manager.tscm_id}>
