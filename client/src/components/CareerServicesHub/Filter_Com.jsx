@@ -73,6 +73,7 @@ function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, se
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
+      
       <div id='filt_subcontainer' >
         <h1 id='filt_title' >Select a MCSP</h1>
           <select

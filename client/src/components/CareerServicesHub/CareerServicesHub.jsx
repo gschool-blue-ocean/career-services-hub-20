@@ -31,6 +31,8 @@ export default function CareerServicesHub() {
   const [educationStatus, setEducationStatus] = useState('');
   const [selectedManager, setSelectedManager] = useState('');
 
+  const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
+
   const eventContext = useContext(EventsContext);
   const events = eventContext.eventsData;
   console.log('events', events);
@@ -177,10 +179,17 @@ export default function CareerServicesHub() {
     selectElement.value = 'Career Service Manager';
   }
 
+  function handleFilterToggle () {
+    const newToggleFiltersBar = !toggleFiltersBar;
+    setToggleFiltersBar(newToggleFiltersBar);
+  }
+
   return (
     <div className='body_container'>      
       <div className='left_container'>
+        <div className={toggleFiltersBar ? 'left-container-filters': 'collapsed-filters-container'}>
         <img src={galvanizeLogo} ></img>
+        
         <Filter 
           setSearchTerm={setSearchTerm}
           searchTerm={searchTerm}
@@ -234,6 +243,8 @@ export default function CareerServicesHub() {
         >
           Clear Filter
         </button>
+        </div>
+        <button className='collapse-filter-button' onClick={handleFilterToggle}> > </button>
       </div>
       <div className='right_container'>
         <StudentCardsList
