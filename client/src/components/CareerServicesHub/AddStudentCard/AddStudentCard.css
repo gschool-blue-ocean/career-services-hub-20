@@ -12,19 +12,6 @@
     align-content: center;
 }
 
-#add-card:hover > #add-card-name{
-    color: white;
-}
-
-#add-card:hover{
-    cursor: pointer;
-    transform: scale(1.05);
-    background-color:rgb(68, 66, 66);
-    color: white;
-
-    transition: ease 0.4s;
-}
-
 #add-card-name {
     color: black;
     display:block;
@@ -35,6 +22,14 @@
     white-space: nowrap;
     padding-left: 26%;
     background: none;   
+}
+
+#add-card-name:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+    color: white;
+
+    transition: ease 0.4s;
 }
 
 .add-modal-overlay-container{
