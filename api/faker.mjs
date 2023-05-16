@@ -1,13 +1,32 @@
-const faker = require('faker');
-const { Pool } = require('pg');
+import faker from 'faker';
+import pg from 'pg';
+import path from 'path';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-const db = new Pool({  
-    user: 'postgres',
-    host: '127.0.0.1',
-    database: 'blueocean',
-    password: 'docker',
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
+const { Pool } = pg;
+
+let db;
+
+if(process.env.NODE_ENV === 'development') {
+    db = new Pool({  
+    user: process.env.POSTGRES_USER,
+    host: 'database',
+    database: process.env.POSTGRES_DB,
+    password: process.env.POSTGRES_PASSWORD,
     port: 5432 
-});
+    });
+} else {
+  // If the app is not running in the development environment, use the deployed database
+    db = new Pool({ connectionString: process.env.DATABASE_URL });
+}
 
 const cohorts = ['MCSP-16', 'MCSP-17', 'MCSP-18', 'MCSP-19', 'MCSP-20', 'MCSP-21', 'MCSP-22'];
 const careerStatus = ['Searching', 'Hired', 'Not Started'];
@@ -103,7 +122,7 @@ const seedCalendar = async () => {
             event_date: faker.date.between(startDate, endDate),
             event_time: faker.datatype.datetime(),
             speak_con: speakContactArray[randomNumber],
-            event_descrip: faker.lorem.paragraph(sentenceCount = 4),
+            event_descrip: faker.lorem.paragraph(4),
         });
     }
 

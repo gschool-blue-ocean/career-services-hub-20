@@ -1,21 +1,26 @@
-const express = require('express');
-const { Pool } = require('pg');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import pg from 'pg';
 
-const db = new Pool({ connectionString: process.env.DATABASE_URL });
+const { Pool } = pg;
 
-const PORT = process.env.PORT
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+});
+
+const PORT = process.env.PORT;
 
 const app = express();
 
-const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
 app.use(express.json());
 
 app.use(
   cors({
-    origin:"*"
+    origin: "*",
   })
 );
 
