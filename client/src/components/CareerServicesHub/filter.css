@@ -35,7 +35,7 @@
 
 .filt_overlay:hover{
     cursor: pointer;
-    background-color: rgba(61, 61, 63, 0.5);
+    background-color: rgba(0, 0, 0, 0);
     backdrop-filter: blur(0px);
 }
 

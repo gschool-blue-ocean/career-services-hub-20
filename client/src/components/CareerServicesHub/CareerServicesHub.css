@@ -14,10 +14,10 @@
 }
 
 .header-buttons{
-    background: #FF4742;
-  border: 1px solid #FF4742;
-  border-radius: 6px;
-  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
   color: #FFFFFF;
   cursor: pointer;
@@ -34,9 +34,10 @@
 }
 
 .header-buttons:hover, .header-buttons:active{
-    background-color: initial;
-  background-position: 0 0;
-  color: #FF4742;
+  cursor: pointer;
+  transform: scale(1.05);
+  background: linear-gradient(135deg, rgba(21,4,89,1) 30%, rgba(247,130,24,1) 125%);
+  transition: ease 0.4s;
 }
 
 .header-buttons:active{
