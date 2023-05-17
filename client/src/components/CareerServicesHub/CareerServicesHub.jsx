@@ -3,6 +3,7 @@ import { EventsContext } from '../../context/eventsContext';
 import { StudentsContext } from '../../context/studentsContext';
 import { ManagersContext } from '../../context/managersContext';
 import StudentCardsList from './StudentCards/StudentCardsList';
+import { FaUserCircle } from 'react-icons/fa';
 import './CareerServicesHub.css'
 
 import Export from './Export';
@@ -11,7 +12,7 @@ import Filter from './Filter_Com';
 import galvanizeLogo from '../logIn/galvanizeLogo.webp';
 import SearchBar from './SearchFunction/Search';
 
-export default function CareerServicesHub() {
+export default function CareerServicesHub( {handleLogOff} ) {
 
   //const [filterOpen, setFilterOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -185,7 +186,7 @@ export default function CareerServicesHub() {
   }
 
   return (
-    <div className='body_container'>      
+    <div className='body_container'>  
       <div className='left_container'>
         <div className={toggleFiltersBar ? 'left-container-filters': 'collapsed-filters-container'}>
         <img className='logo' src={galvanizeLogo} ></img>
@@ -237,12 +238,12 @@ export default function CareerServicesHub() {
           currentClearance={currentClearance}
           educationStatus={educationStatus}
           selectedManager={selectedManager}
-        />
-        
+        />        
         </div>
         <button className='collapse-filter-button' onClick={handleFilterToggle}> &#8646; </button>
       </div>
       <div className='right_container'>
+
         <StudentCardsList
           filterStudents={filterStudents}
           currentCohort={currentCohort}

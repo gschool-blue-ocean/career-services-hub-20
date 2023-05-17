@@ -96,7 +96,7 @@ function AddStudentInfo({ setAddStudent }) {
 
   return (
     <div className="add-container">
-      < ExcelImportButton />
+      <ExcelImportButton />
       <div className="add-subcontainer">
         <div id="add-text">Select MCSP #</div>
         <span>

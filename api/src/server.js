@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import pg from 'pg';
+import jwt from 'jsonwebtoken'
 
 const { Pool } = pg;
 
@@ -170,6 +171,8 @@ app.patch("/managers/:id", async (req, res, next) => {
   res.send(result.rows[0]);
 })
 
+//For front page log in
+
 app.post('/managers/login', async (req, res, next) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
@@ -179,15 +182,19 @@ app.post('/managers/login', async (req, res, next) => {
     const manager = results.rows[0]
 
     if(!manager) {
-      return res.status(404).json({message: 'Incorrect Password or Email'})
+      return res.status(404).json({message: 'Incorrect Password or Email 🤷'})
     }
 
     if(manager.tscm_password === inputPassword) {
-      res.json({ success: true, manager })
+
+      const user = { val_mananger: manager.login_id };
+
+      const accessToken = jwt.sign(user, 'super secret key', {expiresIn: '10m'})
+      res.json({ accessToken })
     }
   } catch (error) {
-    console.error('error idk bro 🤷' , error)
-    res.status(500).json({ message: 'idk bro 🤷'})
+    console.error('Something really went wrong, check if DB is running 🤷' , error)
+    res.status(500).json({ message: 'Service unavailable 🤷'})
     console.log('bad')
   }
 })

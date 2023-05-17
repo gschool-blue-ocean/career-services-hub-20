@@ -6,7 +6,7 @@ import AddStudentInfo from "./AddStudentInfo";
 
 
 
-function AddStudent() {
+function AddStudent( {filterStudents}) {
     const [ addStudent, setAddStudent ] = useState(false)
 
 

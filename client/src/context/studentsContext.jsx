@@ -4,9 +4,9 @@ export const StudentsContext = createContext();
 
 export function StudentsContextProvider ({children}) {
     const [studentsData, setStudentsData] = useState([{
-        student_first : "Esta",
+        student_first : "Test",
         student_id : 1,
-        student_last : "West",
+        student_last : "Test",
         career_status : "Searching",
         cohort : "MCSP-18",
         college_degree : "Associate Not in CS/STEM",
