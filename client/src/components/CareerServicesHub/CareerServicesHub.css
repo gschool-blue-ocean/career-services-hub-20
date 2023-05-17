@@ -1,5 +1,6 @@
 .main-body-container{
-    width: 100%;
+    width: 100vw;
+    height: 100vh;
 }
 
 .filt-wrapper{
@@ -13,11 +14,11 @@
   display: flex;
   margin: 0px;
   padding:0px;
-  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .left_container {
   display: flex;
+  height: 100vh;
   font-family: 'KelsonSans-Bold';
   background-color:rgba(0, 0, 0, 0.3)
 }
@@ -43,6 +44,7 @@
 
 .right_container {
   width: 100vw;
+  height: 100vh;
   margin: 0px;
   padding: 0px;
 }
