@@ -55,6 +55,13 @@
   font-size: large;
 }
 
+.collapse-filter-button:hover{
+  transition: ease .5s;
+  cursor: pointer;
+  transform: scale(1.05);
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
 .collapsed-filters-container {
 display: none;
 }
