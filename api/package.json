@@ -21,6 +21,7 @@
     "faker": "^5.5.3",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
+    "memory-cache": "^0.2.0",
     "nodemon": "^2.0.22",
     "pg": "^8.10.0"
   }

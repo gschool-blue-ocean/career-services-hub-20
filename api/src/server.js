@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import pg from 'pg';
 import jwt from 'jsonwebtoken'
+import cache from 'memory-cache'
 
 const { Pool } = pg;
 
