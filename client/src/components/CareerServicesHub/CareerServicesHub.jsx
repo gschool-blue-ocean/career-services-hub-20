@@ -32,6 +32,8 @@ export default function CareerServicesHub( {handleLogOff} ) {
   const [educationStatus, setEducationStatus] = useState('');
   const [selectedManager, setSelectedManager] = useState('');
 
+  const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
+
   const eventContext = useContext(EventsContext);
   const events = eventContext.eventsData;
   console.log('events', events);
@@ -178,10 +180,17 @@ export default function CareerServicesHub( {handleLogOff} ) {
     selectElement.value = 'Career Service Manager';
   }
 
+  function handleFilterToggle () {
+    const newToggleFiltersBar = !toggleFiltersBar;
+    setToggleFiltersBar(newToggleFiltersBar);
+  }
+
   return (
     <div className='body_container'>  
       <div className='left_container'>
-        <img src={galvanizeLogo} ></img>
+        <div className={toggleFiltersBar ? 'left-container-filters': 'collapsed-filters-container'}>
+        <img className='logo' src={galvanizeLogo} ></img>
+        
         <Filter 
           setSearchTerm={setSearchTerm}
           searchTerm={searchTerm}
@@ -210,6 +219,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
           setEducationStatus={setEducationStatus}
           selectedManager={selectedManager}
           setSelectedManager={setSelectedManager}
+          handleClear={handleClear}
         />
         <Export 
           filterStudents={filterStudents}
@@ -228,18 +238,9 @@ export default function CareerServicesHub( {handleLogOff} ) {
           currentClearance={currentClearance}
           educationStatus={educationStatus}
           selectedManager={selectedManager}
-        />
-        <button
-          onClick={handleClear}
-          className='header-buttons'
-        >
-          Clear Filter
-        </button>
-        <div className='profile-container'>
-          <button className='header-buttons' onClick={handleLogOff}>
-            <FaUserCircle/> Logout
-          </button>
-        </div>    
+        />        
+        </div>
+        <button className='collapse-filter-button' onClick={handleFilterToggle}> &#8646; </button>
       </div>
       <div className='right_container'>
 

@@ -98,10 +98,10 @@ function AddStudentInfo({ setAddStudent }) {
     <div className="add-container">
       <ExcelImportButton />
       <div className="add-subcontainer">
-        <h1 id="add-text">Select MCSP</h1>
+        <div id="add-text">Select MCSP #</div>
         <span>
           {" "}
-          MCSP:{" "}
+          {" "}
           <input
             type="number"
             className="import-input-MCSP"
@@ -111,13 +111,13 @@ function AddStudentInfo({ setAddStudent }) {
         </span>
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Managers</h1>
+        <div id="add-text">Select Manager</div>
         <select
-          className="import-input"
+          className="add-import-input"
           ref={managerInputRef}
           onChange={handleManagerChange}
         >
-          <option>Select a Career Service Manager</option>
+        <option>Select a Career Service Manager</option>
           {managers.map((manager) => {
             return (
               <option value={manager.tscm_id}>
@@ -128,7 +128,7 @@ function AddStudentInfo({ setAddStudent }) {
         </select>
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Enter First Name:</h1>
+        <div id="add-text">Enter First Name</div>
         <input
           type="text"
           placeholder="first name"
@@ -137,7 +137,7 @@ function AddStudentInfo({ setAddStudent }) {
         />
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Enter Last Name:</h1>
+        <div id="add-text">Enter Last Name</div>
         <input
           type="text"
           placeholder="last name"
@@ -146,7 +146,7 @@ function AddStudentInfo({ setAddStudent }) {
         />
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Education:</h1>
+        <div id="add-text">Education</div>
         <select
           value={newStudent.addEducation}
           onChange={handleEducationChange}
@@ -162,7 +162,7 @@ function AddStudentInfo({ setAddStudent }) {
         </select>
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Security Clearance:</h1>
+        <div id="add-text">Security Clearance</div>
         <select
           value={newStudent.secClearance}
           onChange={handleClearanceChange}
@@ -177,7 +177,8 @@ function AddStudentInfo({ setAddStudent }) {
           })}
         </select>
       </div>
-      <button onClick={addNewStudent}>Add New Student</button>
+      <br/>
+      <button className="add-student-button" onClick={addNewStudent}>Add New Student</button>
     </div>
   );
 }
