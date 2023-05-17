@@ -27,13 +27,30 @@ app.use(
 );
 
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
-app.get("/students", async (req, res, next) =>{
-  const results = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
-                                  FROM student 
-                                  JOIN service_manager ON service_manager.tscm_id = student.tscm_id`)
-                          .catch(next);
-  res.send(results.rows)
-})
+app.get("/students", async (req, res, next) => {
+  // Check if the data is cached.
+  const cachedData = cache.get('students');
+
+  if (cachedData) {
+    // If cached data is found, send it.
+    res.send(cachedData);
+  } else {
+    // If no cache is found, query the database.
+    try {
+      const results = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
+                                      FROM student 
+                                      JOIN service_manager ON service_manager.tscm_id = student.tscm_id`);
+
+      // Cache the data for 30 seconds.
+      cache.put('students', results.rows, 30 * 1000);
+
+      // Send the data.
+      res.send(results.rows);
+    } catch (error) {
+      next(error);
+    }
+  }
+});
 
 app.get("/students/:id", async (req, res, next) =>{
   const id = req.params.id;
