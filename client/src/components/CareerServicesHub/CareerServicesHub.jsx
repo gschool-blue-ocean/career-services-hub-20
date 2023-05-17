@@ -188,7 +188,7 @@ export default function CareerServicesHub() {
     <div className='body_container'>      
       <div className='left_container'>
         <div className={toggleFiltersBar ? 'left-container-filters': 'collapsed-filters-container'}>
-        <img src={galvanizeLogo} ></img>
+        <img className='logo' src={galvanizeLogo} ></img>
         
         <Filter 
           setSearchTerm={setSearchTerm}
@@ -218,6 +218,7 @@ export default function CareerServicesHub() {
           setEducationStatus={setEducationStatus}
           selectedManager={selectedManager}
           setSelectedManager={setSelectedManager}
+          handleClear={handleClear}
         />
         <Export 
           filterStudents={filterStudents}
@@ -237,14 +238,9 @@ export default function CareerServicesHub() {
           educationStatus={educationStatus}
           selectedManager={selectedManager}
         />
-        <button
-          onClick={handleClear}
-          className='header-buttons'
-        >
-          Clear Filter
-        </button>
+        
         </div>
-        <button className='collapse-filter-button' onClick={handleFilterToggle}> > </button>
+        <button className='collapse-filter-button' onClick={handleFilterToggle}> &#8646; </button>
       </div>
       <div className='right_container'>
         <StudentCardsList

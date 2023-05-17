@@ -31,7 +31,7 @@ export default function StudentCard({student}) {
             } else {
                 setMilestoneProgress('Completed')
             } 
-    }, []);
+    }, [student]);
 
     // console.log('student #' + student.student_id + ' total ' + count);
 

@@ -53,7 +53,7 @@ function handleUpdateStudent(e) {
     console.log(milestones);
     console.log(newUpdatedStudent);
 
-    fetch(`${url}/${student.student_id}`,
+    fetch(`${url}/students/${student.student_id}`,
                 {
                     method:"PATCH", 
                     body: JSON.stringify(newUpdatedStudent),

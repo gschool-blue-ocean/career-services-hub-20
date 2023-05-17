@@ -66,8 +66,8 @@ app.post("/students", async (req, res, next) => {
 })
 
 app.patch("/students/:id", async (req, res, next) => {
+  console.log(req.body);
   const id = req.params.id;
-
   const firstName = req.body.student_first;
   const lastName = req.body.student_last;
   const cohort = req.body.cohort;
