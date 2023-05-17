@@ -238,7 +238,12 @@ export default function CareerServicesHub( {handleLogOff} ) {
           currentClearance={currentClearance}
           educationStatus={educationStatus}
           selectedManager={selectedManager}
-        />        
+        />
+        <div className='profile-container'>
+          <button className='header-buttons' onClick={handleLogOff}>
+            <FaUserCircle/> Logout
+          </button>
+        </div>            
         </div>
         <button className='collapse-filter-button' onClick={handleFilterToggle}> &#8646; </button>
       </div>
