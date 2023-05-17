@@ -3,6 +3,8 @@ import ImportResults from "../Excel Import Button/ImportResults";
 import { ManagersContext } from "../../../context/managersContext";
 import "../Excel Import Button/CSVInputModal.css"
 
+import exportFromJSON from 'export-from-json';
+
 function CSVInputRevised({setAddStudent}) {
   const initialStudents = [
     {
@@ -80,6 +82,15 @@ function CSVInputRevised({setAddStudent}) {
     setResultsToggle(newResultsToggle);
   };
 
+  function excelImportTemplate(){
+    const fields = ['student_first', 'student_last', 'sec_clearance'];
+    const data = [{student_first :'David', student_last : 'Garcia', sec_clearance : 'TOP SECRET//SCI'}];
+    const fileName = `ImportStudentTemplate`;
+    const exportType = exportFromJSON.types.csv;
+
+    exportFromJSON({data, fileName, fields: fields, exportType});
+  }
+
   return (
     <div className="import-modal-container">
       <div className="import-modal-description-container">
@@ -88,7 +99,7 @@ function CSVInputRevised({setAddStudent}) {
           Please choose a MCSP/Career Service Manager and upload a .csv file
           with information about the students
         </span>
-        <a className="import-modal-description-text">
+        <a className="import-modal-description-text" onClick={excelImportTemplate}>
           {" "}
           Click here for a excel template{" "}
         </a>
