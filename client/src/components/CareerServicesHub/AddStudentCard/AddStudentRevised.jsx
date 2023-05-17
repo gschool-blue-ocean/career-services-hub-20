@@ -36,8 +36,6 @@ function AddStudentRevised({ setAddStudent }) {
   const firstStudent = students[0];
   const milestoneFields = firstStudent.milestones.map((milestone) => milestone.mile_name);
   const milestoneArray = milestoneFields.map((milestone) => milestone);
-  console.log(milestoneFields);
-  
 
   const handleFirstNameChange = (event) => {
     setNewStudent({ ...newStudent, student_first: event.target.value });
@@ -53,19 +51,16 @@ function AddStudentRevised({ setAddStudent }) {
   const handleManagerChange = (event) => {
     const selectedManager = event.target.value;
     setNewStudent({ ...newStudent, tscm_id: selectedManager });
-    console.log(selectedManager);
   };
 
   const handleEducationChange = (event) => {
     const currentEducation = event.target.value;
     setNewStudent({ ...newStudent, college_degree: currentEducation });
-    console.log("log education", currentEducation);
   };
 
   const handleClearanceChange = (event) => {
     const currentClearance = event.target.value;
     setNewStudent({ ...newStudent, sec_clearance: currentClearance });
-    console.log('current clearance', currentClearance);
   };
 
   const handleMCSPChange = (event) => {

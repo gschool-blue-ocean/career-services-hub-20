@@ -29,13 +29,10 @@
     position: relative;
     z-index: 1001;
     height: fit-content;
-    width: 50vh;
-    padding: 20px;
+    width: 100%;
+    padding: 10px;
     font-family: 'KelsonSans';
-    font-size:larger;
     color: white;
-    border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.678); 
 }
 
 .import-modal-header{
@@ -84,6 +81,8 @@
 
 .import-modal-description-container{
     display:flex; 
+    justify-content: center;
+    align-items: center;
     flex-direction:column;
     
     width: 95%;
@@ -92,8 +91,6 @@
 
 .import-modal-description-text{
     width: 100%;
-    text-align: center;
-    margin: 10px;
 }
 
 .import-button-container{
