@@ -3,7 +3,6 @@ import { EventsContext } from '../../context/eventsContext';
 import { StudentsContext } from '../../context/studentsContext';
 import { ManagersContext } from '../../context/managersContext';
 import StudentCardsList from './StudentCards/StudentCardsList';
-import { FaUserCircle } from 'react-icons/fa';
 import './CareerServicesHub.css'
 
 import Export from './Export';
@@ -241,7 +240,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
         />
         <div className='profile-container'>
           <button className='header-buttons' onClick={handleLogOff}>
-            <FaUserCircle/> Logout
+            Logout
           </button>
         </div>            
         </div>
