@@ -28,8 +28,8 @@ function AddStudent() {
           <button onClick={() => setBtnSwitch(true)}>Bulk Import</button>
           <button onClick={() => setBtnSwitch(false)}>Single Student</button>
           {btnSwitch
-            ? <CSVInputRevised />
-            : <AddStudentRevised />
+            ? <CSVInputRevised setAddStudent={setAddStudent}/>
+            : <AddStudentRevised setAddStudent={setAddStudent}/>
           }
         </Add_Student_Modal>
       </div>

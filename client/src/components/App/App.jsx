@@ -5,9 +5,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { EventsContextProvider } from '../../context/eventsContext'
 import { StudentsContextProvider } from '../../context/studentsContext'
 import { ManagersContextProvider } from '../../context/managersContext'
+import { FieldsContextProvider } from '../../context/fieldsContext'
 import CareerServicesHub from '../CareerServicesHub/CareerServicesHub'
 import LogInPage from '../logIn/logInPage'
-
 
 const App = () => {
   const [loggedInfo, setLoggedInfo] = useState("");
@@ -47,6 +47,7 @@ const App = () => {
       <EventsContextProvider>
         <StudentsContextProvider>
           <ManagersContextProvider>
+            <FieldsContextProvider>
             <Routes>
               <Route
                 path="/"
@@ -60,6 +61,7 @@ const App = () => {
               />
               <Route path="/mainpage" element={<CareerServicesHub handleLogOff={handleLogOff}/>} />
             </Routes>
+            </FieldsContextProvider>
           </ManagersContextProvider>
         </StudentsContextProvider>
       </EventsContextProvider>

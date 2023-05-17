@@ -2,6 +2,8 @@ import React, {useContext, useState} from 'react';
 import { EventsContext } from '../../context/eventsContext';
 import { StudentsContext } from '../../context/studentsContext';
 import { ManagersContext } from '../../context/managersContext';
+import { FieldsContext } from '../../context/fieldsContext';
+
 import StudentCardsList from './StudentCards/StudentCardsList';
 import { FaUserCircle } from 'react-icons/fa';
 import './CareerServicesHub.css'
@@ -46,7 +48,9 @@ export default function CareerServicesHub( {handleLogOff} ) {
   const managers = managersContext.managersData;
   console.log('managers', managers);
 
-  
+  const fieldsContext = useContext(FieldsContext);
+  const fields = fieldsContext.fieldsData;
+  console.log('fields', fields);
 
   // Filter the list of students based on the current filter
   const filterStudents = (students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance, educationStatus, selectedManager) => {

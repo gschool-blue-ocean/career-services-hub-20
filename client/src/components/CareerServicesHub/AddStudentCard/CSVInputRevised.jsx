@@ -101,7 +101,7 @@ function CSVInputRevised({setAddStudent}) {
         </span>
         <a className="import-modal-description-text header-buttons" onClick={excelImportTemplate}>
           {" "}
-          Click here for a excel template{" "}
+          Click for csv template{" "}
         </a>
       </div>
       <div className="import-button-container">
