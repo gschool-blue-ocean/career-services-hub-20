@@ -19,7 +19,7 @@ function Export({ filterStudents, currentCohort, coverLetter, currentCoverStatus
     const firstStudent = filteredStudents[0];
     const milestoneFields = firstStudent.milestones.map((milestone) => milestone.mile_name);
   
-    const fields = ['cohort', 'student_first', 'student_last', 'sec_clearance', 'career_status', 'course_status', 'college_degree', ...milestoneFields];
+    const fields = ['cohort', 'student_first', 'student_last', 'sec_clearance', 'career_status', 'course_status', 'college_degree', ...milestoneFields, 'tscm_first', 'tscm_last'];
     
     const selectedStudents = filteredStudents.map(student => {
       const milestones = student.milestones.reduce((acc, milestone) => {
