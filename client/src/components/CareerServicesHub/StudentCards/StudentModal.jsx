@@ -1,7 +1,5 @@
-import React, {useContext, useRef} from 'react';
-import { StudentsContext } from '../../../context/studentsContext';
+import React, {useRef} from 'react';
 import './StudentModal.css';
-import { all } from 'axios';
 
 export default function StudentModal({handleModalToggle, student}) {
 
