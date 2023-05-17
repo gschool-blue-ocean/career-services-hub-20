@@ -84,6 +84,7 @@
 }
 
 .student-tracker-modal select{
+    font-family: 'kelsonsans';
     color:white;
     border:solid rgb(116, 116, 116) 1px;
     border-radius: 5px;

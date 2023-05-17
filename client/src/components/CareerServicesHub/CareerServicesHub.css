@@ -25,6 +25,8 @@
 
 .logo {
   margin:5px;
+  width: 200px;
+  height:fit-content;
 }
 
 .left_container select {
@@ -74,7 +76,7 @@ display: none;
 }
 
 .header-buttons{
-  background: transparent;
+  /* background: transparent;
   border: none;
   border-radius: 10px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
@@ -90,7 +92,14 @@ display: none;
   text-align: center;
   text-rendering: geometricprecision;
   touch-action: manipulation;
-  margin-bottom: 15px;
+  margin: 10px; */
+  width: 180px;
+    height: 25px;
+    color:white;
+    border:solid rgb(255, 255, 255) 1px;
+    border-radius: 5px;
+    background-color: transparent;
+    margin: 10px;
 }
 
 .header-buttons:hover, .header-buttons:active{
@@ -114,5 +123,4 @@ display: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
 }
