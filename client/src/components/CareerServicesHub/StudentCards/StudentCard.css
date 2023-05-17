@@ -60,3 +60,11 @@
     padding:3%;
     white-space: nowrap;
 }
+
+.modal-off{
+    display: none;
+}
+
+.modal-on{
+    display: flex;
+}
