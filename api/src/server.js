@@ -134,6 +134,7 @@ app.post("/students/:studentId/milestones", async (req, res, next) =>{
 })
 
 app.patch("/students/:studentId/milestones/:milestoneId", async (req, res, next) =>{
+  console.log(req.body)
   const milestoneId = req.params.milestoneId;
   const studentId = req.params.studentId;
 
@@ -142,6 +143,7 @@ app.patch("/students/:studentId/milestones/:milestoneId", async (req, res, next)
 
   const result = await db.query(`UPDATE milestone SET mile_name = $1, progress_stat = $2, student_id = $3 WHERE milestone.mile_id = $4 RETURNING *`, [mileName, progress, studentId, milestoneId])
                             .catch(next);
+                            console.log(result.rows)
   res.send(result.rows);
 })
 
@@ -219,14 +221,14 @@ app.post('/managers/login', async (req, res, next) => {
 
 // Need to think about this more, because we need to update student records and calendar records BEFORE we delete any manager records otherwise we are violating foreign keys
 
-// app.delete("/managers/:id", async (req, res, next) => {
-//   const id = req.params.id;
+app.delete("/managers/:id", async (req, res, next) => {
+  const id = req.params.id;
 
-//     await db.query("DELETE FROM service_manager WHERE service_manager.tscm_id = $1", [id])
+    await db.query("DELETE FROM service_manager WHERE service_manager.tscm_id = $1", [id])
 
-//      .catch(next);
-//    res.send('Sucessfully Deleted Manager Records!');
-// })
+    .catch(next);
+    res.json({ message: 'Sucessfully Deleted Manager Records!' });
+})
 
 // -------------------------------------------------------------- EVENTS ROUTES -------------------------------------------------------------
 
