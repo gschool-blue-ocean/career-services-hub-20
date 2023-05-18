@@ -1,15 +1,19 @@
-import React, {useRef} from 'react';
+import React, {useRef, useContext} from 'react';
+import { FieldsContext } from "../../../context/fieldsContext";
 import './StudentModal.css';
 
 export default function StudentModal({handleModalToggle, student}) {
 
 const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
 
-const milestoneProgressOptions = ['Un-Satisfactory', 'In-Progress', 'Completed'];
-const careerStatusOptions = ['Searching', 'Hired', 'Not Started'];
-const courseStatusOptions = ['Student', 'Graduate'];
-const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI'];
-const degreeStatusOptions = ['Unknown', 'None', 'Associate in CS/STEM', 'Associate Not in CS/STEM', 'Bachelor in CS/STEM', 'Bachelor Not in CS/STEM', 'Masters in CS/STEM', 'Masters Not in CS/STEM'];
+const fieldsContext = useContext(FieldsContext);
+const fields = fieldsContext.fieldsData;
+
+const milestoneProgressOptions = fields.milestoneProgress;
+const careerStatusOptions = fields.career_status;
+const courseStatusOptions = fields.course_status;
+const clearanceStatusOptions = fields.sec_clearance;
+const degreeStatusOptions = fields.college_degree;
 
 const coverLetterInputRef = useRef();
 const resumeInputRef = useRef();
@@ -33,7 +37,6 @@ function handleUpdateStudent(e) {
         newMilestone.student_id = milestone.student_id;
         milestones.push(newMilestone);
     });
-
 
     milestones[0].progress_stat = coverLetterInputRef.current.value;
     milestones[1].progress_stat = resumeInputRef.current.value;
@@ -64,8 +67,6 @@ function handleUpdateStudent(e) {
                 .then(data => {
                     //Adding Milestones to Student
                     milestones.forEach((milestone) => {
-
-
                         fetch(`${url}/students/${data.student_id}/milestones/${milestone.mile_id}`, 
                         {
                             method:"PATCH", 
@@ -86,9 +87,7 @@ function handleUpdateStudent(e) {
                 })
                 .catch(function(error) {
                 console.log(error);
-                });
-
-    
+                });    
 }
 
     return (
@@ -227,7 +226,6 @@ function handleUpdateStudent(e) {
             })}
             </select>
         </div>
-
         <br/>
         <div className='update-student-container'>
         <button className='update-student' onClick={handleUpdateStudent}>Update Student</button>

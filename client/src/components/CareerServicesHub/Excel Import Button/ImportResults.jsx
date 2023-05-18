@@ -3,7 +3,7 @@ import './ImportResults.css';
 import { StudentsContext } from '../../../context/studentsContext';
 import { ManagersContext } from '../../../context/managersContext';
 
-export default function ImportResults({setAddStudent, newStudents, importManager, importMCSP}) {
+export default function ImportResults({setAddStudent, newStudents, importManager, importMCSP, handleAddStudentModalToggle, handleUpdateNewStudent}) {
 
     const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
     
@@ -32,6 +32,11 @@ export default function ImportResults({setAddStudent, newStudents, importManager
             student.cohort = `MCSP-${importMCSP}`     // Adding Identified Career Manager to Student
             student.college_degeree = `Unknown`       // Adding Identified Career Manager to Student
 
+            const managerFirst = managers[student.tscm_id - 1].tscm_first;
+            const managerLast = managers[student.tscm_id - 1].tscm_last;
+            student.tscm_first = managerFirst;
+            student.tscm_last = managerLast;
+
             fetch(`${url}/students`, 
                 {
                     method:"POST", 
@@ -43,6 +48,7 @@ export default function ImportResults({setAddStudent, newStudents, importManager
                 )
                 .then(response => response.json())   
                 .then(data => {
+                    student.milestones = [];
                     //Adding Milestones to Student
                     milestoneArray.forEach((milestone_name) => {
 
@@ -50,7 +56,7 @@ export default function ImportResults({setAddStudent, newStudents, importManager
                             mile_name: milestone_name,
                             progress_stat: 'In-Progress'
                         }
-
+                    student.milestones.push(newMilestone);
                         fetch(`${url}/students/${data.student_id}/milestones`, 
                         {
                             method:"POST", 
@@ -68,12 +74,13 @@ export default function ImportResults({setAddStudent, newStudents, importManager
                         console.log(error);
                         }); 
                     })
+                handleUpdateNewStudent(student)
+                handleAddStudentModalToggle();
                 })
                 .catch(function(error) {
                 console.log(error);
                 });
         })
-
     }
 
     return (

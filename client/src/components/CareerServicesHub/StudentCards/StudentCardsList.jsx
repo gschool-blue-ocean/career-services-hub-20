@@ -51,9 +51,6 @@ export default function StudentCardslist({
   function handleUpdateNewStudent(newStudentObj) {
     const newCurrentStudents = currentStudents.push(newStudentObj);
     setCurrentStudents(newCurrentStudents);
-    console.log("new student obj:", newStudentObj);
-    console.log("current students:", currentStudents);
-    console.log("new current students:", newCurrentStudents);
   }
 
   return (
@@ -65,9 +62,6 @@ export default function StudentCardslist({
         />
         {filterStudents != null
           ? filteredStudents.map((student) => {
-              {
-                /* console.log(student); */
-              }
               if (student.student_first === "Test") {
                 return <div className="loading-card">Loading...</div>;
               } else {

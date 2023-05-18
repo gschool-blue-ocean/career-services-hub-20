@@ -5,7 +5,7 @@ import "../Excel Import Button/CSVInputModal.css"
 
 import exportFromJSON from 'export-from-json';
 
-function CSVInputRevised({setAddStudent}) {
+function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpdateNewStudent}) {
   const initialStudents = [
     {
       First: "Bob",
@@ -143,6 +143,8 @@ function CSVInputRevised({setAddStudent}) {
           newStudents={newStudents}
           importManager={importManager}
           importMCSP={importMCSP}
+          handleAddStudentModalToggle={handleAddStudentModalToggle}
+          handleUpdateNewStudent={handleUpdateNewStudent}
         />
       </div>
     </div>
