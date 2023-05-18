@@ -75,9 +75,9 @@ function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, se
       />
       <button
           onClick={handleClear}
-          className='clear-filter-button'
+          className='header-buttons'
         >
-          Clear Filter
+          Clear Filters
       </button>
 
       <div id='filt_subcontainer' >
