@@ -1,10 +1,6 @@
-import React, {useContext, useState, useEffect} from 'react';
-import { StudentsContext } from '../../../context/studentsContext';
+import React, {useState, useEffect} from 'react';
 import './StudentCard.css'
 import StudentModal from './StudentModal';
-
-
-
 
 export default function StudentCard({student}) {
     const [milestoneProgress, setMilestoneProgress] = useState('Un-Satisfactory');
@@ -13,7 +9,6 @@ export default function StudentCard({student}) {
     let unSatisfactoryFlag = false;
 
     useEffect(() => {
-
         student.milestones.forEach((milestone) => {
             if (milestone.progress_stat == 'Un-Satisfactory') {
                 unSatisfactoryFlag = true;

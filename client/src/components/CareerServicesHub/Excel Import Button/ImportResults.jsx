@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import './ImportResults.css';
 import { StudentsContext } from '../../../context/studentsContext';
 import { ManagersContext } from '../../../context/managersContext';

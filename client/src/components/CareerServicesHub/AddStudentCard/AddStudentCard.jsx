@@ -1,12 +1,8 @@
-import React, { useContext, useState } from "react";
-import { StudentsContext } from "../../../context/studentsContext";
+import React, { useState } from "react";
 import "./AddStudentCard.css";
 import Add_Student_Modal from "./AddStudentModal";
-import AddStudentInfo from "./AddStudentInfo";
 import CSVInputRevised from "./CSVInputRevised";
 import AddStudentRevised from "./AddStudentRevised";
-
-
 
 function AddStudent() {
     const [ addStudent, setAddStudent ] = useState(false);
@@ -27,10 +23,14 @@ function AddStudent() {
         >
           <button onClick={() => setBtnSwitch(true)}>Bulk Import</button>
           <button onClick={() => setBtnSwitch(false)}>Single Student</button>
-          {btnSwitch
-            ? <CSVInputRevised />
-            : <AddStudentRevised />
-          }
+          {btnSwitch ? (
+            <CSVInputRevised setAddStudent={setAddStudent} />
+          ) : (
+            <AddStudentRevised
+              setAddStudent={setAddStudent}
+              handleAddStudentModalToggle={handleAddStudentModalToggle}
+            />
+          )}
         </Add_Student_Modal>
       </div>
     );

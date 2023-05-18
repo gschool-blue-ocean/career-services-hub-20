@@ -24,47 +24,15 @@
     filter: blur(3px);
 }
 
-.import-csv-template-button{
-    background: #FF4742;
-    border: 1px solid #FF4742;
-    border-radius: 6px;
-    box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 16px;
-    font-weight: 800;
-    line-height: 16px;
-    min-height: 40px;
-    outline: 0;
-    padding: 12px 14px;
-    text-align: center;
-    text-rendering: geometricprecision;
-    touch-action: manipulation;
-}
-
-.import-csv-template-button:hover, .import-csv-template-button:active{
-    background-color: initial;
-    background-position: 0 0;
-    color: #FF4742;
-}
-
-
 .import-modal-container{
     transition: ease .5s;
+    position: relative;
+    z-index: 1001;
     height: fit-content;
-    width: 50vw;
-
-    font-family: 'KelsonSans-Light', sans-serif;
-
-    position: fixed;
-    z-index: 3;
-    
-    background-color: rgb(255, 255, 255, 1);
-    border-radius: 10px;
-
-    animation: fadeDownIn 1s;
+    width: 100%;
+    padding: 10px;
+    font-family: 'KelsonSans';
+    color: white;
 }
 
 .import-modal-header{
@@ -113,6 +81,8 @@
 
 .import-modal-description-container{
     display:flex; 
+    justify-content: center;
+    align-items: center;
     flex-direction:column;
     
     width: 95%;
@@ -121,8 +91,6 @@
 
 .import-modal-description-text{
     width: 100%;
-    text-align: center;
-    margin: 10px;
 }
 
 .import-button-container{

@@ -3,9 +3,11 @@ import "./AddStudentCard.css";
 import { ManagersContext } from "../../../context/managersContext";
 import { StudentsContext } from "../../../context/studentsContext";
 
-function AddStudentRevised({ setAddStudent }) {
-
-  const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
+function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle }) {
+  const url =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:8000"
+      : "https://career-services-server.onrender.com";
 
   const [newStudent, setNewStudent] = useState({
     cohort: "",
@@ -34,10 +36,10 @@ function AddStudentRevised({ setAddStudent }) {
   ];
 
   const firstStudent = students[0];
-  const milestoneFields = firstStudent.milestones.map((milestone) => milestone.mile_name);
+  const milestoneFields = firstStudent.milestones.map(
+    (milestone) => milestone.mile_name
+  );
   const milestoneArray = milestoneFields.map((milestone) => milestone);
-  console.log(milestoneFields);
-  
 
   const handleFirstNameChange = (event) => {
     setNewStudent({ ...newStudent, student_first: event.target.value });
@@ -53,19 +55,16 @@ function AddStudentRevised({ setAddStudent }) {
   const handleManagerChange = (event) => {
     const selectedManager = event.target.value;
     setNewStudent({ ...newStudent, tscm_id: selectedManager });
-    console.log(selectedManager);
   };
 
   const handleEducationChange = (event) => {
     const currentEducation = event.target.value;
     setNewStudent({ ...newStudent, college_degree: currentEducation });
-    console.log("log education", currentEducation);
   };
 
   const handleClearanceChange = (event) => {
     const currentClearance = event.target.value;
     setNewStudent({ ...newStudent, sec_clearance: currentClearance });
-    console.log('current clearance', currentClearance);
   };
 
   const handleMCSPChange = (event) => {
@@ -84,7 +83,7 @@ function AddStudentRevised({ setAddStudent }) {
       college_degree: newStudent.college_degree,
       sec_clearance: newStudent.sec_clearance,
     };
-    console.log('new student object:', newStudentObj);
+    console.log("new student object:", newStudentObj);
     try {
       const response = await fetch(`${url}/students`, {
         method: "POST",
@@ -117,6 +116,7 @@ function AddStudentRevised({ setAddStudent }) {
     } finally {
       setAddStudent(false);
     }
+    handleAddStudentModalToggle();
   };
 
   return (
@@ -178,10 +178,7 @@ function AddStudentRevised({ setAddStudent }) {
           <option>Select Education</option>
           {addEducation.map((education, index) => {
             return (
-              <option 
-                key={index} 
-                value={education}
-              >
+              <option key={index} value={education}>
                 {education}
               </option>
             );
@@ -197,10 +194,7 @@ function AddStudentRevised({ setAddStudent }) {
           <option value="">Select a Security Clearance</option>
           {secClearance.map((security, index) => {
             return (
-              <option 
-                key={index} 
-                value={security}
-              >
+              <option key={index} value={security}>
                 {security}
               </option>
             );

@@ -99,9 +99,9 @@ function CSVInputRevised({setAddStudent}) {
           Please choose a MCSP/Career Service Manager and upload a .csv file
           with information about the students
         </span>
-        <a className="import-modal-description-text" onClick={excelImportTemplate}>
+        <a className="import-modal-description-text header-buttons" onClick={excelImportTemplate}>
           {" "}
-          Click here for a excel template{" "}
+          Click for csv template{" "}
         </a>
       </div>
       <div className="import-button-container">
@@ -132,7 +132,7 @@ function CSVInputRevised({setAddStudent}) {
           </div>
         </div>
         <input
-          className="submit-button"
+          className="header-buttons"
           type="submit"
           onClick={(e) => handleSubmit(e)}
         />

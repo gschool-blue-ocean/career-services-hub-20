@@ -8,7 +8,6 @@ export default function StudentCardslist ({ filterStudents, currentCohort, cover
 
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
-  //console.log(students);
 
   const filteredStudents = filterStudents(students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance,  educationStatus, selectedManager);
   
