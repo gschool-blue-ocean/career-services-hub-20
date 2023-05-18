@@ -53,6 +53,11 @@ function AddStudentRevised({
       college_degree: educationInputRef.current.value,
       sec_clearance: clearanceInputRef.current.value,
     };
+    const managerFirst = managers[newStudentObj.tscm_id - 1].tscm_first;
+    const managerLast = managers[newStudentObj.tscm_id - 1].tscm_last;
+    newStudentObj.tscm_first = managerFirst;
+    newStudentObj.tscm_last = managerLast;
+
     try {
       const response = await fetch(`${url}/students`, {
         method: "POST",
@@ -63,14 +68,14 @@ function AddStudentRevised({
       });
 
       const addedStudent = await response.json();
-
+      newStudentObj.milestones = [];
       //Adding Milestones to Student
       milestoneArray.forEach((milestone_name) => {
         const newMilestone = {
           mile_name: milestone_name,
           progress_stat: "In-Progress",
         };
-
+        newStudentObj.milestones.push(newMilestone);
         fetch(`${url}/students/${addedStudent.student_id}/milestones`, {
           method: "POST",
           headers: {
@@ -79,13 +84,13 @@ function AddStudentRevised({
           body: JSON.stringify(newMilestone),
         });
       });
+      handleUpdateNewStudent(newStudentObj);
       return addedStudent;
     } catch (error) {
       console.log(error);
     } finally {
       setAddStudent(false);
     }
-    handleUpdateNewStudent(newStudentObj);
 
     handleAddStudentModalToggle();
   };
