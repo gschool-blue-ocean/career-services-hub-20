@@ -2,18 +2,11 @@ import React, { useContext, useState, useRef } from "react";
 import "./AddStudentCard.css";
 import { ManagersContext } from "../../../context/managersContext";
 import { StudentsContext } from "../../../context/studentsContext";
+import { FieldsContext } from "../../../context/fieldsContext";
 
-function AddStudentRevised({
-  setAddStudent,
-  handleAddStudentModalToggle,
-  handleUpdateNewStudent,
-}) {
-  const url =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:8000"
-      : "https://career-services-server.onrender.com";
+function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleUpdateNewStudent }) {
+  const url = process.env.NODE_ENV === "development" ? "http://localhost:8000": "https://career-services-server.onrender.com";
 
-  const managersContext = useContext(ManagersContext);
   const managerInputRef = useRef();
   const mcspInputRef = useRef();
   const studentFirstInputRef = useRef();
@@ -24,17 +17,14 @@ function AddStudentRevised({
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
 
+  const fieldsContext = useContext(FieldsContext);
+  const fields = fieldsContext.fieldsData;
+
+  const managersContext = useContext(ManagersContext);
   const managers = managersContext.managersData;
-  const secClearance = ["None", "SECRET", "TOP SECRET", "TOP SECRET//SCI"];
-  const addEducation = [
-    "None",
-    "Associate's in CS/STEM",
-    "Associate's Not in CS/STEM",
-    "Bachelor's in CS/STEM",
-    "Bachelor's Not in CS/STEM",
-    "Masters in CS/STEM",
-    "Masters Not in CS/STEM",
-  ];
+
+  const secClearance = fields.sec_clearance;
+  const addEducation = fields.college_degree;
 
   const firstStudent = students[0];
   const milestoneFields = firstStudent.milestones.map(
@@ -53,6 +43,11 @@ function AddStudentRevised({
       college_degree: educationInputRef.current.value,
       sec_clearance: clearanceInputRef.current.value,
     };
+    const managerFirst = managers[newStudentObj.tscm_id - 1].tscm_first;
+    const managerLast = managers[newStudentObj.tscm_id - 1].tscm_last;
+    newStudentObj.tscm_first = managerFirst;
+    newStudentObj.tscm_last = managerLast;
+
     try {
       const response = await fetch(`${url}/students`, {
         method: "POST",
@@ -63,14 +58,14 @@ function AddStudentRevised({
       });
 
       const addedStudent = await response.json();
-
+      newStudentObj.milestones = [];
       //Adding Milestones to Student
       milestoneArray.forEach((milestone_name) => {
         const newMilestone = {
           mile_name: milestone_name,
           progress_stat: "In-Progress",
         };
-
+        newStudentObj.milestones.push(newMilestone);
         fetch(`${url}/students/${addedStudent.student_id}/milestones`, {
           method: "POST",
           headers: {
@@ -79,14 +74,13 @@ function AddStudentRevised({
           body: JSON.stringify(newMilestone),
         });
       });
+      handleUpdateNewStudent(newStudentObj);
       return addedStudent;
     } catch (error) {
       console.log(error);
     } finally {
       setAddStudent(false);
     }
-    handleUpdateNewStudent(newStudentObj);
-
     handleAddStudentModalToggle();
   };
 

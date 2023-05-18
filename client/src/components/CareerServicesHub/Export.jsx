@@ -9,11 +9,6 @@ function Export({ filterStudents, currentCohort, coverLetter, currentCoverStatus
 
   const filteredStudents = filterStudents(students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance, educationStatus, selectedManager);
 
-  
-  // const milestoneFields = [{ name: 'mile_name' }, { name: 'progress_stat' }];
-  // const milestoneColumns = milestoneFields.map(field => `milestones.${field.name}`);
-  // const allFields = fields.concat(milestoneColumns);
-
   const onExportToCsv = () => {
     
     const firstStudent = filteredStudents[0];

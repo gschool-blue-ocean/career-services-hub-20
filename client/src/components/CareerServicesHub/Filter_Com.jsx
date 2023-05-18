@@ -1,25 +1,23 @@
-import React, { useContext, useEffect, useRef } from 'react';
-
-import './filter.css';
-import { StudentsContext } from '../../context/studentsContext';
+import React, { useContext, useRef } from 'react';
 import { ManagersContext } from "../../context/managersContext";
+import { FieldsContext } from "../../context/fieldsContext";
 import SearchBar from './SearchFunction/Search';
-
+import './filter.css';
 
 function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, setCoverLetter, setCurrentCoverStatus, currentCoverStatus, setStudentResume, currentResumeStatus, setCurrentResumeStatus,setLinkedAccount, linkedAccountStatus, setLinkedAccountStatus, setPersonalNarrative, narrativeStatus, setNarrativeStatus, setHunterAccess, currentAccess, setCurrentAccess, currentStatus, setCurrentStatus, currentClearance, setCurrentClearance, educationStatus, setEducationStatus, setSelectedManager, setSelectedManagerFull, handleClear }) {
-  
-  const studentContext = useContext(StudentsContext);
-  const students = studentContext.studentsData;
-  
+
   const managersContext = useContext(ManagersContext);
   const managers = managersContext.managersData;
   const managerInputRef = useRef();
+    
+  const fieldsContext = useContext(FieldsContext);
+  const fields = fieldsContext.fieldsData;
   
-  const cohorts = ['MCSP-16', 'MCSP-17', 'MCSP-18', 'MCSP-19', 'MCSP-20', 'MCSP-21', 'MCSP-22'];
-  const secClearance = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI'];
-  const courseStatus = ['Student', 'Graduate'];
-  const progress_stat = ['In-Progress', 'Completed', 'Un-Satisfactory'];
-  const ed_status = ['Undetermined', 'None', 'Associate in CS/STEM', 'Associate Not in CS/STEM', 'Bachelor in CS/STEM', 'Bachelor Not in CS/STEM', 'Masters in CS/STEM', 'Masters Not in CS/STEM'];
+  const cohorts = fields.cohort;
+  const secClearance = fields.sec_clearance;
+  const courseStatus = fields.course_status;
+  const progress_stat = fields.milestoneProgress;
+  const ed_status = fields.college_degree;
 
   const handleSearch = (searchTerm) => {
     setSearchTerm(searchTerm);
@@ -52,14 +50,8 @@ function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, se
 
   const handleManagerChange = (e) => {
     const selectedManagerId = parseInt(e.target.value)
-    // console.log('Selected manager ID:', selectedManagerId);
-    // console.log('Managers:', managers);
-
     const selectManager = managers.find(manager => manager.tscm_id === selectedManagerId);
-    // console.log('Selected manager first name:', selectManager.tscm_first);
-    // console.log('Selected manager last name:', selectManager.tscm_last);
     
-
     if (selectManager) {
       setSelectedManager(selectManager.tscm_first);
     }

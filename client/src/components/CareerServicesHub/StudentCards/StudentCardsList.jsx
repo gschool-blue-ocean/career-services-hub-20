@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useEffect } from "react";
 import { StudentsContext } from "../../../context/studentsContext";
 import AddStudent from "../AddStudentCard/AddStudentCard";
 import StudentCard from "./StudentCard";
@@ -24,15 +25,10 @@ export default function StudentCardslist({
 }) {
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
-  const [newStudent, setNewStudent] = useState({
-    cohort: "",
-    tscm_id: 0,
-    student_first: "",
-    student_last: "",
-    college_degree: "",
-    sec_clearance: "",
-  });
-
+  const [currentStudents, setCurrentStudents] = useState(students);
+  useEffect(() => {
+    setCurrentStudents(students);
+  }, [students]);
   const filteredStudents = filterStudents(
     students,
     currentCohort,
@@ -53,19 +49,19 @@ export default function StudentCardslist({
   );
 
   function handleUpdateNewStudent(newStudentObj) {
-    setNewStudent(newStudentObj)
-    console.log('I am the handleUpdateNewStudent')
+    const newCurrentStudents = currentStudents.push(newStudentObj);
+    setCurrentStudents(newCurrentStudents);
   }
 
   return (
     <>
       <div className="student-card-container">
-        <AddStudent filterStudents={filterStudents} handleUpdateNewStudent={handleUpdateNewStudent} />
+        <AddStudent
+          filterStudents={filterStudents}
+          handleUpdateNewStudent={handleUpdateNewStudent}
+        />
         {filterStudents != null
           ? filteredStudents.map((student) => {
-              {
-                /* console.log(student); */
-              }
               if (student.student_first === "Test") {
                 return <div className="loading-card">Loading...</div>;
               } else {
