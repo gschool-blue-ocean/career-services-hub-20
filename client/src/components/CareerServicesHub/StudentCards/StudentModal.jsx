@@ -230,7 +230,7 @@ function handleUpdateStudent(e) {
 
         <br/>
         <div className='update-student-container'>
-        <button className='update-student' onClick={handleUpdateStudent}>Update Student</button>
+        <button className='header-buttons' onClick={handleUpdateStudent}>Update Student</button>
         </div>
     </div>
     </>

@@ -93,10 +93,10 @@ function AddStudentRevised({
   return (
     <div className="add-container">
       <div className="add-subcontainer">
-        <h1 id="add-text">Select MCSP</h1>
+        <div id="add-text">MCSP:</div>
         <span>
           {" "}
-          MCSP:{" "}
+          {" "}
           <input
             type="number"
             className="import-input-MCSP"
@@ -105,8 +105,8 @@ function AddStudentRevised({
         </span>
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Managers</h1>
-        <select className="import-input" ref={managerInputRef}>
+        <div id="add-text">Manager:</div>
+        <select className="import-input-manager" ref={managerInputRef}>
           <option>Select a Career Service Manager</option>
           {managers.map((manager) => {
             return (
@@ -118,7 +118,7 @@ function AddStudentRevised({
         </select>
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Enter First Name:</h1>
+        <div id="add-text">First Name:</div>
         <input
           type="text"
           placeholder="first name"
@@ -126,11 +126,11 @@ function AddStudentRevised({
         />
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Enter Last Name:</h1>
+        <div id="add-text">Last Name:</div>
         <input type="text" placeholder="last name" ref={studentLastInputRef} />
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Education:</h1>
+        <div id="add-text">Education:</div>
         <select ref={educationInputRef}>
           <option>Select Education</option>
           {addEducation.map((education, index) => {
@@ -143,7 +143,7 @@ function AddStudentRevised({
         </select>
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Security Clearance:</h1>
+        <div id="add-text">Security Clearance:</div>
         <select ref={clearanceInputRef}>
           <option value="">Select a Security Clearance</option>
           {secClearance.map((security, index) => {
@@ -155,7 +155,9 @@ function AddStudentRevised({
           })}
         </select>
       </div>
-      <button onClick={addNewStudent}>Add New Student</button>
+      <div className="submit-student-button">
+      <button className="header-buttons" onClick={addNewStudent}>Add New Student</button>
+      </div>
     </div>
   );
 }

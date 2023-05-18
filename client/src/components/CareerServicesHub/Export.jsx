@@ -41,10 +41,11 @@ function Export({ filterStudents, currentCohort, coverLetter, currentCoverStatus
   }
 
   return (
-    <div>
+    <div className='export-button'>
       <button
         onClick={onExportToCsv}
         className='header-buttons'
+        id='export'
       >
         Export to CSV
       </button>
