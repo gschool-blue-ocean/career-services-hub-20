@@ -63,7 +63,7 @@ const seedStudents = async () => {
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
         for (let i = 0; i < SEED_STUDENT_ROWS; i++){
-            console.log(`seeded ${i} students!`);
+            // console.log(`seeded ${i} students!`);
             const {student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm__id} = studentList[i];
             await db.query(queryString, [student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm__id]);
         }
@@ -94,7 +94,7 @@ const seedServiceManager = async () => {
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
 
         for (let i = 0; i < SEED_CAREER_MANAGER; i++){
-            console.log(`seeded ${i} TSCM!`);
+            // console.log(`seeded ${i} TSCM!`);
             const {tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar} = careerManager[i];
             await db.query(queryString, [tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar]);
         }
@@ -132,7 +132,7 @@ const seedCalendar = async () => {
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
         
         for (let i = 0; i < 15; i++){
-            console.log(`seeded ${i} Calendar events!`);
+            // console.log(`seeded ${i} Calendar events!`);
             const {event_name, tscm_id, event_date, event_time, speak_con, event_descrip} = calendarEvent[i];
             await db.query(queryString, [event_name, tscm_id, event_date, event_time, speak_con, event_descrip]);
         }
@@ -156,7 +156,7 @@ const seedMilestone = async () => {
             for (let i = 0; i < studentMilestone.length; i++){
             let randomNumber = Math.floor(Math.random() * 3);
 
-            console.log(`seeded ${i} milestone!`);
+            // console.log(`seeded ${i} milestone!`);
             await db.query(queryString, [studentMilestone[i], progress_stat[randomNumber], currentStudentNumber]);
         }
         currentStudentNumber++;

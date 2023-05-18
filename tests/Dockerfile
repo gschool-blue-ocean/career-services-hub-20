@@ -3,4 +3,4 @@ WORKDIR /code
 COPY package*.json .
 RUN npm install
 COPY . .
-CMD ["npm", "test"]
+CMD ["./wait-for.sh", "api:8000", "npm", "test"]

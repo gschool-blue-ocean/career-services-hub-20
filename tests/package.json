@@ -2,14 +2,18 @@
   "name": "tests",
   "version": "1.0.0",
   "description": "Testing suite",
-  "main": "apitest.js",
+  "main": "apitest.spec.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest apitests.spec.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "jest": "^29.5.0",
     "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.11.0"
   }
 }
