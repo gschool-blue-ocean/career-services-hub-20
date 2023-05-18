@@ -109,7 +109,7 @@ app.delete("/students/:id", async (req, res, next) => {
 
   await db.query("DELETE FROM student WHERE student.student_id = $1", [id])
     .catch(next);
-  res.send('Sucessfully Deleted Student Record!');
+    res.json({ message: 'Successfully Deleted Student Record!' });
 })
 
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
