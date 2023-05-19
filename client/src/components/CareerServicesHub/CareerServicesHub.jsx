@@ -270,6 +270,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
           currentClearance={currentClearance}
           educationStatus={educationStatus}
           selectedManager={selectedManager}
+          handleClear={handleClear}
         />
       </div>
     </div>
