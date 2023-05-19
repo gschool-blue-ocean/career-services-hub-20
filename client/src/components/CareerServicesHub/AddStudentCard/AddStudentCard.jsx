@@ -19,6 +19,8 @@ function AddStudent({ handleUpdateNewStudent }) {
       <Add_Student_Modal
         addStudent={addStudent}
         handleAddStudentModalToggle={handleAddStudentModalToggle}
+        setAddStudent={setAddStudent}
+        handleUpdateNewStudent={handleUpdateNewStudent}
       >
       </Add_Student_Modal>
     </div>

@@ -24,12 +24,9 @@ export default function StudentCardslist({
   selectedManager,
 }) {
   const studentContext = useContext(StudentsContext);
-  const students = studentContext.studentsData;
+  let students = studentContext.studentsData;
   const [currentStudents, setCurrentStudents] = useState(students);
-  useEffect(() => {
-    setCurrentStudents(students);
-  }, [students]);
-  const filteredStudents = filterStudents(
+  let filteredStudents = filterStudents(
     students,
     currentCohort,
     coverLetter,
@@ -47,10 +44,38 @@ export default function StudentCardslist({
     educationStatus,
     selectedManager
   );
+  useEffect(() => {
+    setCurrentStudents(students);
+  }, [students]);
 
   function handleUpdateNewStudent(newStudentObj) {
     const newCurrentStudents = currentStudents.push(newStudentObj);
     setCurrentStudents(newCurrentStudents);
+  }
+
+  function handleUpdateExistingStudent(existingStudentObj) {
+  // let studentId;
+  // filteredStudents.forEach((student, index)=> {
+  //   if (student.student_id == existingStudentObj.student_id) {
+  //     studentId = index;
+  //   }
+  // })
+
+  // filteredStudents[studentId] = existingStudentObj;
+  // setCurrentStudents(filteredStudents);
+  // console.log('filtered students: ', filteredStudents);
+  // console.log('existing student obj: ',existingStudentObj)
+  const updatedStudents = filteredStudents.map((student) => {
+    if (student.student_id === existingStudentObj.student_id) {
+      return existingStudentObj;
+    }
+    return student;
+  });
+  filteredStudents = updatedStudents;
+  console.log('existing student object ', existingStudentObj);
+  console.log('updated students', updatedStudents);
+  console.log('filtered students', filteredStudents);
+  setCurrentStudents(updatedStudents);
   }
 
   return (
@@ -60,6 +85,7 @@ export default function StudentCardslist({
           filterStudents={filterStudents}
           handleUpdateNewStudent={handleUpdateNewStudent}
         />
+        {console.log('filtered students inside return ',filteredStudents)}
         {filterStudents != null
           ? filteredStudents.map((student) => {
               if (student.student_first === "Test") {
@@ -67,7 +93,10 @@ export default function StudentCardslist({
               } else {
                 return (
                   <div key={student.student_id}>
-                    <StudentCard student={student} />
+                    <StudentCard 
+                    currentStudents={currentStudents}
+                    handleUpdateExistingStudent={handleUpdateExistingStudent}
+                    student={student} />
                   </div>
                 );
               }
