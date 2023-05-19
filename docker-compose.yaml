@@ -36,6 +36,7 @@ services:
       # This allows live reload inside a docker container by mapping your
       # filesystem to the container's.
       - ./api/src:/code/src
+      # Sleep time added for seeding since things get kinda weird if you don't wait.
     command: /bin/sh -c "sleep 2 && npm run seed && npm run dev"
 
 
@@ -57,7 +58,7 @@ services:
   tests:
       build: ./tests
       env_file: .env
-      environment:  # "environment" was misspelled
+      environment:
         DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database/${POSTGRES_DB}
         NODE_ENV: development
       depends_on:

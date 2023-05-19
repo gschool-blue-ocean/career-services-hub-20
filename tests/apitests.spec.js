@@ -1,8 +1,11 @@
 const request = require('supertest');
 const app = 'http://api:80';
 
+// This is for testing all routes locally. There should be a docker container that can run the suite and talk directly to the container.
+
 // TEST ARE OUT OF ORDER INTENTIONALLY. TO AVOID FK PROBLEMS A MANAGER/STUDENT IS MADE FIRST BEFORE ANYTHING ELSE HAPPENS //
 
+// Global variables intentional. This is for use in multiple routes.
 let newStudentId;
 let newMileId;
 let newManagerId
