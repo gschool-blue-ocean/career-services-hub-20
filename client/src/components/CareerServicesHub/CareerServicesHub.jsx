@@ -5,14 +5,12 @@ import { ManagersContext } from '../../context/managersContext';
 import { FieldsContext } from '../../context/fieldsContext';
 
 import StudentCardsList from './StudentCards/StudentCardsList';
-import { FaUserCircle } from 'react-icons/fa';
 import './CareerServicesHub.css'
 
 import Export from './Export';
 import './filter.css';
 import Filter from './Filter_Com';
 import galvanizeLogo from '../logIn/galvanizeLogo.webp';
-import SearchBar from './SearchFunction/Search';
 
 export default function CareerServicesHub( {handleLogOff} ) {
 
@@ -245,7 +243,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
         />
         <div className='profile-container'>
           <button className='header-buttons' onClick={handleLogOff}>
-            <FaUserCircle/> Logout
+            Logout
           </button>
         </div>            
         </div>

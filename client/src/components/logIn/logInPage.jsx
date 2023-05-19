@@ -26,7 +26,6 @@ const LogInPage = ({ handleLogin }) => {
 
 
       if (responseData.success) {
-        console.log("Login successful:", responseData);
         localStorage.setItem('authToken', responseData.accessToken);
         handleLogin(responseData.accessToken); // Call the handleLogin function passed as a prop
       } else {
@@ -34,7 +33,6 @@ const LogInPage = ({ handleLogin }) => {
       }
     }
     catch (error) {
-      console.error(error)
       setErrorRelay("Get out of here imposter 😠");
     }
   }
@@ -73,7 +71,7 @@ const LogInPage = ({ handleLogin }) => {
           id="password"
         ></input>
         <button className="login-button">Log In</button>
-        {errorRelay && <p className="error-message">{errorRelay}</p>}
+        {errorRelay ? <p className="error-message">{errorRelay}</p> : <p className="easter-egg">🌮</p>} 
       </form>
     </div>
   );
