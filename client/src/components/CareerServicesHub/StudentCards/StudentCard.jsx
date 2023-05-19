@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './StudentCard.css'
 import StudentModal from './StudentModal';
 
-export default function StudentCard({student}) {
+export default function StudentCard({ currentStudents, handleUpdateExistingStudent, student}) {
     const [milestoneProgress, setMilestoneProgress] = useState('Un-Satisfactory');
     const [modalToggle, setModalToggle] = useState(false);
     let count = 0;
@@ -26,9 +26,8 @@ export default function StudentCard({student}) {
             } else {
                 setMilestoneProgress('Completed')
             } 
-    }, [student]);
-
-    // console.log('student #' + student.student_id + ' total ' + count);
+            console.log('student ', student) 
+    }, [student, currentStudents]);
 
         function handleModalToggle() {
             let newModalToggle = !modalToggle;
@@ -43,7 +42,9 @@ export default function StudentCard({student}) {
                 <span className='student-card-manager'>{student.tscm_first} {student.tscm_last[0]} .</span>
                 </div>
             <div className={modalToggle ? 'modal-on' : 'modal-off'}>
-                <StudentModal handleModalToggle = {handleModalToggle} student = {student}/>
+                <StudentModal 
+                handleUpdateExistingStudent = {handleUpdateExistingStudent}
+                handleModalToggle = {handleModalToggle} student = {student}/>
             </div>
         </>
 
