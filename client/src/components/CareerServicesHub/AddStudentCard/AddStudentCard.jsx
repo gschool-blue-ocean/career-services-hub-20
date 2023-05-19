@@ -20,21 +20,6 @@ function AddStudent({ handleUpdateNewStudent }) {
         addStudent={addStudent}
         handleAddStudentModalToggle={handleAddStudentModalToggle}
       >
-        <button onClick={() => setBtnSwitch(true)}>Bulk Import</button>
-        <button onClick={() => setBtnSwitch(false)}>Single Student</button>
-        {btnSwitch ? (
-          <CSVInputRevised 
-            setAddStudent={setAddStudent} 
-            handleAddStudentModalToggle={handleAddStudentModalToggle}
-            handleUpdateNewStudent={handleUpdateNewStudent} 
-          />
-        ) : (
-          <AddStudentRevised
-            setAddStudent={setAddStudent}
-            handleAddStudentModalToggle={handleAddStudentModalToggle}
-            handleUpdateNewStudent={handleUpdateNewStudent}
-          />
-        )}
       </Add_Student_Modal>
     </div>
   );
