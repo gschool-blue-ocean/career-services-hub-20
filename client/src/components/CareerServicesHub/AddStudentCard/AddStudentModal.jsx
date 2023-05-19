@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
-
+import CSVInputRevised from "./CSVInputRevised";
+import AddStudentRevised from "./AddStudentRevised";
 import "./AddStudentCard.css";
 
-function Add_Student_Modal({ children, addStudent, handleAddStudentModalToggle }) {
+function Add_Student_Modal({ addStudent, handleAddStudentModalToggle, setAddStudent, handleUpdateNewStudent }) {
+  const [btnSwitch, setBtnSwitch] = useState(true);
 
     if (!addStudent) return null;
     return ReactDOM.createPortal(
@@ -14,11 +16,23 @@ function Add_Student_Modal({ children, addStudent, handleAddStudentModalToggle }
               onClick={handleAddStudentModalToggle}
               />
             <div className="add_modal">
-            <button id="closeBtn" onClick={handleAddStudentModalToggle}>
-              X
-            </button>
-            {children}
-          </div>
+              <div className="add-modal-buttons-container">
+                <div className="add-modal-tab-button-containers">
+                  <button className={btnSwitch? "header-buttons-active" : "header-buttons"} onClick={() => setBtnSwitch(true)}>Bulk Import</button>
+                  <button className={btnSwitch? "header-buttons" : "header-buttons-active"} onClick={() => setBtnSwitch(false)}>Single Student</button>
+                </div>
+                <button className="header-buttons" onClick={handleAddStudentModalToggle}>X</button>
+                </div>
+                {btnSwitch ? (
+                  <CSVInputRevised setAddStudent={setAddStudent} />
+                ) : (
+                  <AddStudentRevised
+                    setAddStudent={setAddStudent}
+                    handleAddStudentModalToggle={handleAddStudentModalToggle}
+                    handleUpdateNewStudent={handleUpdateNewStudent}
+                  />
+                )}
+            </div>
         </div>
       </>,
       document.getElementById("portal")

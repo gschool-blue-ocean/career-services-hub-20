@@ -13,6 +13,7 @@ const SearchBar = ({ onSearch, searchTerm, setSearchTerm }) => {
     };
 
     return (
+    <div className='search-bar-container'>
     <form onSubmit={handleSubmit}>
         <input
         type="text"
@@ -22,6 +23,7 @@ const SearchBar = ({ onSearch, searchTerm, setSearchTerm }) => {
         className='student-search-bar'
         />
     </form>
+    </div>
     );
 };
 

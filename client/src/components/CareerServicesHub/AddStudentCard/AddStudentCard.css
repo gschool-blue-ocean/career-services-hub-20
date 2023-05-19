@@ -12,38 +12,26 @@
     align-content: center;
 }
 
-#add-card:hover > #add-card-name{
-    color: white;
-}
-
-#add-card:hover{
-    cursor: pointer;
-    transform: scale(1.05);
-    background: linear-gradient(135deg, rgba(21,4,89,1) 30%, rgba(247,130,24,1) 125%);
-    color: white;
-
-    transition: ease 0.4s;
-}
-
 #add-card-name {
     color: white;
-    display:block;
-    font-size: 70px;;
-    margin:5%;
+    font-size: 70px;
+    height: 100%;
+    width: 100%;
     border:none;
     border-radius:10px;
     white-space: nowrap;
-    padding-left: 26%;
-    background: none;   
+    background: none;  
+    transition:ease 0.4s; 
 }
 
 #add-card-name:hover{
+    background: linear-gradient(135deg, rgba(21,4,89,1) 30%, rgba(247,130,24,1) 125%); 
     cursor: pointer;
-    transform: scale(1.05);
+    transform: scale(1.13);
     color: white;
-
     transition: ease 0.4s;
 }
+
 
 .add-modal-overlay-container{
     display: flex;
@@ -65,7 +53,18 @@
 
 #add-text {
     font-size: 20px;
-    margin-right: 10px;
+    margin-right: 1%;
+}
+
+.submit-student-button {
+    display: flex;
+    justify-content: center;
+}
+
+.add-subcontainer {
+    display: flex;
+    margin-top: 1%;
+    margin-bottom: 1%;
 }
 
 .add_modal{
@@ -73,7 +72,7 @@
     position: fixed;
     z-index: 1001;
     height: fit-content;
-    width: 50vh;
+    width: 50vw;
     padding: 20px;
     font-family: 'KelsonSans';
     color: white;
@@ -83,9 +82,8 @@
 
 .add_modal #add-text {
     font-family: 'KelsonSans-Bold';
-    font-size: x-large;
+    font-size: larger;
     font-weight: bold;
-    margin-top: 10px;
 }
 
 .add-student-info-title {
@@ -124,6 +122,12 @@ color:white;
     background-color: transparent;
 }
 
+.add-modal-buttons-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
 
 .add_modal select{
     font-family: 'kelsonsans';
@@ -133,13 +137,6 @@ color:white;
     background-color: transparent;
 }
 
-.add_modal select{
-    font-family: 'kelsonsans';
-    color:white;
-    border:solid rgb(116, 116, 116) 1px;
-    border-radius: 5px;
-    background-color: transparent;
-}
 
 .add_modal option{
     background-color: black;

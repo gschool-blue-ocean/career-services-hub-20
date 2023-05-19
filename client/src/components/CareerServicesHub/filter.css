@@ -43,13 +43,8 @@
 
 }
 
-.clear-filter-button {
-    width: 180px;
-    height: 25px;
-    color:white;
-    border:solid rgb(116, 116, 116) 1px;
-    border-radius: 5px;
-    background-color: transparent;
+.clear-filters-button {
+text-align: center;
 }
 
 .clear-filter-button:hover, .clear-filter-button:active{
@@ -79,14 +74,12 @@
 }
 
 #filt_container{ 
-    display: grid;
-    margin-left: 2%;
-    margin-top: 5%
+    justify-content: center;
 }
 
 #filt_subcontainer{
-    display:block;
-    width: auto;
+    margin:5%;
+
 }
 
 #filt_title{    

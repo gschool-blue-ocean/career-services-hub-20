@@ -109,7 +109,7 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
           <div className="import-button-input-MCSP">
             <span>
               {" "}
-              MCSP:{" "}
+              MCSP :{" "}
               <input
                 type="number"
                 className="import-input-MCSP"
@@ -128,7 +128,7 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
             })}
           </select>
           <div className="import-file-input-container">
-            <input type="file" accept=".csv" onChange={handleFileUpload} />
+            <input className='header-buttons' type="file" accept=".csv" onChange={handleFileUpload} />
           </div>
         </div>
         <input

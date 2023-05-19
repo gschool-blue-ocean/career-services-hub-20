@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import "./AddStudentCard.css";
 import Add_Student_Modal from "./AddStudentModal";
-import CSVInputRevised from "./CSVInputRevised";
-import AddStudentRevised from "./AddStudentRevised";
+
 
 function AddStudent({ handleUpdateNewStudent }) {
   const [addStudent, setAddStudent] = useState(false);
-  const [btnSwitch, setBtnSwitch] = useState(true);
+  
 
   function handleAddStudentModalToggle() {
     setAddStudent((prevState) => !prevState);

@@ -65,15 +65,16 @@ function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, se
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
+      <div className='clear-filters-button'>
       <button
           onClick={handleClear}
           className='header-buttons'
         >
           Clear Filters
       </button>
-
-      <div id='filt_subcontainer'>
-        <h1 id='filt_title'>Select a MCSP</h1>
+      </div>
+      <div id='filt_subcontainer' >
+        <h1 id='filt_title' >Select a MCSP</h1>
           <select
             value={currentCohort}
             onChange={(e) => setCurrentCohort(e.target.value)}
