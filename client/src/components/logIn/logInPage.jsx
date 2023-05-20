@@ -35,13 +35,21 @@ const LogInPage = ({ handleLogin }) => {
     }
     catch (error) {
       console.error(error)
-      setErrorRelay("get out of here imposter 😠");
+      setErrorRelay("Get out of here imposter 😠");
     }
   }
 
+  // Upon submit email and password is passed into the Log in user function
+
   const handleUserLogin = (e) => {
     e.preventDefault();
-    loginUser(email, pass);
+  
+    // Check if both email and password fields are not empty
+    if (email === "" || pass === "") {
+      setErrorRelay("Please fill in both email and password fields 🤦"); 
+    } else {
+      loginUser(email, pass);
+    }
   };
 
   return (
@@ -64,7 +72,7 @@ const LogInPage = ({ handleLogin }) => {
           placeholder="*******"
           id="password"
         ></input>
-        <button className="login-button">log in</button>
+        <button className="login-button">Log In</button>
         {errorRelay && <p className="error-message">{errorRelay}</p>}
       </form>
     </div>
