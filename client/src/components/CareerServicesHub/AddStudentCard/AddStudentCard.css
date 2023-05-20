@@ -1,7 +1,7 @@
 #add-card {
     background: linear-gradient(135deg, rgba(21,4,89,.8) 30%, rgba(247,130,24,.8) 125%);
     height: 110px;
-    width: 150px;
+    width: 140px;
     border: none;
     padding: 5%;
     text-align: center;
@@ -33,7 +33,7 @@
 }
 
 
-.add-modal-overlay-container{
+.modal-overlay-container{
     display: flex;
     position: absolute;
     z-index: 2;
@@ -49,6 +49,7 @@
 
 .add-container {
     display: grid;
+    
 }
 
 #add-text {
@@ -78,6 +79,7 @@
     color: white;
     border-radius: 10px;
     background-color: rgba(0, 0, 0, 0.678); 
+    justify-content: center;
 }
 
 .add_modal #add-text {
@@ -126,6 +128,7 @@ color:white;
     display: flex;
     width: 100%;
     justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 

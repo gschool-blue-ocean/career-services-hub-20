@@ -43,7 +43,7 @@ const seedStudents = async () => {
         let randomNumber = Math.floor(Math.random() * 3);  // Generates a random number between 0-2
         let randomNumber2 = Math.floor(Math.random() * 2); // Generates a random number between 0-1
         let randomNumber3 = Math.floor(Math.random() * 5); // Generates a random number between 0-4
-        let randomNumber4 = Math.floor(Math.random() * 9); // Generates a random number between 0-8
+        let randomNumber4 = Math.floor(Math.random() * 8); // Generates a random number between 0-7
 
         studentList.push({
             student_first: faker.name.firstName(),
