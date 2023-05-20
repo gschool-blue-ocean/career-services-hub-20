@@ -17,6 +17,7 @@
 }
 
 .left_container {
+  padding-right: 0px;
   display: flex;
   height: 100vh;
   font-family: 'KelsonSans-Bold';
@@ -27,6 +28,7 @@
   width: 200px;
   height:fit-content;
   text-align: center;
+  margin: 10px;
 
 }
 
@@ -52,7 +54,7 @@
 }
 
 .collapse-filter-button {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.267);
   border: none;
   width: fit-content;
   padding: 0px 2px;
@@ -65,7 +67,7 @@
 .collapse-filter-button:hover{
   transition: ease .5s;
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .collapsed-filters-container {
@@ -120,7 +122,8 @@ display: none;
 }
 
 .profile-container{
+  height: 10%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: end;
 }
