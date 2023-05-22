@@ -13,7 +13,7 @@ console.log('Connected to database')
 
 console.log("Running SQL migrate...")
 
-const migrateQuery = fs.readFileSync('./migrate.sql', { encoding: 'utf8' })
+const migrateQuery = fs.readFileSync('./migration.sql', { encoding: 'utf8' })
 
 db.query(migrateQuery, (err, res) => {
     if (err)
