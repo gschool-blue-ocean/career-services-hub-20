@@ -11,7 +11,7 @@ import galvanizeLogo from '../logIn/galvanizeLogo.webp';
 
 export default function CareerServicesHub( {handleLogOff} ) {
 
-  //const [filterOpen, setFilterOpen] = useState(false);
+  // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState('');
   const [currentCohort, setCurrentCohort] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
