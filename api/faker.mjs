@@ -33,8 +33,9 @@ const courseStatus = ['Student', 'Graduate'];
 const secClearance = ['Undetermined', 'None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI'];
 const collegeDegree = ['Undetermined', 'None', 'Associate in CS/STEM', 'Associate Not in CS/STEM', 'Bachelor in CS/STEM', 'Bachelor Not in CS/STEM', 'Masters in CS/STEM', 'Masters Not in CS/STEM']
 
-const SEED_CAREER_MANAGER = 7;
-const SEED_STUDENT_ROWS = 200;
+const SEED_CAREER_MANAGER = 7;    // Set the number of service managers we want generated
+const SEED_STUDENT_ROWS = 200;    // Set the number of students we want generated
+const SEED_EVENTS_ROWS = 15;    // Set the number of events we want generated
 
 const seedStudents = async () => {
     const studentList = [];
