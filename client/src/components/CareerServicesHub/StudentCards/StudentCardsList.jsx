@@ -72,9 +72,6 @@ export default function StudentCardslist({
     return student;
   });
   filteredStudents = updatedStudents;
-  console.log('existing student object ', existingStudentObj);
-  console.log('updated students', updatedStudents);
-  console.log('filtered students', filteredStudents);
   setCurrentStudents(updatedStudents);
   }
 
@@ -85,7 +82,6 @@ export default function StudentCardslist({
           filterStudents={filterStudents}
           handleUpdateNewStudent={handleUpdateNewStudent}
         />
-        {console.log('filtered students inside return ',filteredStudents)}
         {filterStudents != null
           ? filteredStudents.map((student) => {
               if (student.student_first === "Test") {

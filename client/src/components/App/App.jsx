@@ -10,6 +10,7 @@ import LogInPage from '../logIn/logInPage'
 
 const App = () => {
   const [loggedInfo, setLoggedInfo] = useState("");
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -20,29 +21,44 @@ const App = () => {
     }
   }, [loggedInfo]);
 
+  useEffect(() => {
+    if (isTransitioning) {
+    setIsTransitioning(false)
+      return () => clearTimeout(); // cleanup timer on unmount
+    }
+  }, [isTransitioning]);
+
   const handleLogOff = () => {
-    localStorage.removeItem('authToken')
-    setLoggedInfo('')
-  }
+    console.log("log off started");
+    localStorage.removeItem('authToken');
+    setIsTransitioning(true);
+    setLoggedInfo('');
+    console.log("log off completed");
+  };
 
   const handleLogin = (info) => {
+    console.log("log in started");
+    setIsTransitioning(true);
     setLoggedInfo(info);
+      console.log("log in completed");
   };
 
   return (
-      <EventsContextProvider>
-        <StudentsContextProvider>
-          <ManagersContextProvider>
-            <FieldsContextProvider>
-                  {loggedInfo ? (
-                    <CareerServicesHub handleLogOff={handleLogOff}/>
-                  ) : (
-                    <LogInPage handleLogin={handleLogin} />
-                  )}
-            </FieldsContextProvider>
-          </ManagersContextProvider>
-        </StudentsContextProvider>
-      </EventsContextProvider>
+    <EventsContextProvider>
+      <StudentsContextProvider>
+        <ManagersContextProvider>
+          <FieldsContextProvider>
+            {isTransitioning && loggedInfo ? (
+                <CareerServicesHub handleLogOff={handleLogOff} isTransitioning={isTransitioning} setIsTransitioning={setIsTransitioning} loggedInfo={loggedInfo}/>
+            ) : null}
+            {!isTransitioning && loggedInfo ? (
+              <CareerServicesHub handleLogOff={handleLogOff} isTransitioning={isTransitioning} setIsTransitioning={setIsTransitioning} loggedInfo={loggedInfo} />
+            ) : null}
+            {!loggedInfo ? <LogInPage handleLogin={handleLogin} /> : null}
+          </FieldsContextProvider>
+        </ManagersContextProvider>
+      </StudentsContextProvider>
+    </EventsContextProvider>
   );
 };
 

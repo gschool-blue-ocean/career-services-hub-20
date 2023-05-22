@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './loginPage.css'
 import galvanizeLogo from './galvanizeLogo.webp'
 
@@ -7,6 +7,12 @@ const LogInPage = ({ handleLogin }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
+  const [opacity, setOpacity] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setOpacity(1), 100); // delay to let the DOM update
+    return () => clearTimeout(timer); // cleanup timer on unmount
+  }, []);
 
   async function loginUser(email, password) {
     try {
@@ -51,28 +57,30 @@ const LogInPage = ({ handleLogin }) => {
   };
 
   return (
-    <div className="login-background">
-      <form className="login-Container" onSubmit={handleUserLogin}>
-      <img src={galvanizeLogo} ></img>
-        <input
-          className="login-value"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          placeholder="YourEmail@galvanize.com"
-          id="email">
-        </input>
-        <input
-          className="login-value"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
-          type="password"
-          placeholder="*******"
-          id="password"
-        ></input>
-        <button className="login-button">Log In</button>
-        {errorRelay ? <p className="error-message">{errorRelay}</p> : <p className="easter-egg">🌮</p>} 
-      </form>
+    <div style={{ opacity: opacity, transition: 'opacity 2s' }}>
+      <div className="login-background">
+        <form className="login-Container" onSubmit={handleUserLogin}>
+        <img src={galvanizeLogo} ></img>
+          <input
+            className="login-value"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="YourEmail@galvanize.com"
+            id="email">
+          </input>
+          <input
+            className="login-value"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+            type="password"
+            placeholder="*******"
+            id="password"
+          ></input>
+          <button className="login-button">Log In</button>
+          {errorRelay ? <p className="error-message">{errorRelay}</p> : <p className="easter-egg">🌮</p>} 
+        </form>
+      </div>
     </div>
   );
 }

@@ -26,7 +26,6 @@ export default function StudentCard({ currentStudents, handleUpdateExistingStude
             } else {
                 setMilestoneProgress('Completed')
             } 
-            console.log('student ', student) 
     }, [student, currentStudents]);
 
         function handleModalToggle() {
