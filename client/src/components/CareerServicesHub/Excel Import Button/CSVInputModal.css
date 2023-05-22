@@ -61,7 +61,7 @@
 
 .container-on{
     width: 100%;
-    height: fit-content;
+    height: 35vh;
 
     overflow: auto;
 }
