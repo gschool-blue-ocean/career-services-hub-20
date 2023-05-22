@@ -167,4 +167,4 @@ const seedMilestone = async () => {
     }
 }
 
-seedServiceManager().then(() => seedStudents().then(() => seedCalendar().then(() => seedMilestone())));
+seedServiceManager().then(() => seedStudents().then(() => seedCalendar().then(() => seedMilestone().then(() => db.end()))));

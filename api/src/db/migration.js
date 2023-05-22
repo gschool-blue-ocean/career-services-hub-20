@@ -22,12 +22,13 @@ const sqlFilePath = path.join(__dirname, 'migration.sql');
 const migrateQuery = fs.readFileSync(sqlFilePath, { encoding: 'utf8' });
 
 db.query(migrateQuery, (err, res) => {
-    if (err)
-    console.log(err)
-    else
-    console.log('Migrate Completed!')
-    db.end()
-})
+    if (err) {
+        console.error('Error running migration', err.stack);
+    } else {
+        console.log('Migration Completed!');
+    }
+    db.end();
+}).catch(err => console.error('Error in query', err.stack));
 
 // import pg from "pg";
 
