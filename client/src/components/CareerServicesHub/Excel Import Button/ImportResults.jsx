@@ -86,7 +86,7 @@ export default function ImportResults({setAddStudent, newStudents, importManager
     return (
     <>
         <div className='import-results-table'>
-            <div className='results-student-row'>
+            <div className='results-student-row header-row'>
                     {headerArray.map((header) => {
                         return(
                             <span className='results-student-cell header' key={header}>{header}</span>
@@ -114,7 +114,7 @@ export default function ImportResults({setAddStudent, newStudents, importManager
             })}
         </div>
         <div className='results-upload-button-container'>
-             <button className='results-upload-button' onClick={handleUploadClick}> Upload Students </button>
+             <button className='header-buttons' onClick={handleUploadClick}> Upload Students </button>
         </div>
     </>    
   )

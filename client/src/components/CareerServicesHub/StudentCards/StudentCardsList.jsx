@@ -25,7 +25,7 @@ export default function StudentCardslist({
 }) {
   const studentContext = useContext(StudentsContext);
   let students = studentContext.studentsData;
-  const [currentStudents, setCurrentStudents] = useState(students);
+  const [currentStudents, setCurrentStudents] = useState(['', students]);
   let filteredStudents = filterStudents(
     students,
     currentCohort,
@@ -54,25 +54,16 @@ export default function StudentCardslist({
   }
 
   function handleUpdateExistingStudent(existingStudentObj) {
-  // let studentId;
-  // filteredStudents.forEach((student, index)=> {
-  //   if (student.student_id == existingStudentObj.student_id) {
-  //     studentId = index;
-  //   }
-  // })
+    const updatedStudents = filteredStudents.map((student) => {
 
-  // filteredStudents[studentId] = existingStudentObj;
-  // setCurrentStudents(filteredStudents);
-  // console.log('filtered students: ', filteredStudents);
-  // console.log('existing student obj: ',existingStudentObj)
-  const updatedStudents = filteredStudents.map((student) => {
-    if (student.student_id === existingStudentObj.student_id) {
-      return existingStudentObj;
-    }
-    return student;
-  });
-  filteredStudents = updatedStudents;
-  setCurrentStudents(updatedStudents);
+        if (student.student_id === existingStudentObj.student_id) {
+          return existingStudentObj;
+        }
+        return student;
+    });
+
+    filteredStudents = updatedStudents;
+    setCurrentStudents(updatedStudents);
   }
 
   return (
@@ -85,7 +76,7 @@ export default function StudentCardslist({
         {filterStudents != null
           ? filteredStudents.map((student) => {
               if (student.student_first === "Test") {
-                return <div className="loading-card">Loading...</div>;
+                return <div key ="test" className="loading-card">Loading...</div>;
               } else {
                 return (
                   <div key={student.student_id}>

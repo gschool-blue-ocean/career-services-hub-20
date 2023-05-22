@@ -1,15 +1,11 @@
-import React, {useContext, useState, useEffect} from 'react';
-import { EventsContext } from '../../context/eventsContext';
-import { StudentsContext } from '../../context/studentsContext';
-import { ManagersContext } from '../../context/managersContext';
-import { FieldsContext } from '../../context/fieldsContext';
+import React, {useState, useEffect} from 'react';
 
 import StudentCardsList from './StudentCards/StudentCardsList';
 import './CareerServicesHub.css'
 
 import Export from './Export';
-import './filter.css';
-import Filter from './Filter_Com';
+import './Filter/filter.css';
+import Filter from './Filter/Filter_Com';
 import galvanizeLogo from '../logIn/galvanizeLogo.webp';
 
 export default function CareerServicesHub( {handleLogOff, isTransitioning, setIsTransitioning, loggedInfo} ) {
@@ -38,18 +34,6 @@ export default function CareerServicesHub( {handleLogOff, isTransitioning, setIs
   useEffect(() => {
     setOpacity(1)
   }, []);
-
-  const eventContext = useContext(EventsContext);
-  const events = eventContext.eventsData;
-
-  const studentContext = useContext(StudentsContext);
-  const students = studentContext.studentsData;
-
-  const managersContext = useContext(ManagersContext);
-  const managers = managersContext.managersData;
-
-  const fieldsContext = useContext(FieldsContext);
-  const fields = fieldsContext.fieldsData;
 
   // Filter the list of students based on the current filter
   const filterStudents = (students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance, educationStatus, selectedManager) => {

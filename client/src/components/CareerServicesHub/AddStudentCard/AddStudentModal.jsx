@@ -10,7 +10,7 @@ function Add_Student_Modal({ addStudent, handleAddStudentModalToggle, setAddStud
     if (!addStudent) return null;
     return ReactDOM.createPortal(
       <>
-        <div className="add-modal-overlay-container">
+        <div className="modal-overlay-container">
             <div
               className="filt_overlay"
               onClick={handleAddStudentModalToggle}
@@ -24,7 +24,11 @@ function Add_Student_Modal({ addStudent, handleAddStudentModalToggle, setAddStud
                 <button className="header-buttons" onClick={handleAddStudentModalToggle}>X</button>
                 </div>
                 {btnSwitch ? (
-                  <CSVInputRevised setAddStudent={setAddStudent} />
+                  <CSVInputRevised 
+                  setAddStudent={setAddStudent} 
+                  handleAddStudentModalToggle={handleAddStudentModalToggle}
+                  handleUpdateNewStudent={handleUpdateNewStudent}  
+                  />
                 ) : (
                   <AddStudentRevised
                     setAddStudent={setAddStudent}
