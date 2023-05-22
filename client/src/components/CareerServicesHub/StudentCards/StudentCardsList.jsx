@@ -25,7 +25,7 @@ export default function StudentCardslist({
 }) {
   const studentContext = useContext(StudentsContext);
   let students = studentContext.studentsData;
-  const [currentStudents, setCurrentStudents] = useState(['', students]);
+  const [currentStudents, setCurrentStudents] = useState(students);
   let filteredStudents = filterStudents(
     students,
     currentCohort,
@@ -44,8 +44,10 @@ export default function StudentCardslist({
     educationStatus,
     selectedManager
   );
+  
   useEffect(() => {
     setCurrentStudents(students);
+    console.log(currentStudents);
   }, [students]);
 
   function handleUpdateNewStudent(newStudentObj) {
