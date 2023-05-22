@@ -14,9 +14,12 @@ const LogInPage = ({ handleLogin }) => {
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
 
+  const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
+
+
   async function loginUser(email, password) {
     try {
-      const response = await fetch("https://career-services-server.onrender.com/managers/login", {
+      const response = await fetch(`${url}/managers/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,13 +33,12 @@ const LogInPage = ({ handleLogin }) => {
 
       const responseData = await response.json();
 
-
-      if (responseData.success) {
+      if (responseData) {
         localStorage.setItem('authToken', responseData.accessToken);
         handleLogin(responseData.accessToken); // Call the handleLogin function passed as a prop
         
       } else {
-        setErrorRelay(responseData.message);
+        setErrorRelay('Something has gone horribly wrong 😢');
       }
     }
     catch (error) {
