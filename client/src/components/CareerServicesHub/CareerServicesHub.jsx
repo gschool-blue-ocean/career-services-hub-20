@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import StudentCardsList from './StudentCards/StudentCardsList';
-import { FaUserCircle } from 'react-icons/fa';
 import './CareerServicesHub.css'
 
 import Export from './Export';
@@ -9,7 +8,7 @@ import './Filter/filter.css';
 import Filter from './Filter/Filter_Com';
 import galvanizeLogo from '../logIn/galvanizeLogo.webp';
 
-export default function CareerServicesHub( {handleLogOff} ) {
+export default function CareerServicesHub( {handleLogOff, isTransitioning, setIsTransitioning, loggedInfo} ) {
 
   //const [filterOpen, setFilterOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,6 +29,11 @@ export default function CareerServicesHub( {handleLogOff} ) {
   const [selectedManager, setSelectedManager] = useState('');
 
   const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
+  const [opacity, setOpacity] = useState(0);
+
+  useEffect(() => {
+    setOpacity(1)
+  }, []);
 
   // Filter the list of students based on the current filter
   const filterStudents = (students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance, educationStatus, selectedManager) => {
@@ -163,6 +167,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
   }
 
   return (
+    <div style={{ opacity: opacity, transition: 'opacity 2s' }}>
     <div className='body_container'>  
       <div className='left_container'>
         <div className={toggleFiltersBar ? 'left-container-filters': 'collapsed-filters-container'}>
@@ -218,7 +223,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
         />
         <div className='profile-container'>
           <button className='header-buttons' onClick={handleLogOff}>
-            <FaUserCircle/> Logout
+            Logout
           </button>
         </div>            
         </div>
@@ -246,6 +251,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
           handleClear={handleClear}
         />
       </div>
+    </div>
     </div>
   )
 }
