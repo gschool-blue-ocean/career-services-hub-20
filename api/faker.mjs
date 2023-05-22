@@ -119,7 +119,7 @@ const seedCalendar = async () => {
             event_name: faker.company.companyName(),
             tscm_id: faker.datatype.number({ min: 1, max: 7 }),
             event_date: faker.date.between(startDate, endDate),
-            event_time: faker.datatype.datetime(),
+            event_time: faker.date.recent().toLocaleTimeString('en-US', { hour12: false }),
             speak_con: speakContactArray[randomNumber],
             event_descrip: faker.lorem.paragraph(4),
         });
