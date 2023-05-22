@@ -34,6 +34,7 @@ const LogInPage = ({ handleLogin }) => {
       if (responseData.success) {
         localStorage.setItem('authToken', responseData.accessToken);
         handleLogin(responseData.accessToken); // Call the handleLogin function passed as a prop
+        
       } else {
         setErrorRelay(responseData.message);
       }
@@ -53,6 +54,7 @@ const LogInPage = ({ handleLogin }) => {
       setErrorRelay("Please fill in both email and password fields 🤦"); 
     } else {
       loginUser(email, pass);
+      setErrorRelay('Logging in...')
     }
   };
 

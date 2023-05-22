@@ -10,7 +10,6 @@ import LogInPage from '../logIn/logInPage'
 
 const App = () => {
   const [loggedInfo, setLoggedInfo] = useState("");
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -21,26 +20,13 @@ const App = () => {
     }
   }, [loggedInfo]);
 
-  useEffect(() => {
-    if (isTransitioning) {
-    setIsTransitioning(false)
-      return () => clearTimeout(); // cleanup timer on unmount
-    }
-  }, [isTransitioning]);
-
   const handleLogOff = () => {
-    console.log("log off started");
     localStorage.removeItem('authToken');
-    setIsTransitioning(true);
     setLoggedInfo('');
-    console.log("log off completed");
   };
 
   const handleLogin = (info) => {
-    console.log("log in started");
-    setIsTransitioning(true);
     setLoggedInfo(info);
-      console.log("log in completed");
   };
 
   return (
@@ -48,13 +34,9 @@ const App = () => {
       <StudentsContextProvider>
         <ManagersContextProvider>
           <FieldsContextProvider>
-            {isTransitioning && loggedInfo ? (
-                <CareerServicesHub handleLogOff={handleLogOff} isTransitioning={isTransitioning} setIsTransitioning={setIsTransitioning} loggedInfo={loggedInfo}/>
-            ) : null}
-            {!isTransitioning && loggedInfo ? (
-              <CareerServicesHub handleLogOff={handleLogOff} isTransitioning={isTransitioning} setIsTransitioning={setIsTransitioning} loggedInfo={loggedInfo} />
-            ) : null}
-            {!loggedInfo ? <LogInPage handleLogin={handleLogin} /> : null}
+            {loggedInfo ? (
+                <CareerServicesHub handleLogOff={handleLogOff} loggedInfo={loggedInfo}/>
+            ) : <LogInPage handleLogin={handleLogin} /> }
           </FieldsContextProvider>
         </ManagersContextProvider>
       </StudentsContextProvider>

@@ -136,7 +136,7 @@ const seedCalendar = async () => {
             const {event_name, tscm_id, event_date, event_time, speak_con, event_descrip} = calendarEvent[i];
             await db.query(queryString, [event_name, tscm_id, event_date, event_time, speak_con, event_descrip]);
         }
-     console.log('Calendar seeded successfully');
+    console.log('Calendar seeded successfully');
     } catch (err) {
         console.log('Error seeding Calendar', err);
     }
