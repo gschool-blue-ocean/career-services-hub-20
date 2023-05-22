@@ -26,7 +26,6 @@ db.query(migrateQuery, (err, res) => {
     console.log(err)
     else
     console.log('Migrate Completed!')
-    db.end()
 })
 
 // import pg from "pg";
