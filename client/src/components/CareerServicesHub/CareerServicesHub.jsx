@@ -1,7 +1,9 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import { EventsContext } from '../../context/eventsContext';
 import { StudentsContext } from '../../context/studentsContext';
 import { ManagersContext } from '../../context/managersContext';
+import { FieldsContext } from '../../context/fieldsContext';
+
 import StudentCardsList from './StudentCards/StudentCardsList';
 import './CareerServicesHub.css'
 
@@ -9,9 +11,8 @@ import Export from './Export';
 import './filter.css';
 import Filter from './Filter_Com';
 import galvanizeLogo from '../logIn/galvanizeLogo.webp';
-import SearchBar from './SearchFunction/Search';
 
-export default function CareerServicesHub( {handleLogOff} ) {
+export default function CareerServicesHub( {handleLogOff, isTransitioning, setIsTransitioning, loggedInfo} ) {
 
   //const [filterOpen, setFilterOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,20 +33,23 @@ export default function CareerServicesHub( {handleLogOff} ) {
   const [selectedManager, setSelectedManager] = useState('');
 
   const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
+  const [opacity, setOpacity] = useState(0);
+
+  useEffect(() => {
+    setOpacity(1)
+  }, []);
 
   const eventContext = useContext(EventsContext);
   const events = eventContext.eventsData;
-  console.log('events', events);
 
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
-  console.log('students', students);
 
   const managersContext = useContext(ManagersContext);
   const managers = managersContext.managersData;
-  console.log('managers', managers);
 
-  
+  const fieldsContext = useContext(FieldsContext);
+  const fields = fieldsContext.fieldsData;
 
   // Filter the list of students based on the current filter
   const filterStudents = (students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance, educationStatus, selectedManager) => {
@@ -74,7 +78,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
 
     if(selectedManager){
       filteredStudent =filteredStudent.filter(student => student.tscm_first === selectedManager)
-      console.log('Current Manager', selectedManager);
     }
     
     if (coverLetter  && currentCoverStatus) {
@@ -87,7 +90,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if (studentResume && currentResumeStatus){
@@ -100,7 +102,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if(linkedAccount && linkedAccountStatus){
@@ -113,7 +114,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if(personalNarrative && narrativeStatus){
@@ -126,7 +126,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if(hunterAccess && currentAccess){
@@ -139,7 +138,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if (searchTerm) {
@@ -185,6 +183,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
   }
 
   return (
+    <div style={{ opacity: opacity, transition: 'opacity 2s' }}>
     <div className='body_container'>  
       <div className='left_container'>
         <div className={toggleFiltersBar ? 'left-container-filters': 'collapsed-filters-container'}>
@@ -265,8 +264,10 @@ export default function CareerServicesHub( {handleLogOff} ) {
           currentClearance={currentClearance}
           educationStatus={educationStatus}
           selectedManager={selectedManager}
+          handleClear={handleClear}
         />
       </div>
+    </div>
     </div>
   )
 }

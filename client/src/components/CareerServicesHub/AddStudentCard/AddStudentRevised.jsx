@@ -2,76 +2,35 @@ import React, { useContext, useState, useRef } from "react";
 import "./AddStudentCard.css";
 import { ManagersContext } from "../../../context/managersContext";
 import { StudentsContext } from "../../../context/studentsContext";
+import { FieldsContext } from "../../../context/fieldsContext";
 
-function AddStudentRevised({ setAddStudent }) {
+function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleUpdateNewStudent }) {
+  const url = process.env.NODE_ENV === "development" ? "http://localhost:8000": "https://career-services-server.onrender.com";
 
-  const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
-
-  const [newStudent, setNewStudent] = useState({
-    cohort: "",
-    tscm_id: 0,
-    student_first: "",
-    student_last: "",
-    college_degree: "",
-    sec_clearance: "",
-  });
-  const managersContext = useContext(ManagersContext);
   const managerInputRef = useRef();
   const mcspInputRef = useRef();
+  const studentFirstInputRef = useRef();
+  const studentLastInputRef = useRef();
+  const clearanceInputRef = useRef();
+  const educationInputRef = useRef();
+
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
 
+  const fieldsContext = useContext(FieldsContext);
+  const fields = fieldsContext.fieldsData;
+
+  const managersContext = useContext(ManagersContext);
   const managers = managersContext.managersData;
-  const secClearance = ["None", "SECRET", "TOP SECRET", "TOP SECRET//SCI"];
-  const addEducation = [
-    "None",
-    "Associate's in CS/STEM",
-    "Associate's Not in CS/STEM",
-    "Bachelor's in CS/STEM",
-    "Bachelor's Not in CS/STEM",
-    "Masters in CS/STEM",
-    "Masters Not in CS/STEM",
-  ];
+
+  const secClearance = fields.sec_clearance;
+  const addEducation = fields.college_degree;
 
   const firstStudent = students[0];
-  const milestoneFields = firstStudent.milestones.map((milestone) => milestone.mile_name);
+  const milestoneFields = firstStudent.milestones.map(
+    (milestone) => milestone.mile_name
+  );
   const milestoneArray = milestoneFields.map((milestone) => milestone);
-  console.log(milestoneFields);
-  
-
-  const handleFirstNameChange = (event) => {
-    setNewStudent({ ...newStudent, student_first: event.target.value });
-  };
-
-  const handleLastNameChange = (event) => {
-    setNewStudent({
-      ...newStudent,
-      student_last: event.target.value,
-    });
-  };
-
-  const handleManagerChange = (event) => {
-    const selectedManager = event.target.value;
-    setNewStudent({ ...newStudent, tscm_id: selectedManager });
-    console.log(selectedManager);
-  };
-
-  const handleEducationChange = (event) => {
-    const currentEducation = event.target.value;
-    setNewStudent({ ...newStudent, college_degree: currentEducation });
-    console.log("log education", currentEducation);
-  };
-
-  const handleClearanceChange = (event) => {
-    const currentClearance = event.target.value;
-    setNewStudent({ ...newStudent, sec_clearance: currentClearance });
-    console.log('current clearance', currentClearance);
-  };
-
-  const handleMCSPChange = (event) => {
-    const selectedCohort = event.target.value;
-    setNewStudent({ ...newStudent, cohort: selectedCohort });
-  };
 
   const addNewStudent = async () => {
     const newStudentObj = {
@@ -79,12 +38,16 @@ function AddStudentRevised({ setAddStudent }) {
       career_status: "Not Started",
       cohort: "MCSP-" + mcspInputRef.current.value,
       tscm_id: managerInputRef.current.value,
-      student_first: newStudent.student_first,
-      student_last: newStudent.student_last,
-      college_degree: newStudent.college_degree,
-      sec_clearance: newStudent.sec_clearance,
+      student_first: studentFirstInputRef.current.value,
+      student_last: studentLastInputRef.current.value,
+      college_degree: educationInputRef.current.value,
+      sec_clearance: clearanceInputRef.current.value,
     };
-    console.log('new student object:', newStudentObj);
+    const managerFirst = managers[newStudentObj.tscm_id - 1].tscm_first;
+    const managerLast = managers[newStudentObj.tscm_id - 1].tscm_last;
+    newStudentObj.tscm_first = managerFirst;
+    newStudentObj.tscm_last = managerLast;
+
     try {
       const response = await fetch(`${url}/students`, {
         method: "POST",
@@ -95,14 +58,14 @@ function AddStudentRevised({ setAddStudent }) {
       });
 
       const addedStudent = await response.json();
-
+      newStudentObj.milestones = [];
       //Adding Milestones to Student
       milestoneArray.forEach((milestone_name) => {
         const newMilestone = {
           mile_name: milestone_name,
           progress_stat: "In-Progress",
         };
-
+        newStudentObj.milestones.push(newMilestone);
         fetch(`${url}/students/${addedStudent.student_id}/milestones`, {
           method: "POST",
           headers: {
@@ -111,36 +74,33 @@ function AddStudentRevised({ setAddStudent }) {
           body: JSON.stringify(newMilestone),
         });
       });
+      handleUpdateNewStudent(newStudentObj);
       return addedStudent;
     } catch (error) {
       console.log(error);
     } finally {
       setAddStudent(false);
     }
+    handleAddStudentModalToggle();
   };
 
   return (
     <div className="add-container">
       <div className="add-subcontainer">
-        <h1 id="add-text">Select MCSP</h1>
+        <div id="add-text">MCSP:</div>
         <span>
           {" "}
-          MCSP:{" "}
+          {" "}
           <input
             type="number"
             className="import-input-MCSP"
             ref={mcspInputRef}
-            onChange={handleMCSPChange}
           />{" "}
         </span>
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Managers</h1>
-        <select
-          className="import-input"
-          ref={managerInputRef}
-          onChange={handleManagerChange}
-        >
+        <div id="add-text">Manager:</div>
+        <select className="import-input-manager" ref={managerInputRef}>
           <option>Select a Career Service Manager</option>
           {managers.map((manager) => {
             return (
@@ -152,36 +112,24 @@ function AddStudentRevised({ setAddStudent }) {
         </select>
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Enter First Name:</h1>
+        <div id="add-text">First Name:</div>
         <input
           type="text"
           placeholder="first name"
-          value={newStudent.student_first}
-          onChange={handleFirstNameChange}
+          ref={studentFirstInputRef}
         />
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Enter Last Name:</h1>
-        <input
-          type="text"
-          placeholder="last name"
-          value={newStudent.student_last}
-          onChange={handleLastNameChange}
-        />
+        <div id="add-text">Last Name:</div>
+        <input type="text" placeholder="last name" ref={studentLastInputRef} />
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Education:</h1>
-        <select
-          value={newStudent.college_degree}
-          onChange={handleEducationChange}
-        >
+        <div id="add-text">Education:</div>
+        <select ref={educationInputRef}>
           <option>Select Education</option>
           {addEducation.map((education, index) => {
             return (
-              <option 
-                key={index} 
-                value={education}
-              >
+              <option key={index} value={education}>
                 {education}
               </option>
             );
@@ -189,25 +137,21 @@ function AddStudentRevised({ setAddStudent }) {
         </select>
       </div>
       <div className="add-subcontainer">
-        <h1 id="add-text">Security Clearance:</h1>
-        <select
-          value={newStudent.sec_clearance}
-          onChange={handleClearanceChange}
-        >
+        <div id="add-text">Security Clearance:</div>
+        <select ref={clearanceInputRef}>
           <option value="">Select a Security Clearance</option>
           {secClearance.map((security, index) => {
             return (
-              <option 
-                key={index} 
-                value={security}
-              >
+              <option key={index} value={security}>
                 {security}
               </option>
             );
           })}
         </select>
       </div>
-      <button onClick={addNewStudent}>Add New Student</button>
+      <div className="submit-student-button">
+      <button className="header-buttons" onClick={addNewStudent}>Add New Student</button>
+      </div>
     </div>
   );
 }

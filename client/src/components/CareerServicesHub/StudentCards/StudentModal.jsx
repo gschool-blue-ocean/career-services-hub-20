@@ -1,17 +1,22 @@
-import React, {useContext, useRef} from 'react';
-import { StudentsContext } from '../../../context/studentsContext';
+import React, {useRef, useContext} from 'react';
+import { FieldsContext } from "../../../context/fieldsContext";
 import './StudentModal.css';
-import { all } from 'axios';
-
-export default function StudentModal({handleModalToggle, student}) {
+import { ManagersContext } from '../../../context/managersContext';
+export default function StudentModal({handleUpdateExistingStudent ,handleModalToggle, student}) {
 
 const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
 
-const milestoneProgressOptions = ['Un-Satisfactory', 'In-Progress', 'Completed'];
-const careerStatusOptions = ['Searching', 'Hired', 'Not Started'];
-const courseStatusOptions = ['Student', 'Graduate'];
-const clearanceStatusOptions = ['None', 'SECRET', 'TOP SECRET', 'TOP SECRET//SCI'];
-const degreeStatusOptions = ['Unknown', 'None', 'Associate in CS/STEM', 'Associate Not in CS/STEM', 'Bachelor in CS/STEM', 'Bachelor Not in CS/STEM', 'Masters in CS/STEM', 'Masters Not in CS/STEM'];
+const fieldsContext = useContext(FieldsContext);
+const fields = fieldsContext.fieldsData;
+
+const managersContext = useContext(ManagersContext);
+const managers = managersContext.managersData;
+
+const milestoneProgressOptions = fields.milestoneProgress;
+const careerStatusOptions = fields.career_status;
+const courseStatusOptions = fields.course_status;
+const clearanceStatusOptions = fields.sec_clearance;
+const degreeStatusOptions = fields.college_degree;
 
 const coverLetterInputRef = useRef();
 const resumeInputRef = useRef();
@@ -25,8 +30,11 @@ const degreeInputRef = useRef();
 
 function handleUpdateStudent(e) {
     console.log(e.target.value);
+    console.log(student.student_id);
     let newUpdatedStudent = {};
+    let existingStudentObj = {};
     let milestones=[];
+    existingStudentObj.milestones = [];
 
     student.milestones.forEach(milestone => {
         let newMilestone = {};
@@ -36,6 +44,7 @@ function handleUpdateStudent(e) {
         milestones.push(newMilestone);
     });
 
+    
 
     milestones[0].progress_stat = coverLetterInputRef.current.value;
     milestones[1].progress_stat = resumeInputRef.current.value;
@@ -50,10 +59,14 @@ function handleUpdateStudent(e) {
     newUpdatedStudent.student_first = student.student_first;
     newUpdatedStudent.student_last = student.student_last;
     newUpdatedStudent.cohort = student.cohort;
-    console.log(milestones);
-    console.log(newUpdatedStudent);
+    newUpdatedStudent.student_id = student.student_id;
+    existingStudentObj = newUpdatedStudent;
+    existingStudentObj.milestones = milestones;
+    existingStudentObj.tscm_first = managers[newUpdatedStudent.tscm_id-1].tscm_first;
+    existingStudentObj.tscm_last = managers[newUpdatedStudent.tscm_id-1].tscm_last;
+    handleUpdateExistingStudent(existingStudentObj);
 
-    fetch(`${url}/students/${student.student_id}`,
+    fetch(`${url}/students/${newUpdatedStudent.student_id}`,
                 {
                     method:"PATCH", 
                     body: JSON.stringify(newUpdatedStudent),
@@ -66,8 +79,6 @@ function handleUpdateStudent(e) {
                 .then(data => {
                     //Adding Milestones to Student
                     milestones.forEach((milestone) => {
-
-
                         fetch(`${url}/students/${data.student_id}/milestones/${milestone.mile_id}`, 
                         {
                             method:"PATCH", 
@@ -88,14 +99,27 @@ function handleUpdateStudent(e) {
                 })
                 .catch(function(error) {
                 console.log(error);
-                });
+                });    
 
-    
+                handleModalToggle();
+
 }
+
+
+    function resetStudentModalForms() {    
+        coverLetterInputRef.current.value = student.milestones[0].progress_stat;
+        resumeInputRef.current.value = student.milestones[1].progress_stat;
+        linkedInInputRef.current.value = student.milestones[2].progress_stat;
+        narrativeInputRef.current.value = student.milestones[3].progress_stat;
+        huntrInputRef.current.value = student.milestones[4].progress_stat;
+        careerInputRef.current.value = student.career_status;
+        courseInputRef.current.value = student.course_status;
+        clearanceInputRef.current.value = student.sec_clearance;
+    }
 
     return (
     <>
-    <div onClick={handleModalToggle} className='student-backdrop'>
+    <div onClick={()=>{handleModalToggle(), resetStudentModalForms()}} className='student-backdrop'>
     </div>
 
     <div className='student-tracker-modal'>
@@ -229,10 +253,9 @@ function handleUpdateStudent(e) {
             })}
             </select>
         </div>
-
         <br/>
         <div className='update-student-container'>
-        <button className='update-student' onClick={handleUpdateStudent}>Update Student</button>
+        <button className='header-buttons' onClick={handleUpdateStudent}>Update Student</button>
         </div>
     </div>
     </>

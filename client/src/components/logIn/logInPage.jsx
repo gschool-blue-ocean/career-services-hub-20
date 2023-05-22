@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './loginPage.css'
 import galvanizeLogo from './galvanizeLogo.webp'
 
@@ -7,6 +7,12 @@ const LogInPage = ({ handleLogin }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
+  const [opacity, setOpacity] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setOpacity(1), 100); // delay to let the DOM update
+    return () => clearTimeout(timer); // cleanup timer on unmount
+  }, []);
 
   async function loginUser(email, password) {
     try {
@@ -26,47 +32,57 @@ const LogInPage = ({ handleLogin }) => {
 
 
       if (responseData.success) {
-        console.log("Login successful:", responseData);
         localStorage.setItem('authToken', responseData.accessToken);
         handleLogin(responseData.accessToken); // Call the handleLogin function passed as a prop
+        
       } else {
         setErrorRelay(responseData.message);
       }
     }
     catch (error) {
-      console.error(error)
-      setErrorRelay("get out of here imposter 😠");
+      setErrorRelay("Get out of here imposter 😠");
     }
   }
 
+  // Upon submit email and password is passed into the Log in user function
+
   const handleUserLogin = (e) => {
     e.preventDefault();
-    loginUser(email, pass);
+  
+    // Check if both email and password fields are not empty
+    if (email === "" || pass === "") {
+      setErrorRelay("Please fill in both email and password fields 🤦"); 
+    } else {
+      loginUser(email, pass);
+      setErrorRelay('Logging in...')
+    }
   };
 
   return (
-    <div className="login-background">
-      <form className="login-Container" onSubmit={handleUserLogin}>
-      <img src={galvanizeLogo} ></img>
-        <input
-          className="login-value"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          placeholder="YourEmail@galvanize.com"
-          id="email">
-        </input>
-        <input
-          className="login-value"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
-          type="password"
-          placeholder="*******"
-          id="password"
-        ></input>
-        <button className="login-button">log in</button>
-        {errorRelay && <p className="error-message">{errorRelay}</p>}
-      </form>
+    <div style={{ opacity: opacity, transition: 'opacity 2s' }}>
+      <div className="login-background">
+        <form className="login-Container" onSubmit={handleUserLogin}>
+        <img src={galvanizeLogo} ></img>
+          <input
+            className="login-value"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="YourEmail@galvanize.com"
+            id="email">
+          </input>
+          <input
+            className="login-value"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+            type="password"
+            placeholder="*******"
+            id="password"
+          ></input>
+          <button className="login-button">Log In</button>
+          {errorRelay ? <p className="error-message">{errorRelay}</p> : <p className="easter-egg">🌮</p>} 
+        </form>
+      </div>
     </div>
   );
 }

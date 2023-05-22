@@ -26,16 +26,15 @@
 
 .import-modal-container{
     transition: ease .5s;
-    position: relative;
+    position:relative;
     z-index: 1001;
     height: fit-content;
-    width: 50vh;
-    padding: 20px;
+    width: 50vw;
     font-family: 'KelsonSans';
-    font-size:larger;
     color: white;
-    border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.678); 
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .import-modal-header{
@@ -84,16 +83,16 @@
 
 .import-modal-description-container{
     display:flex; 
+    justify-content: center;
+    align-items: center;
     flex-direction:column;
     
-    width: 95%;
-    margin: 10px;
+    width: 100%;
 }
 
 .import-modal-description-text{
     width: 100%;
-    text-align: center;
-    margin: 10px;
+    margin: 1%;
 }
 
 .import-button-container{
@@ -112,7 +111,7 @@
     flex-direction:column;
     justify-content: center;
 
-    width: 35%;
+    width: fit-content;
     margin: 10px;
     padding: 10px;
 }
@@ -133,7 +132,7 @@
 .import-file-input-container{
     display: flex;
     justify-content: center;
-
+    width: 100%;
     font-family: 'KelsonSans-Light', sans-serif;
 }
 

@@ -5,7 +5,7 @@ import "../Excel Import Button/CSVInputModal.css"
 
 import exportFromJSON from 'export-from-json';
 
-function CSVInputRevised({setAddStudent}) {
+function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpdateNewStudent}) {
   const initialStudents = [
     {
       First: "Bob",
@@ -101,7 +101,7 @@ function CSVInputRevised({setAddStudent}) {
         </span>
         <a className="import-modal-description-text header-buttons" onClick={excelImportTemplate}>
           {" "}
-          Click here for a excel template{" "}
+          Click for csv template{" "}
         </a>
       </div>
       <div className="import-button-container">
@@ -109,7 +109,7 @@ function CSVInputRevised({setAddStudent}) {
           <div className="import-button-input-MCSP">
             <span>
               {" "}
-              MCSP:{" "}
+              MCSP :{" "}
               <input
                 type="number"
                 className="import-input-MCSP"
@@ -128,7 +128,7 @@ function CSVInputRevised({setAddStudent}) {
             })}
           </select>
           <div className="import-file-input-container">
-            <input type="file" accept=".csv" onChange={handleFileUpload} />
+            <input className='header-buttons' type="file" accept=".csv" onChange={handleFileUpload} />
           </div>
         </div>
         <input
@@ -143,6 +143,8 @@ function CSVInputRevised({setAddStudent}) {
           newStudents={newStudents}
           importManager={importManager}
           importMCSP={importMCSP}
+          handleAddStudentModalToggle={handleAddStudentModalToggle}
+          handleUpdateNewStudent={handleUpdateNewStudent}
         />
       </div>
     </div>

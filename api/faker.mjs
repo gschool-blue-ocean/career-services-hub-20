@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -54,21 +53,22 @@ const seedStudents = async () => {
             career_status: careerStatus[randomNumber],
             course_status: courseStatus[randomNumber2],
             college_degree: collegeDegree[randomNumber4],
-            tscm_id: faker.datatype.number({ min: 1, max: 7 }),
+            tscm__id: faker.datatype.number({ min: 1, max: 7 }),
         });
     }
 
     try {
+        await db.query('TRUNCATE TABLE student CASCADE');
+        await db.query('ALTER SEQUENCE student_student_id_seq RESTART WITH 1');
         const queryString = `INSERT INTO student (student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) 
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
 
         for (let i = 0; i < SEED_STUDENT_ROWS; i++){
-            const {student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id} = studentList[i];
-            const result = await db.query(queryString, [student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id]);
-            console.log(result.rows[0])
+            // console.log(`seeded ${i} students!`);
+            const {student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm__id} = studentList[i];
+            await db.query(queryString, [student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm__id]);
         }
-
-        console.log('Students seeded successfully');
+    console.log('Students seeded successfully');
     } catch (err) {
         console.log('Error seeding students', err);
     }
@@ -89,22 +89,20 @@ const seedServiceManager = async () => {
     }
 
     try {
-
+        await db.query('TRUNCATE TABLE service_manager CASCADE');
+        await db.query('ALTER SEQUENCE service_manager_tscm_id_seq RESTART WITH 1');
         const queryString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) 
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
 
         for (let i = 0; i < SEED_CAREER_MANAGER; i++){
-            console.log(`seeded ${i} TSCM!`);
+            // console.log(`seeded ${i} TSCM!`);
             const {tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar} = careerManager[i];
             await db.query(queryString, [tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar]);
-
         }
-
-        console.log('TSCM seeded successfully');
+    console.log('TSCM seeded successfully');
     } catch (err) {
         console.log('Error seeding TSCM', err);
     }
-
 }
 
 const seedCalendar = async () => {
@@ -117,35 +115,31 @@ const seedCalendar = async () => {
     for (let i = 0; i < 15; i++){
         let randomNumber = Math.floor(Math.random() * 3);
 
-        const randomDate = faker.date.between(startDate, endDate);
-        const randomTime = randomDate.toLocaleTimeString('en-US', { hour12: false });
-
         calendarEvent.push({
             event_name: faker.company.companyName(),
             tscm_id: faker.datatype.number({ min: 1, max: 7 }),
-            event_date: randomDate,
-            event_time: randomTime,
+            event_date: faker.date.between(startDate, endDate),
+            event_time: faker.datatype.datetime(),
             speak_con: speakContactArray[randomNumber],
             event_descrip: faker.lorem.paragraph(4),
         });
     }
 
     try {
-        
+        await db.query('TRUNCATE TABLE calendar CASCADE');
+        await db.query('ALTER SEQUENCE calendar_event_id_seq RESTART WITH 1');
         const queryString = `INSERT INTO calendar (event_name, tscm_id, event_date, event_time, speak_con, event_descrip) 
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
         
         for (let i = 0; i < 15; i++){
-            console.log(`seeded ${i} Calendar events!`);
+            // console.log(`seeded ${i} Calendar events!`);
             const {event_name, tscm_id, event_date, event_time, speak_con, event_descrip} = calendarEvent[i];
             await db.query(queryString, [event_name, tscm_id, event_date, event_time, speak_con, event_descrip]);
         }
-        
-        console.log('Calendar seeded successfully');
+    console.log('Calendar seeded successfully');
     } catch (err) {
         console.log('Error seeding Calendar', err);
     }
-
 }
 
 const seedMilestone = async () => {
@@ -154,23 +148,23 @@ const seedMilestone = async () => {
     let currentStudentNumber = 1;
 
     try {
+        await db.query('TRUNCATE TABLE milestone CASCADE');
+        await db.query('ALTER SEQUENCE milestone_mile_id_seq RESTART WITH 1');
         const queryString = `INSERT INTO milestone (mile_name, progress_stat, student_id) VALUES ($1, $2, $3) RETURNING *`;
 
         for (let i = 0; i < SEED_STUDENT_ROWS; i++){
             for (let i = 0; i < studentMilestone.length; i++){
             let randomNumber = Math.floor(Math.random() * 3);
 
-            console.log(`seeded ${i} milestone!`);
+            // console.log(`seeded ${i} milestone!`);
             await db.query(queryString, [studentMilestone[i], progress_stat[randomNumber], currentStudentNumber]);
         }
         currentStudentNumber++;
     }
-
-        console.log('Calendar seeded successfully');
+    console.log('Milestone seeded successfully');
     } catch (err) {
         console.log('Error seeding Calendar', err);
     }
-
 }
 
 seedServiceManager().then(() => seedStudents().then(() => seedCalendar().then(() => seedMilestone())));

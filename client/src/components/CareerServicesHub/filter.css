@@ -43,14 +43,15 @@
 
 }
 
-.clear-filter-button {
-    width: 180px;
-    height: 25px;
-    color:white;
-    border:solid rgb(116, 116, 116) 1px;
-    border-radius: 5px;
-    background-color: transparent;
+.clear-filters-button {
+text-align: center;
 }
+
+.clear-filter-button:hover, .clear-filter-button:active{
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(21,4,89,1) 30%, rgba(247,130,24,1) 125%);
+    transition: ease 0.4s;
+  }
 
 .filt_modal{
     position: fixed;
@@ -73,14 +74,12 @@
 }
 
 #filt_container{ 
-    display: grid;
-    margin-left: 2%;
-    margin-top: 5%
+    justify-content: center;
 }
 
 #filt_subcontainer{
-    display:block;
-    width: auto;
+    margin:5%;
+
 }
 
 #filt_title{    
@@ -88,5 +87,6 @@
     color: white;
     font-family: 'kelsonsans-bold';
     white-space: nowrap;
-    margin-right: 5px;
+    margin-bottom: 2%;
+    margin-top: auto;
 }
