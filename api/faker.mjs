@@ -112,7 +112,7 @@ const seedCalendar = async () => {
     const endDate = new Date(2023, 8, 30);
     const speakContactArray = ["yes", "no", "pending"]
 
-    for (let i = 0; i < 15; i++){
+    for (let i = 0; i < SEED_EVENTS_ROWS; i++){
         let randomNumber = Math.floor(Math.random() * 3);
         let randomHour = faker.datatype.number({min: 0, max: 23}).toString().padStart(2, '0');
         let randomMinute = faker.datatype.number({min: 0, max: 59}).toString().padStart(2, '0');
