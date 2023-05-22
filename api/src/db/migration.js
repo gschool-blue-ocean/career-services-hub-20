@@ -1,27 +1,33 @@
 import pg from "pg";
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const db = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 
 db.connect((err, client, release) => {
     if (err) {
         return console.error('Error acquiring client', err.stack)
-}
-console.log(process.env.DATABASE_URL)
-console.log('Connected to database')
+    }
+    console.log(process.env.DATABASE_URL)
+    console.log('Connected to database')
 })
 
 console.log("Running SQL migrate...")
 
-const migrateQuery = fs.readFileSync('./migration.sql', { encoding: 'utf8' })
+const sqlFilePath = path.join(__dirname, 'migration.sql');
+const migrateQuery = fs.readFileSync(sqlFilePath, { encoding: 'utf8' });
 
 db.query(migrateQuery, (err, res) => {
     if (err)
     console.log(err)
     else
     console.log('Migrate Completed!')
-    pool.end()
-    })
+    db.end()
+})
 
 // import pg from "pg";
 
