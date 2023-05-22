@@ -119,6 +119,7 @@ function handleUpdateStudent(e) {
 
     return (
     <>
+    <div className='modal-overlay-container'>
     <div onClick={()=>{handleModalToggle(), resetStudentModalForms()}} className='student-backdrop'>
     </div>
 
@@ -257,6 +258,7 @@ function handleUpdateStudent(e) {
         <div className='update-student-container'>
         <button className='header-buttons' onClick={handleUpdateStudent}>Update Student</button>
         </div>
+    </div>
     </div>
     </>
   )

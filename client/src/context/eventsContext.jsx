@@ -3,6 +3,7 @@ import React, { useState, useEffect, createContext } from "react";
 export const EventsContext = createContext();
 
 export function EventsContextProvider ({children}) {
+    //Create eventData state and give it a single fake event at the start
     const [eventsData, setEventsData] = useState([{
         event_id : 1,
         event_date : "2023-05-10T00:00:00.000Z",
@@ -14,10 +15,13 @@ export function EventsContextProvider ({children}) {
         tscm_first : "Delia",
         tscm_last : "Denesik"
     }]);
-    
+
+    // This allows the app to run in both development (locally) and deployed (on render)
     const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
 
+    // Run once, until page is refreshed
     useEffect(() =>{
+        // Get latest events data from SQL database
         fetch(`${url}/events`)
             .then(response => response.json())
             .then(data => setEventsData(data))

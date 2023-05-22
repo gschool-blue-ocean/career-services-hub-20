@@ -29,13 +29,7 @@ app.use(
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
 app.get("/students", async (req, res, next) => {
   // Check if the data is cached.
-  const cachedData = cache.get('students');
-
-  if (cachedData) {
-    // If cached data is found, send it.
-    res.send(cachedData);
-  } else {
-    // If no cache is found, query the database.
+  
     try {
       const results = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
                                       FROM student 
@@ -49,7 +43,6 @@ app.get("/students", async (req, res, next) => {
     } catch (error) {
       next(error);
     }
-  }
 });
 
 app.get("/students/:id", async (req, res, next) =>{

@@ -78,7 +78,7 @@ text-align: center;
 }
 
 #filt_subcontainer{
-    margin:5%;
+    margin:3%;
 
 }
 
@@ -88,5 +88,13 @@ text-align: center;
     font-family: 'kelsonsans-bold';
     white-space: nowrap;
     margin-bottom: 2%;
-    margin-top: auto;
+    margin-top: 8%;
+}
+
+#export{
+    margin: 10px;
+}
+
+#clear{
+    margin: 10px;
 }
