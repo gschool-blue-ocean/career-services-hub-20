@@ -18,7 +18,7 @@ const App = () => {
       // If a token is stored in local storage, consider the user as logged in.
       setLoggedInfo(token);
     }
-  }, [loggedInfo]);
+  }, []);
 
   const handleLogOff = () => {
     localStorage.removeItem('authToken');
