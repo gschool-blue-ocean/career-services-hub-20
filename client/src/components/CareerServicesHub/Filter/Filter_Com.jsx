@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react';
-import { ManagersContext } from "../../context/managersContext";
-import { FieldsContext } from "../../context/fieldsContext";
-import SearchBar from './SearchFunction/Search';
+import { ManagersContext } from "../../../context/managersContext";
+import { FieldsContext } from "../../../context/fieldsContext";
+import SearchBar from '../SearchFunction/Search';
 import './filter.css';
 
 function Filter({ searchTerm, setSearchTerm, currentCohort, setCurrentCohort, setCoverLetter, setCurrentCoverStatus, currentCoverStatus, setStudentResume, currentResumeStatus, setCurrentResumeStatus,setLinkedAccount, linkedAccountStatus, setLinkedAccountStatus, setPersonalNarrative, narrativeStatus, setNarrativeStatus, setHunterAccess, currentAccess, setCurrentAccess, currentStatus, setCurrentStatus, currentClearance, setCurrentClearance, educationStatus, setEducationStatus, setSelectedManager, setSelectedManagerFull, handleClear }) {

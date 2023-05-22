@@ -18,21 +18,20 @@ export default function StudentCard({ currentStudents, handleUpdateExistingStude
             } 
 
         });
-
-            if(unSatisfactoryFlag == true) {
+        
+        if(unSatisfactoryFlag == true) {
             }
-            else if (count > 0) {
+        else if (count > 0) {
                 setMilestoneProgress('In-Progress')
-            } else {
+        } else {
                 setMilestoneProgress('Completed')
             } 
-            console.log('student ', student) 
     }, [student, currentStudents]);
 
-        function handleModalToggle() {
-            let newModalToggle = !modalToggle;
-            setModalToggle(newModalToggle)
-        }
+    function handleModalToggle() {
+        let newModalToggle = !modalToggle;
+        setModalToggle(newModalToggle)
+    }
 
     return(
         <>

@@ -1,18 +1,13 @@
-import React, {useContext, useState} from 'react';
-import { EventsContext } from '../../context/eventsContext';
-import { StudentsContext } from '../../context/studentsContext';
-import { ManagersContext } from '../../context/managersContext';
-import { FieldsContext } from '../../context/fieldsContext';
+import React, {useState} from 'react';
 
 import StudentCardsList from './StudentCards/StudentCardsList';
 import { FaUserCircle } from 'react-icons/fa';
 import './CareerServicesHub.css'
 
 import Export from './Export';
-import './filter.css';
-import Filter from './Filter_Com';
+import './Filter/filter.css';
+import Filter from './Filter/Filter_Com';
 import galvanizeLogo from '../logIn/galvanizeLogo.webp';
-import SearchBar from './SearchFunction/Search';
 
 export default function CareerServicesHub( {handleLogOff} ) {
 
@@ -35,22 +30,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
   const [selectedManager, setSelectedManager] = useState('');
 
   const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
-
-  const eventContext = useContext(EventsContext);
-  const events = eventContext.eventsData;
-  console.log('events', events);
-
-  const studentContext = useContext(StudentsContext);
-  const students = studentContext.studentsData;
-  console.log('students', students);
-
-  const managersContext = useContext(ManagersContext);
-  const managers = managersContext.managersData;
-  console.log('managers', managers);
-
-  const fieldsContext = useContext(FieldsContext);
-  const fields = fieldsContext.fieldsData;
-  console.log('fields', fields);
 
   // Filter the list of students based on the current filter
   const filterStudents = (students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance, educationStatus, selectedManager) => {
@@ -79,7 +58,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
 
     if(selectedManager){
       filteredStudent =filteredStudent.filter(student => student.tscm_first === selectedManager)
-      console.log('Current Manager', selectedManager);
     }
     
     if (coverLetter  && currentCoverStatus) {
@@ -92,7 +70,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if (studentResume && currentResumeStatus){
@@ -105,7 +82,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if(linkedAccount && linkedAccountStatus){
@@ -118,7 +94,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if(personalNarrative && narrativeStatus){
@@ -131,7 +106,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if(hunterAccess && currentAccess){
@@ -144,7 +118,6 @@ export default function CareerServicesHub( {handleLogOff} ) {
           progress_stat: milestone.progress_stat,
         }));
       });
-      console.log(filteredStudent);
     }
 
     if (searchTerm) {
