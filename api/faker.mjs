@@ -122,14 +122,17 @@ const seedCalendar = async () => {
     // Generate multiple events objects and push it to calendarEvent Array
     for (let i = 0; i < SEED_EVENTS_ROWS; i++){
         let randomNumber = Math.floor(Math.random() * 3);   // Generates a random number between 0-2
+        let randomHour = faker.datatype.number({min: 0, max: 23}).toString().padStart(2, '0');
+        let randomMinute = faker.datatype.number({min: 0, max: 59}).toString().padStart(2, '0');
+        let randomSecond = faker.datatype.number({min: 0, max: 59}).toString().padStart(2, '0');
 
         calendarEvent.push({
-            event_name: faker.company.companyName(),                                // Use faker method to generate fake company name for event
-            tscm_id: faker.datatype.number({ min: 1, max: SEED_CAREER_MANAGER }),   // Use faker method to create random number between 1 and MAX # of managers
-            event_date: faker.date.between(startDate, endDate),                     // Use faker method to create date for event
-            event_time: faker.datatype.datetime(),                                  // Use faker method to create time for event
-            speak_con: speakContactArray[randomNumber],                             // Randomly pick a element in the self-defined speakContactArray 
-            event_descrip: faker.lorem.paragraph(4),                                // Use faker method to create description for event (nonsense Latin)
+            event_name: faker.company.companyName(),
+            tscm_id: faker.datatype.number({ min: 1, max: 7 }),
+            event_date: faker.date.between(startDate, endDate),
+            event_time: `${randomHour}:${randomMinute}:${randomSecond}`,
+            speak_con: speakContactArray[randomNumber],
+            event_descrip: faker.lorem.paragraph(4),
         });
     }
 
