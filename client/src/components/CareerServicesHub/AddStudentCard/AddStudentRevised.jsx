@@ -22,7 +22,8 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
   // Retrieve data from context providers
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
-  const setStudents = studentContext.setStudentsData
+  const setUpdate = studentContext.setUpdate
+  const update = studentContext.update
 
   const fieldsContext = useContext(FieldsContext);
   const fields = fieldsContext.fieldsData;
@@ -87,6 +88,7 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
           body: JSON.stringify(newMilestone),
         });
       });
+      setUpdate(!update)
       // Update the UI with the newly added student
       handleUpdateNewStudent(newStudentObj);
       return addedStudent;
@@ -96,7 +98,6 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
       setAddStudent(false);
     }
     handleAddStudentModalToggle();
-    setStudents(...students)
   };
 
   return (

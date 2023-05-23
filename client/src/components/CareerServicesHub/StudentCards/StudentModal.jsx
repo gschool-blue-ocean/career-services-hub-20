@@ -1,5 +1,6 @@
 import React, {useRef, useContext} from 'react';
 import { FieldsContext } from "../../../context/fieldsContext";
+import { StudentsContext } from "../../../context/studentsContext";
 import './StudentModal.css';
 import { ManagersContext } from '../../../context/managersContext';
 export default function StudentModal({handleUpdateExistingStudent ,handleModalToggle, student}) {
@@ -14,6 +15,11 @@ const fields = fieldsContext.fieldsData;
 // Accessing the managers data from the ManagersContext
 const managersContext = useContext(ManagersContext);
 const managers = managersContext.managersData;
+
+// Accessing the students data from the StudentContext
+const studentContext = useContext(StudentsContext);
+const setUpdate = studentContext.setUpdate
+const update = studentContext.update
 
 // Options for different fields obtained from the fields data
 const milestoneProgressOptions = fields.milestoneProgress;
@@ -107,15 +113,14 @@ function handleUpdateStudent(e) {
                         console.log(error);
                         }); 
                     })
+                    setUpdate(!update)
                 })
                 .catch(function(error) {
                 console.log(error);
                 });    
 
                 handleModalToggle();
-
 }
-
     // Function to reset the form input elements with student data
     function resetStudentModalForms() {    
         coverLetterInputRef.current.value = student.milestones[0].progress_stat;
