@@ -74,8 +74,7 @@ export function StudentsContextProvider ({children}) {
             }
         };
         fetchData(); // Execute fetch above
-    }, []);
-
+    }, [studentsData]);
 
     return(
         <StudentsContext.Provider value={{studentsData}}>

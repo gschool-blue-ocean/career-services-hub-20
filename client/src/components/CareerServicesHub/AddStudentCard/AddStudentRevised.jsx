@@ -16,6 +16,7 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
 
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
+  const setStudents = studentContext.setStudentsData
 
   const fieldsContext = useContext(FieldsContext);
   const fields = fieldsContext.fieldsData;
@@ -82,6 +83,7 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
       setAddStudent(false);
     }
     handleAddStudentModalToggle();
+    setStudents(...students)
   };
 
   return (

@@ -49,7 +49,6 @@ export default function StudentCardslist({
    // Update the currentStudents state whenever the students list changes
   useEffect(() => {
     setCurrentStudents(students);
-    console.log(currentStudents);
   }, [students]);
 
   // Function to handle updating the list with a new student object
