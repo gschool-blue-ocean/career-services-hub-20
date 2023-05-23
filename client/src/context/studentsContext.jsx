@@ -3,8 +3,6 @@ import React, { useState, useEffect, createContext } from "react";
 export const StudentsContext = createContext();
 
 export function StudentsContextProvider ({children}) {
-
-    setStudentsData(...studentsData, )
     //Update hook is used in the use effect for later so that when a component does a task the student state gets updated along with DB
     const [update, setUpdate] = useState(true)
     const [studentsData, setStudentsData] = useState([{
