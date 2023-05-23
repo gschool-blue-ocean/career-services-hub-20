@@ -6,6 +6,7 @@ describe('Career Service Application', () => {
   test('should log in and display the main page', () => {
     render(<App />);
     
+    //If the classNames for the emailInput, passwordInput, loginButton variables are changed on the logInPage.jsx file they need to be updated here as well or the test will fail.
     const emailInput = screen.getByTestId('email');
     const passwordInput = screen.getByTestId('password');
     const loginButton = screen.getByTestId('login-button');
@@ -14,6 +15,7 @@ describe('Career Service Application', () => {
     fireEvent.change(passwordInput, { target: { value: 'password' } });
     fireEvent.click(loginButton);
 
+    //If the className for the mainPageElement variables is changed on the CareerServicesHub.jsx file it will need to be updated here as well or the test will fail.
     const mainPageElement = screen.getByTestId('body_container');
     expect(mainPageElement).toBeInTheDocument();
   });
