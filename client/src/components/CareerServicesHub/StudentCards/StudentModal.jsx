@@ -4,20 +4,25 @@ import './StudentModal.css';
 import { ManagersContext } from '../../../context/managersContext';
 export default function StudentModal({handleUpdateExistingStudent ,handleModalToggle, student}) {
 
+// URL for API based on the environment (development or production)
 const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
 
+// Accessing the fields data from the FieldsContext
 const fieldsContext = useContext(FieldsContext);
 const fields = fieldsContext.fieldsData;
 
+// Accessing the managers data from the ManagersContext
 const managersContext = useContext(ManagersContext);
 const managers = managersContext.managersData;
 
+// Options for different fields obtained from the fields data
 const milestoneProgressOptions = fields.milestoneProgress;
 const careerStatusOptions = fields.career_status;
 const courseStatusOptions = fields.course_status;
 const clearanceStatusOptions = fields.sec_clearance;
 const degreeStatusOptions = fields.college_degree;
 
+// References for form input elements
 const coverLetterInputRef = useRef();
 const resumeInputRef = useRef();
 const linkedInInputRef = useRef();
@@ -28,14 +33,16 @@ const courseInputRef = useRef();
 const clearanceInputRef = useRef();
 const degreeInputRef = useRef();
 
+// Function to handle updating the student data
 function handleUpdateStudent(e) {
-    console.log(e.target.value);
-    console.log(student.student_id);
+
+    // Creating a new updated student object
     let newUpdatedStudent = {};
     let existingStudentObj = {};
     let milestones=[];
     existingStudentObj.milestones = [];
 
+    // Copying the existing milestones with their data
     student.milestones.forEach(milestone => {
         let newMilestone = {};
         newMilestone.mile_name = milestone.mile_name;
@@ -45,12 +52,14 @@ function handleUpdateStudent(e) {
     });
 
     
-
+    // Updating the progress status for each milestone based on the selected values
     milestones[0].progress_stat = coverLetterInputRef.current.value;
     milestones[1].progress_stat = resumeInputRef.current.value;
     milestones[2].progress_stat = linkedInInputRef.current.value;
     milestones[3].progress_stat = narrativeInputRef.current.value;
     milestones[4].progress_stat = huntrInputRef.current.value;
+
+    // Updating other fields in the updated student object
     newUpdatedStudent.career_status = careerInputRef.current.value;
     newUpdatedStudent.course_status = courseInputRef.current.value;
     newUpdatedStudent.sec_clearance = clearanceInputRef.current.value;
@@ -62,6 +71,8 @@ function handleUpdateStudent(e) {
     newUpdatedStudent.student_id = student.student_id;
     existingStudentObj = newUpdatedStudent;
     existingStudentObj.milestones = milestones;
+
+    // Setting the first and last name of the manager for the student
     existingStudentObj.tscm_first = managers[newUpdatedStudent.tscm_id-1].tscm_first;
     existingStudentObj.tscm_last = managers[newUpdatedStudent.tscm_id-1].tscm_last;
     handleUpdateExistingStudent(existingStudentObj);
@@ -105,7 +116,7 @@ function handleUpdateStudent(e) {
 
 }
 
-
+    // Function to reset the form input elements with student data
     function resetStudentModalForms() {    
         coverLetterInputRef.current.value = student.milestones[0].progress_stat;
         resumeInputRef.current.value = student.milestones[1].progress_stat;
