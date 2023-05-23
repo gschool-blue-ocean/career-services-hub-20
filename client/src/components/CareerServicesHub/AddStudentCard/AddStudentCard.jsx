@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import "./AddStudentCard.css";
 import Add_Student_Modal from "./AddStudentModal";
 
-
+// Component for adding a new student
 function AddStudent({ handleUpdateNewStudent }) {
   const [addStudent, setAddStudent] = useState(false);
-  
 
+  // Function to toggle the add student modal
   function handleAddStudentModalToggle() {
     setAddStudent((prevState) => !prevState);
   }
@@ -21,8 +21,7 @@ function AddStudent({ handleUpdateNewStudent }) {
         handleAddStudentModalToggle={handleAddStudentModalToggle}
         setAddStudent={setAddStudent}
         handleUpdateNewStudent={handleUpdateNewStudent}
-      >
-      </Add_Student_Modal>
+      ></Add_Student_Modal>
     </div>
   );
 }
