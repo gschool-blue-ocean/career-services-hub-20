@@ -6,6 +6,7 @@ import "../Excel Import Button/CSVInputModal.css"
 import exportFromJSON from 'export-from-json';
 
 function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpdateNewStudent}) {
+  // Have a temp object hold a single new student from the bulk being imported
   const initialStudents = [
     {
       First: "Bob",
@@ -23,6 +24,7 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
   const managerInputRef = useRef();
   const mcspInputRef = useRef();
 
+  // FileReader() allows you to take in data from a file (in this case .csv) and break it into a JavaScript datatype
   const fileReader = new FileReader();
 
   // Use managers context to get the latest list of Career Service Managers
@@ -34,17 +36,17 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
     setFile(e.target.files[0]);
   }
 
-  // Once Submit button is pressed
+  // Once Submit button is pressed, read in the MCSP/Service Manager input fields and the .csv file that was attached 
   function handleSubmit(e) {
     e.preventDefault();
 
-    // Grab current values from input fields to get MCSP and Career Service Manager for the new students
+    // Grab current values from input fields to get MCSP and Career Service Manager and set the state
     const newImportManager = managerInputRef.current.value;
     const newImportMCSP = Number(mcspInputRef.current.value);
-
     setImportManager(newImportManager);
     setImportMCSP(newImportMCSP);
 
+    // If file was attached, call csvFileToArray to convert data into Array
     if (file) {
       fileReader.onload = function (event) {
         const text = event.target.result;
@@ -54,41 +56,46 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
     }
   }
 
+  // Convert .csv data into Array of students
   const csvFileToArray = (string) => {
-    var array = string.toString().split(",");
+    var array = string.toString().split(",");  // Since its a csv file, seperate the data using commas
     var data = [];
 
+    // For each row in the input csv file
     for (const element of array) {
-      let row = element.toString().split("\n");
-
-      for (const element2 of row) data.push(element2);
+      let row = element.toString().split("\n");  // Split apart into an element in the array using the new-line character
+      for (const element2 of row) // For each cell in that row
+        data.push(element2);   // Push into a string into that array
     }
 
-    var heading = [data[0], data[1], data[2].replaceAll("\r", "")]; //to extract the column headers (assuming this is a excel file with 3 headers)
+    // Establish heading array using the first few elements in the data array (HARDCODED since we are assuming the user will follow the provided csv template)
+    var heading = [data[0], data[1], data[2].replaceAll("\r", "")]; // Extract the column headers (assuming this is a excel file with 3 headers)
     var ans_array = [];
 
+    // Step through the rest of the array, that should be data and no more headers
     for (var i = heading.length; i < data.length; i += heading.length) {
       var obj = {};
       for (var j = 0; j < heading.length; j++) {
         if (!data[i + j]) {
-          data[i + j] = "N/A";
+          data[i + j] = "N/A"; // If cell was empty in original csv submission, file it with N/A
         }
-        obj[heading[j].replaceAll(" ", "_")] = data[i + j].replaceAll("\r", "");
+        obj[heading[j].replaceAll(" ", "_")] = data[i + j].replaceAll("\r", ""); // Any cells with two words, replace the space with underscore
       }
       ans_array.push(obj);
     }
-    setNewStudents(ans_array);
-    const newResultsToggle = !resultsToggle;
-    setResultsToggle(newResultsToggle);
+    setNewStudents(ans_array);  // Once complete, set local state to the resultant array
+    const newResultsToggle = !resultsToggle; // Invert Results Flag 
+    setResultsToggle(newResultsToggle);  // Set new results flag to signal the import is finished
   };
 
+  // Once csv template button is clicked, generate and download an example csv the user can use to import more students
   function excelImportTemplate(){
-    const fields = ['student_first', 'student_last', 'sec_clearance'];
-    const data = [{student_first :'David', student_last : 'Garcia', sec_clearance : 'TOP SECRET//SCI'}];
-    const fileName = `ImportStudentTemplate`;
-    const exportType = exportFromJSON.types.csv;
+    const fields = ['student_first', 'student_last', 'sec_clearance'];     // Set the headers of the template
+    const data = [{student_first :'David', student_last : 'Garcia', sec_clearance : 'TOP SECRET//SCI'}]; // Set a single example data row
+    const fileName = `ImportStudentTemplate`;  // Give it a filename
+    const exportType = exportFromJSON.types.csv;  // Give it a file type of csv
 
-    exportFromJSON({data, fileName, fields: fields, exportType});
+    exportFromJSON({data, fileName, fields: fields, exportType});   // Call the method that will generate and download csv in clients browser
   }
 
   return (

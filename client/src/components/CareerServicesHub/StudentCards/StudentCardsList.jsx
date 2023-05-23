@@ -25,9 +25,9 @@ export default function StudentCardslist({
   selectedManager,
 }) {
   const studentContext = useContext(StudentsContext);
-  let students = studentContext.studentsData; // Get the list of students from the context
-  const [currentStudents, setCurrentStudents] = useState(['', students]);
-  let filteredStudents = filterStudents( // Apply the filtering criteria to the list of students
+  let students = studentContext.studentsData;
+  const [currentStudents, setCurrentStudents] = useState(students);
+  let filteredStudents = filterStudents(
     students,
     currentCohort,
     coverLetter,
@@ -49,6 +49,7 @@ export default function StudentCardslist({
    // Update the currentStudents state whenever the students list changes
   useEffect(() => {
     setCurrentStudents(students);
+    console.log(currentStudents);
   }, [students]);
 
   // Function to handle updating the list with a new student object

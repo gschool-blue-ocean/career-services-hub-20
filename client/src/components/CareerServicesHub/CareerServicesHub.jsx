@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import StudentCardsList from './StudentCards/StudentCardsList';
-import { FaUserCircle } from 'react-icons/fa';
 import './CareerServicesHub.css'
 
 import Export from './Export';
@@ -9,9 +8,9 @@ import './Filter/filter.css';
 import Filter from './Filter/Filter_Com';
 import galvanizeLogo from '../logIn/galvanizeLogo.webp';
 
-export default function CareerServicesHub( {handleLogOff} ) {
+export default function CareerServicesHub( {handleLogOff, isTransitioning, setIsTransitioning, loggedInfo} ) {
 
-  //const [filterOpen, setFilterOpen] = useState(false);
+  // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState('');
   const [currentCohort, setCurrentCohort] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
@@ -30,12 +29,22 @@ export default function CareerServicesHub( {handleLogOff} ) {
   const [selectedManager, setSelectedManager] = useState('');
 
   const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
+  const [opacity, setOpacity] = useState(0);
+
+  useEffect(() => {
+    setOpacity(1)
+  }, []);
 
   // Filter the list of students based on the current filter
   const filterStudents = (students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance, educationStatus, selectedManager) => {
     if(!students){
-        return [];
+      return [];
     }
+
+    /*
+      All states are propped drill to the Export.jsx and StudentCardList.jsx with the setStates propped drilled to the Filter_Com.jsx. All filter options are updated through the Filter_Com.jsx and Search.jsx file. 
+      If a state name changes or added they must be updated in all three files.
+    */
 
     let filteredStudent = students;
 
@@ -132,6 +141,13 @@ export default function CareerServicesHub( {handleLogOff} ) {
 
   };
 
+
+  /*
+    The handle clear functions set all states back to the original configuration of the state.
+    To reset/clear out the input bar for the search bar make sure searchTerm has propped drilled down to the grandchild.
+    If the input bar's className is changed in the Search.jsx file, it needs to be changed to update the variable searchBar.
+    If the Service Career Manager's select's id is changed on the Filter_com.jsx file, it must be changed to update the variable selectElement
+  */
   const handleClear = () => {
     setSearchTerm('');
     const searchBar = document.getElementsByClassName('student-search-bar')[0];
@@ -163,6 +179,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
   }
 
   return (
+    <div style={{ opacity: opacity, transition: 'opacity 2s' }}>
     <div className='body_container'>  
       <div className='left_container'>
         <div className={toggleFiltersBar ? 'left-container-filters': 'collapsed-filters-container'}>
@@ -218,7 +235,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
         />
         <div className='profile-container'>
           <button className='header-buttons' onClick={handleLogOff}>
-            <FaUserCircle/> Logout
+            Logout
           </button>
         </div>            
         </div>
@@ -246,6 +263,7 @@ export default function CareerServicesHub( {handleLogOff} ) {
           handleClear={handleClear}
         />
       </div>
+    </div>
     </div>
   )
 }

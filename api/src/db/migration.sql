@@ -38,7 +38,7 @@ CREATE TABLE calendar (
   event_name VARCHAR(50) NOT NULL,
   tscm_id INTEGER NOT NULL,
   event_date DATE NOT NULL,
-  event_time DATE NOT NULL,
+  event_time TIME NOT NULL,
   speak_con TEXT,
   event_descrip TEXT NOT NULL,
   FOREIGN KEY (tscm_id) REFERENCES service_manager (tscm_id)
