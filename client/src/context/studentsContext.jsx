@@ -3,7 +3,10 @@ import React, { useState, useEffect, createContext } from "react";
 export const StudentsContext = createContext();
 
 export function StudentsContextProvider ({children}) {
-    //Create studentData state and give it a single fake student at the start
+
+    setStudentsData(...studentsData, )
+    //Update hook is used in the use effect for later so that when a component does a task the student state gets updated along with DB
+    const [update, setUpdate] = useState(true)
     const [studentsData, setStudentsData] = useState([{
         student_first : "Test",
         student_id : 1,
@@ -74,10 +77,10 @@ export function StudentsContextProvider ({children}) {
             }
         };
         fetchData(); // Execute fetch above
-    }, [studentsData]);
+    }, [update]);
 
     return(
-        <StudentsContext.Provider value={{studentsData}}>
+        <StudentsContext.Provider value={{studentsData, setUpdate, update}}>
             {children}
         </StudentsContext.Provider>
     );

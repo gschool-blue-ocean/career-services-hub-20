@@ -16,7 +16,8 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
 
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
-  const setStudents = studentContext.setStudentsData
+  const setUpdate = studentContext.setUpdate
+  const update = studentContext.update
 
   const fieldsContext = useContext(FieldsContext);
   const fields = fieldsContext.fieldsData;
@@ -75,6 +76,7 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
           body: JSON.stringify(newMilestone),
         });
       });
+      setUpdate(!update)
       handleUpdateNewStudent(newStudentObj);
       return addedStudent;
     } catch (error) {
@@ -83,7 +85,6 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
       setAddStudent(false);
     }
     handleAddStudentModalToggle();
-    setStudents(...students)
   };
 
   return (
