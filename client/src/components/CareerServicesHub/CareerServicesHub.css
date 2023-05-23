@@ -123,8 +123,5 @@ display: none;
 }
 
 .profile-container{
-  height: 10%;
-  display: flex;
-  justify-content: center;
-  align-items: end;
+ text-align: center;
 }
