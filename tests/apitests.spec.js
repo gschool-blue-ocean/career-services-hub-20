@@ -245,7 +245,7 @@ describe('DELETE /students/:id', () => {
         const response = await request(app)
         .delete(`/students/${newStudentId}`)
         .expect(response => {
-            expect(response.body).toEqual({ message: 'Successfully Deleted Student Record!' });
+            expect(response.body).toEqual({message: "Sucessfully Deleted Student Record!"});
         })
         .expect(200);
 
