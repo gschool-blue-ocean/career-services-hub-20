@@ -91,3 +91,5 @@ Should you choose Render for your deployment of this application then it should 
 - [`msw`](https://testing-library.com/docs/react-testing-library/api/) - Request mocking library for writing frontend tests.
 - [`supertest`](https://github.com/ladjs/supertest) - HTTP request simulator for backend testing.
 - [`docker`](https://www.docker.com/) - Containerization framework for dev and deployment.
+- [`jest`](https://jestjs.io/) - testing suite
+- [`JSONwebToken`](https://jwt.io/) - Used for authentication
