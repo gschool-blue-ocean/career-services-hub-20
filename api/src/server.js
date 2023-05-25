@@ -12,7 +12,6 @@ const db = new Pool({
 });
 
 const PORT = process.env.PORT;
-
 const app = express();
 
 app.use(bodyParser.json());
@@ -123,6 +122,7 @@ app.post("/students/:studentId/milestones", async (req, res, next) =>{
 })
 
 app.patch("/students/:studentId/milestones/:milestoneId", async (req, res, next) =>{
+  console.log(req.body)
   const milestoneId = req.params.milestoneId;
   const studentId = req.params.studentId;
 
@@ -131,6 +131,7 @@ app.patch("/students/:studentId/milestones/:milestoneId", async (req, res, next)
 
   const result = await db.query(`UPDATE milestone SET mile_name = $1, progress_stat = $2, student_id = $3 WHERE milestone.mile_id = $4 RETURNING *`, [mileName, progress, studentId, milestoneId])
                             .catch(next);
+                            console.log(result.rows)
   res.send(result.rows);
 })
 
