@@ -3,7 +3,6 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import pg from 'pg';
 import jwt from 'jsonwebtoken'
-import cache from 'memory-cache'
 
 const { Pool } = pg;
 
@@ -34,9 +33,6 @@ app.get("/students", async (req, res, next) => {
       const results = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
                                       FROM student 
                                       JOIN service_manager ON service_manager.tscm_id = student.tscm_id`);
-
-      // Cache the data for 30 seconds.
-      cache.put('students', results.rows, 30 * 1000);
 
       // Send the data.
       res.send(results.rows);
