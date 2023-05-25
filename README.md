@@ -27,9 +27,13 @@ Also on the mainhub, you can filter for certain students in a variety of ways (M
 
 ## Automated Testing
 
+Testing can be done locally or deployed, however there may or may not be additional work for testing to work on a deployed server. At this current moment a container is made on docker for testing. Testing will fail upon build, however once the API is initialized then you can start the container to run the tests through docker desktop. This will test all API routes.
+
 ### Front-End
 
 ### Back-End
+
+Simple Express server, nothing too complicated or intense on this end. A Docker compose will build the server and have it listen. 
 
 ## Setting Up App Locally (with Docker)
 
@@ -47,6 +51,8 @@ The app can be started with a few steps:
 Additionally, please note that you need to wait for the API server to be up and running (localhost:8000/) before running the front-end (localhost:3000/). Otherwise the students cards will not load on the page. If this occurs you can refresh the page and the students cards should load in.
 
 ## Deploying App (on Render)
+
+Should you choose Render for your deployment of this application then it should be fairly easy. The client side can be launched as a static site with ease, The database can be made and the connection link can be copied for later use, the API server can either be used as a node enviornment or can utilize the docker file to build in a container. You would just need to take the connection link and add it to the API settings in Render. 
 
 ## Possible Future Improvements to Consider
 
