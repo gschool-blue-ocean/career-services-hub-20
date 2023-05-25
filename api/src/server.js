@@ -3,7 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import pg from 'pg';
 import jwt from 'jsonwebtoken'
-import cache from 'memory-cache'
+import NodeCache from 'node-cache'
 
 const { Pool } = pg;
 
@@ -13,7 +13,6 @@ const db = new Pool({
 });
 
 const PORT = process.env.PORT;
-
 const app = express();
 
 app.use(bodyParser.json());
@@ -27,22 +26,32 @@ app.use(
 );
 
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
+
+const cache = new NodeCache();
+
 app.get("/students", async (req, res, next) => {
   // Check if the data is cached.
-  
-    try {
+  try {
+    // Check if the data is cached.
+    const cachedData = cache.get("students");
+    if (cachedData) {
+      // If the data is available in the cache, send it directly.
+      res.send(cachedData);
+    } else {
+      // If the data is not cached, fetch it from the database.
       const results = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
                                       FROM student 
                                       JOIN service_manager ON service_manager.tscm_id = student.tscm_id`);
 
       // Cache the data for 30 seconds.
-      cache.put('students', results.rows, 30 * 1000);
+      cache.set("students", results.rows, 30);
 
       // Send the data.
       res.send(results.rows);
-    } catch (error) {
-      next(error);
     }
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get("/students/:id", async (req, res, next) =>{
