@@ -98,7 +98,7 @@ app.delete("/students/:id", async (req, res, next) => {
 
   await db.query("DELETE FROM student WHERE student.student_id = $1", [id])
     .catch(next);
-  res.send('Sucessfully Deleted Student Record!');
+  res.send({message: "Sucessfully Deleted Student Record!"});
 })
 
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
@@ -208,14 +208,14 @@ app.post('/managers/login', async (req, res, next) => {
 
 // Need to think about this more, because we need to update student records and calendar records BEFORE we delete any manager records otherwise we are violating foreign keys
 
-// app.delete("/managers/:id", async (req, res, next) => {
-//   const id = req.params.id;
+app.delete("/managers/:id", async (req, res, next) => {
+  const id = req.params.id;
 
-//     await db.query("DELETE FROM service_manager WHERE service_manager.tscm_id = $1", [id])
+    await db.query("DELETE FROM service_manager WHERE service_manager.tscm_id = $1", [id])
 
-//      .catch(next);
-//    res.send('Sucessfully Deleted Manager Records!');
-// })
+    .catch(next);
+    res.json({ message: 'Sucessfully Deleted Manager Records!' });
+})
 
 // -------------------------------------------------------------- EVENTS ROUTES -------------------------------------------------------------
 
