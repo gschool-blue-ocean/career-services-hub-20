@@ -1,20 +1,16 @@
-import React, {useContext, useState, useEffect} from 'react';
-import { EventsContext } from '../../context/eventsContext';
-import { StudentsContext } from '../../context/studentsContext';
-import { ManagersContext } from '../../context/managersContext';
-import { FieldsContext } from '../../context/fieldsContext';
+import React, {useState, useEffect} from 'react';
 
 import StudentCardsList from './StudentCards/StudentCardsList';
 import './CareerServicesHub.css'
 
 import Export from './Export';
-import './filter.css';
-import Filter from './Filter_Com';
+import './Filter/filter.css';
+import Filter from './Filter/Filter_Com';
 import galvanizeLogo from '../logIn/galvanizeLogo.webp';
 
 export default function CareerServicesHub( {handleLogOff, isTransitioning, setIsTransitioning, loggedInfo} ) {
 
-  //const [filterOpen, setFilterOpen] = useState(false);
+  // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState('');
   const [currentCohort, setCurrentCohort] = useState('');
   const [coverLetter, setCoverLetter] = useState('');
@@ -39,23 +35,16 @@ export default function CareerServicesHub( {handleLogOff, isTransitioning, setIs
     setOpacity(1)
   }, []);
 
-  const eventContext = useContext(EventsContext);
-  const events = eventContext.eventsData;
-
-  const studentContext = useContext(StudentsContext);
-  const students = studentContext.studentsData;
-
-  const managersContext = useContext(ManagersContext);
-  const managers = managersContext.managersData;
-
-  const fieldsContext = useContext(FieldsContext);
-  const fields = fieldsContext.fieldsData;
-
   // Filter the list of students based on the current filter
   const filterStudents = (students, currentCohort, coverLetter, currentCoverStatus, studentResume, currentResumeStatus, linkedAccount, linkedAccountStatus, personalNarrative, narrativeStatus, hunterAccess, currentAccess, currentStatus, currentClearance, educationStatus, selectedManager) => {
     if(!students){
-        return [];
+      return [];
     }
+
+    /*
+      All states are propped drill to the Export.jsx and StudentCardList.jsx with the setStates propped drilled to the Filter_Com.jsx. All filter options are updated through the Filter_Com.jsx and Search.jsx file. 
+      If a state name changes or added they must be updated in all three files.
+    */
 
     let filteredStudent = students;
 
@@ -152,6 +141,13 @@ export default function CareerServicesHub( {handleLogOff, isTransitioning, setIs
 
   };
 
+
+  /*
+    The handle clear functions set all states back to the original configuration of the state.
+    To reset/clear out the input bar for the search bar make sure searchTerm has propped drilled down to the grandchild.
+    If the input bar's className is changed in the Search.jsx file, it needs to be changed to update the variable searchBar.
+    If the Service Career Manager's select's id is changed on the Filter_com.jsx file, it must be changed to update the variable selectElement
+  */
   const handleClear = () => {
     setSearchTerm('');
     const searchBar = document.getElementsByClassName('student-search-bar')[0];

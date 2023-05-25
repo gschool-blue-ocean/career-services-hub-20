@@ -1,11 +1,12 @@
 .student-search-bar {
     font-family: 'KelsonSans';
-    width:max-content;
+    width:80%;
     height: max-content;
     border-radius: 5px;
-    border-width: 3px;
+    border-width: 2px;
     border-style: solid;
     border-color: rgba(247,130,24,1);
+    margin:10px;
 }
 
 .search-bar-container {

@@ -1,5 +1,7 @@
 import pg from "pg";
 
+//Migration for a deployed env. 
+
 const db = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 
 function delay(ms) {
@@ -64,6 +66,8 @@ async function migration() {
 }
 
 migration();
+
+// The following is to reference a migration.sql file. Didn't use for deployment process, but may be useful later
 
 // import pg from "pg";
 // import fs from "fs";

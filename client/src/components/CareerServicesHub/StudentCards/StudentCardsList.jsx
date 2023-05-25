@@ -5,6 +5,7 @@ import AddStudent from "../AddStudentCard/AddStudentCard";
 import StudentCard from "./StudentCard";
 import "./StudentCardList.css";
 
+// Component responsible for displaying a list of student cards with filtering options
 export default function StudentCardslist({
   filterStudents,
   currentCohort,
@@ -44,35 +45,30 @@ export default function StudentCardslist({
     educationStatus,
     selectedManager
   );
+
+   // Update the currentStudents state whenever the students list changes
   useEffect(() => {
     setCurrentStudents(students);
   }, [students]);
 
+  // Function to handle updating the list with a new student object
   function handleUpdateNewStudent(newStudentObj) {
-    const newCurrentStudents = currentStudents.push(newStudentObj);
-    setCurrentStudents(newCurrentStudents);
+    const newCurrentStudents = currentStudents.push(newStudentObj); // Add the new student to the current list
+    setCurrentStudents(newCurrentStudents); // Update the state with the new list
   }
 
+  // Function to handle updating an existing student object in the list
   function handleUpdateExistingStudent(existingStudentObj) {
-  // let studentId;
-  // filteredStudents.forEach((student, index)=> {
-  //   if (student.student_id == existingStudentObj.student_id) {
-  //     studentId = index;
-  //   }
-  // })
+    const updatedStudents = filteredStudents.map((student) => {
 
-  // filteredStudents[studentId] = existingStudentObj;
-  // setCurrentStudents(filteredStudents);
-  // console.log('filtered students: ', filteredStudents);
-  // console.log('existing student obj: ',existingStudentObj)
-  const updatedStudents = filteredStudents.map((student) => {
-    if (student.student_id === existingStudentObj.student_id) {
-      return existingStudentObj;
-    }
-    return student;
-  });
-  filteredStudents = updatedStudents;
-  setCurrentStudents(updatedStudents);
+        if (student.student_id === existingStudentObj.student_id) {
+          return existingStudentObj; // Replace the existing student with the updated student object
+        }
+        return student;
+    });
+
+    filteredStudents = updatedStudents; // Update the filtered students list
+    setCurrentStudents(updatedStudents); // Update the state with the updated list
   }
 
   return (
@@ -85,7 +81,7 @@ export default function StudentCardslist({
         {filterStudents != null
           ? filteredStudents.map((student) => {
               if (student.student_first === "Test") {
-                return <div className="loading-card">Loading...</div>;
+                return <div key ="test" className="loading-card">Loading...</div>;
               } else {
                 return (
                   <div key={student.student_id}>

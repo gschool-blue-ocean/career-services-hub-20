@@ -1,12 +1,12 @@
 .student-backdrop {
-    display: flex;
     height: 100%;
     width: 100%;
-
     position: fixed;
     z-index: 2;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
 
     background-color: rgba(0, 0, 0, 0.678);
     backdrop-filter: blur(5px);
@@ -19,13 +19,13 @@
     font-size:larger;
     color: white;
     border-radius: 10px;
+    position: fixed;
+    margin-left: auto;
+    margin-right: auto;
     padding: 20px;
     height: fit-content;
     width: 30vw;
-    position:fixed;
     z-index: 3;
-    top: 20%;
-    left: 20%;
     background-color: rgba(0, 0, 0, 0.678); 
     transition:ease .5s;
 }

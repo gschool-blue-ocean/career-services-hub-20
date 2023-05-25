@@ -15,7 +15,8 @@ const LogInPage = ({ handleLogin }) => {
   }, []);
 
   const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
-  
+
+
   async function loginUser(email, password) {
     try {
       const response = await fetch(`${url}/managers/login`, {
@@ -37,7 +38,7 @@ const LogInPage = ({ handleLogin }) => {
         handleLogin(responseData.accessToken); // Call the handleLogin function passed as a prop
         
       } else {
-        setErrorRelay('Something has gone horribly wrong 😢'); 
+        setErrorRelay('Something has gone horribly wrong 😢');
       }
     }
     catch (error) {
