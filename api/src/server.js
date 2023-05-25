@@ -25,21 +25,19 @@ app.use(
 );
 
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
-
 app.get("/students", async (req, res, next) => {
-  // Fetch data from the database.
-  try {
-    const results = await db.query(`
-      SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
-      FROM student 
-      JOIN service_manager ON service_manager.tscm_id = student.tscm_id
-    `);
+  // Check if the data is cached.
+  
+    try {
+      const results = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
+                                      FROM student 
+                                      JOIN service_manager ON service_manager.tscm_id = student.tscm_id`);
 
-    // Send the data.
-    res.send(results.rows);
-  } catch (err) {
-    next(err); // Pass errors to the error handler
-  }
+      // Send the data.
+      res.send(results.rows);
+    } catch (error) {
+      next(error);
+    }
 });
 
 app.get("/students/:id", async (req, res, next) =>{
@@ -99,7 +97,7 @@ app.delete("/students/:id", async (req, res, next) => {
 
   await db.query("DELETE FROM student WHERE student.student_id = $1", [id])
     .catch(next);
-    res.json({ message: 'Successfully Deleted Student Record!' });
+  res.send({message: "Sucessfully Deleted Student Record!"});
 })
 
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------

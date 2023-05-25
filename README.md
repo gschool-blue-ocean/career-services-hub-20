@@ -63,6 +63,7 @@ Should you choose Render for your deployment of this application then it should 
 
 ## Possible Future Improvements to Consider
 
+- When updating a student, you have to refresh the page to see the latest changes. Make it so you dont...
 - Have an ability to sort the students on the app in a variety of ways (alphabetically, by Milestone Status, by Cohort, etc.)
 - Once logged in, the app should have a filter automatically set to only display the students tied to that career service manager
 
