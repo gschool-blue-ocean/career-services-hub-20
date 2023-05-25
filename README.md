@@ -31,6 +31,13 @@ Testing can be done locally or deployed, however there may or may not be additio
 
 ### Front-End
 
+Front-End testing was initially wrote using WebdriverIO, but was switched over to a Babel-Jest transform testing.
+To start Front-End testing follow the below steps
+1. `cd frontend_testing` - Enter frontend-testing folder.
+2. `npm install` - Install all dependencies.
+3. `run test` - This will run all tests inside the frontend-testing folder
+4. Currently the end-to-end testing and the filter component are being tested
+
 ### Back-End
 
 Simple Express server, nothing too complicated or intense on this end. A Docker compose will build the server and have it listen. 
@@ -56,7 +63,6 @@ Should you choose Render for your deployment of this application then it should 
 
 ## Possible Future Improvements to Consider
 
-- When updating a student, you have to refresh the page to see the latest changes. Make it so you dont...
 - Have an ability to sort the students on the app in a variety of ways (alphabetically, by Milestone Status, by Cohort, etc.)
 - Once logged in, the app should have a filter automatically set to only display the students tied to that career service manager
 
@@ -81,6 +87,9 @@ Should you choose Render for your deployment of this application then it should 
 - `dev` - Runs the server in watch mode (executed by docker-compose).
 - `start` - Starts the production server.
 - `test` - Runs tests.
+
+**`/frontend_testing`**
+- `test` - Runs frontend tests
 
 ## Tech used
 
