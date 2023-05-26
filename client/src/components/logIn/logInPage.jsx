@@ -14,7 +14,7 @@ const LogInPage = ({ handleLogin }) => {
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
 
-  // switch between localhost:8000 or your deployed site, hard coded deployed for now.
+  // switch between localhost8000 or your deployed site, hard coded career-services for now.
   const url = 'https://career-services-server.onrender.com';
 
 

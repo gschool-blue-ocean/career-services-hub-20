@@ -37,7 +37,7 @@ const studentMilestone = ['Cover Letter', 'Resume', 'LinkedIn', 'Personal Narrat
 const progress_stat = ['In-Progress', 'Completed', 'Un-Satisfactory'];
 
 const SEED_CAREER_MANAGER = 7;    // Set the number of service managers we want generated
-const SEED_STUDENT_ROWS = 200;    // Set the number of students we want generated
+const SEED_STUDENT_ROWS = 100;    // Set the number of students we want generated
 const SEED_EVENTS_ROWS = 15;    // Set the number of events we want generated
 
 const seedStudents = async () => {
