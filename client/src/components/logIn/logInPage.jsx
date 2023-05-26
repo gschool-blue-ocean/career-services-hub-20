@@ -14,7 +14,8 @@ const LogInPage = ({ handleLogin }) => {
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
 
-  const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
+  // switch between localhost:8000 or your deployed site, hard coded deployed for now.
+  const url = 'https://career-services-server.onrender.com';
 
 
   async function loginUser(email, password) {
