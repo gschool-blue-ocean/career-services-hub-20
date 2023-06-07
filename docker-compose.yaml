@@ -37,7 +37,8 @@ services:
       # filesystem to the container's.
       - ./api/src:/code/src
       # Sleep time added for seeding since things get kinda weird if you don't wait.
-    command: /bin/sh -c "sleep 2 && npm run seed && npm run dev"
+      # To reset database with Admin seeded, change command to "sleep 2 && npm run seed && npm run dev"
+    command: /bin/sh -c "sleep 2 && npm run dev"
 
 
   app:

@@ -18,9 +18,13 @@ async function migration() {
             login_id VARCHAR(50) NOT NULL,
             tscm_password text NOT NULL,
             tscm_email text NOT NULL,
-            tscm_avatar text NOT NULL
+            tscm_avatar text
         )`);
-    console.log('TSCM table created');
+        console.log('TSCM table created');
+         const queryString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email) 
+                    VALUES ($1, $2, $3, $4, $5) RETURNING *`
+                      await db.query(queryString, ["tscm_admin"," tscm_last", "admin_id", "admin", "admin@admin.com"]);
+        console.log('TSCM admin created');
     await delay(2000); // 2-second delay
 
     // Student table
@@ -65,7 +69,12 @@ async function migration() {
     
 }
 
+
 migration();
+
+
+
+
 
 // The following is to reference a migration.sql file. Didn't use for deployment process, but may be useful later
 
