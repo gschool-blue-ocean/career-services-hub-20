@@ -5,6 +5,7 @@
   "description": "",
   "main": "vite.config.js",
   "scripts": {
+    "lint": "prettier --check .",
     "dev": "cross-env NODE_ENV=development nodemon src/server.js",
     "start": "node src/server.js",
     "test": "echo 'add tests'",

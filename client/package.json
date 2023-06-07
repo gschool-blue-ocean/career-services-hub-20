@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "lint": "prettier --check .",
     "dev": "vite serve --host",
     "build": "vite build",
     "test": "vitest"
