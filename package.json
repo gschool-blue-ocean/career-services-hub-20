@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "lint": "node_modules/.bin/prettier --check .",
+    "lint:api": "prettier --check api/**/*.js",
+    "lint:client": "prettier --check client/**/*.js",
+    "lint": "npm run lint:api && npm run lint:client",
     "test": "concurrently \"npm:test:*\"",
     "ci": "npm run lint && npm run test",
     "test:client": "npm run test --prefix=client",
@@ -26,7 +28,7 @@
     "wdio-chromedriver-service": "^8.1.1"
   },
   "dependencies": {
-    "faker": "^6.6.6",
+    "faker": "^5.5.3",
     "nodemon": "^2.0.22",
     "pg": "^8.10.0",
     "react-transition-group": "^4.4.5",
