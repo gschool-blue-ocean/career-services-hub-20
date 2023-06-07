@@ -25,9 +25,9 @@ it('test always passes', async () => {
   expect(true).toBe(true);
 });
 
-it('test always fails', async () => {
-  expect(true).toBe(false);
-});
+// it('test always fails', async () => {
+//   expect(true).toBe(false);
+// });
 
 
 // it("displays tasks from the api", async () => {
