@@ -19,6 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install prettier
+      run: npm install -g prettier
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -31,4 +33,5 @@ jobs:
     - run: npm test
     - run: npm test --prefix=api
     - run: npm test --prefix=client
+
 
