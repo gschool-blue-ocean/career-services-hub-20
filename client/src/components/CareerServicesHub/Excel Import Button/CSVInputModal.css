@@ -1,152 +1,157 @@
-.modal-backdrop{
-    display: flex;
-    height: 100%;
-    width: 100%;
+.modal-backdrop {
+  display: flex;
+  height: 100%;
+  width: 100%;
 
-    position: fixed;
-    z-index: 2;
-    top: 0;
-    left: 0;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
 
-    background-color: rgba(61, 61, 63, 0.2);
-    backdrop-filter: blur(5px);
-    transition: ease .5s;
+  background-color: rgba(61, 61, 63, 0.2);
+  backdrop-filter: blur(5px);
+  transition: ease 0.5s;
 }
 
-.modal-backdrop:hover{
-    cursor: pointer;
-    background-color: rgba(61, 61, 63, 0.5);
-    backdrop-filter: blur(0px);
+.modal-backdrop:hover {
+  cursor: pointer;
+  background-color: rgba(61, 61, 63, 0.5);
+  backdrop-filter: blur(0px);
 }
 
-.modal-backdrop:hover + .import-modal-container{
-    transform: scale(.95);
-    filter: blur(3px);
+.modal-backdrop:hover + .import-modal-container {
+  transform: scale(0.95);
+  filter: blur(3px);
 }
 
-.import-modal-container{
-    transition: ease .5s;
-    position:relative;
-    z-index: 1001;
-    height: fit-content;
-    width: 50vw;
-    font-family: 'KelsonSans';
-    color: white;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
+.import-modal-container {
+  transition: ease 0.5s;
+  position: relative;
+  z-index: 1001;
+  height: fit-content;
+  width: 50vw;
+  font-family: "KelsonSans";
+  color: white;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.import-modal-header{
-    color: black;
+.import-modal-header {
+  color: black;
 
-    text-align: center;
-    font-weight: 900;
+  text-align: center;
+  font-weight: 900;
 }
 
-.import-button-container{
-    display: flex;
-    width: 100%;
-    height: 65%;
+.import-button-container {
+  display: flex;
+  width: 100%;
+  height: 65%;
 
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 
-    border-top: solid rgb(61, 61, 63, 0.45) 5px;
+  border-top: solid rgb(61, 61, 63, 0.45) 5px;
 }
 
-.container-off{
-    display: none;
+.container-off {
+  display: none;
 }
 
-.container-on{
-    width: 100%;
-    height: 35vh;
+.container-on {
+  width: 100%;
+  height: 35vh;
 
-    overflow: auto;
+  overflow: auto;
 }
 
-.exit-button{
-    display: flex;
-    justify-content: end;
-    margin: 15px;
+.exit-button {
+  display: flex;
+  justify-content: end;
+  margin: 15px;
 
-    font-size: 20px;
+  font-size: 20px;
 }
 
-.exit-button:hover{
-    cursor: pointer;
-    font-weight: 900;
+.exit-button:hover {
+  cursor: pointer;
+  font-weight: 900;
 
-    transition: ease .5s;
+  transition: ease 0.5s;
 }
 
-.import-modal-description-container{
-    display:flex; 
-    justify-content: center;
-    align-items: center;
-    flex-direction:column;
-    
-    width: 100%;
+.import-modal-description-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 100%;
 }
 
-.import-modal-description-text{
-    width: 100%;
-    margin: 1%;
+.import-modal-description-text {
+  width: 100%;
+  margin: 1%;
 }
 
-.import-modal-description-text.header-buttons{
-    width: fit-content;
-    margin: 2%;
-    padding: 1%;
+.import-modal-description-text.header-buttons {
+  width: fit-content;
+  margin: 2%;
+  padding: 1%;
 }
 
-.import-button-container{
-    display: flex; 
-    flex-direction:column;
-    justify-content: center;
-    
-    width: 100%;
+.import-button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-    margin-bottom: 10px;
-    border-bottom: solid rgb(61, 61, 63, 0.45) 5;
+  width: 100%;
+
+  margin-bottom: 10px;
+  border-bottom: solid rgb(61, 61, 63, 0.45) 5;
 }
 
-.import-button-container-inputs{ 
-    display: flex;  
-    flex-direction:column;
-    justify-content: center;
+.import-button-container-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-    width: fit-content;
-    margin: 10px;
-    padding: 10px;
+  width: fit-content;
+  margin: 10px;
+  padding: 10px;
 }
 
-.import-button-input-MCSP{
-    width: 100%;
-    text-align: center;
+.import-button-input-MCSP {
+  width: 100%;
+  text-align: center;
 }
 
-.import-input-MCSP{
-    width: 30%
+.import-input-MCSP {
+  width: 30%;
 }
 
-.import-input{
-    margin: 10px;
+.import-input {
+  margin: 10px;
 }
 
-.import-file-input-container{
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    font-family: 'KelsonSans-Light', sans-serif;
+.import-file-input-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  font-family: "KelsonSans-Light", sans-serif;
 }
 
-.submit-button{
-    margin: 5px;
+.submit-button {
+  margin: 5px;
 }
 
 @keyframes fadeDownIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; transform: translateY(10px); }
+  0% {
+    opacity: 0;
   }
+  100% {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+}
