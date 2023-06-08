@@ -5,10 +5,6 @@ import pg from 'pg';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
 import cookieParser from 'cookie-parser';
-// import session from 'express-session'
-// import pgSession from 'connect-pg-simple'
-
-// const pgSessionStore = pgSession(session);
 
 const { Pool } = pg;
 
@@ -37,22 +33,6 @@ app.use(function(req,res,next){
   res.header('Access-Control-Allow-Headers','X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
   next();
 })
-// //For front page log in
-// app.use(session({
-//   //
-//   // store: new pgSessionStore({
-//   //   conString: process.env.DATABASE_URL, // connection string to your PostgreSQL database
-//   //   tableName: 'sessions' // name of the session table in your database
-//   // }),
-//   secret: 'q5G%J3@x2c9D6F8!v0P#A*W$Z@Y7&',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { 
-//     sameSite:'strict',
-//     maxAge: 1000* 60 * 1,  //15 minutes before expires 
-//   } //Strict allows you to only use the cookie in the first party.
-// })) //client web data, cookie set to UUID
-
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
 app.get("/students", async (req, res, next) => {
   // Check if the data is cached.
