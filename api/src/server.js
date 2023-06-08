@@ -2,7 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import pg from 'pg';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt'
+import cookieParser from 'cookie-parser';
+// import session from 'express-session'
+// import pgSession from 'connect-pg-simple'
+
+// const pgSessionStore = pgSession(session);
 
 const { Pool } = pg;
 
@@ -14,15 +20,38 @@ const db = new Pool({
 const PORT = process.env.PORT;
 const app = express();
 
-app.use(bodyParser.json());
-
+app.use(cookieParser());
+app.use(bodyParser.json()); 
 app.use(express.json());
 
 app.use(
   cors({
     origin: "*",
+    //exposedHeaders: ['Set-Cookie']
   })
 );
+app.use(function(req,res,next){
+  res.header('Access-Control-Allow-Credentials',true);
+  res.header('Access-Control-Allow-Origin',req.headers.origin);
+  res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,UPDATE,OPTIONS');
+  res.header('Access-Control-Allow-Headers','X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  next();
+})
+// //For front page log in
+// app.use(session({
+//   //
+//   // store: new pgSessionStore({
+//   //   conString: process.env.DATABASE_URL, // connection string to your PostgreSQL database
+//   //   tableName: 'sessions' // name of the session table in your database
+//   // }),
+//   secret: 'q5G%J3@x2c9D6F8!v0P#A*W$Z@Y7&',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { 
+//     sameSite:'strict',
+//     maxAge: 1000* 60 * 1,  //15 minutes before expires 
+//   } //Strict allows you to only use the cookie in the first party.
+// })) //client web data, cookie set to UUID
 
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
 app.get("/students", async (req, res, next) => {
@@ -144,7 +173,6 @@ app.get ("/managers", async (req, res, next) => {
 
 app.get ("/managers/:id", async (req, res, next) => {
   const id = req.params.id;
-  
   const results = await db.query(`SELECT * FROM service_manager WHERE tscm_id = ${id}`).catch(next);
   res.send(results.rows)
 })
@@ -179,33 +207,43 @@ app.patch("/managers/:id", async (req, res, next) => {
   res.send(result.rows[0]);
 })
 
-//For front page log in
 
 app.post('/managers/login', async (req, res, next) => {
-  const email = req.body.email;
-  const inputPassword = req.body.password;
-
-  try {
-    const results = await db.query('SELECT * FROM service_manager WHERE tscm_email = $1', [email])
+   try{
+    const user =isAuthorized(req,res);
+    console.log(user)
+    if(!user)
+      throw new Error('Unauthorized');
+    return res.json({message: user})
+ }
+  catch (e) {
+    const email = req.body.email;
+    const inputPassword = req.body.password;
+    
+    const results = await db.query(`SELECT * FROM service_manager WHERE tscm_email = $1`,[email]);
     const manager = results.rows[0]
-
+    console.log(manager)
+    console.log('manager')
     if(!manager) {
-      return res.status(404).json({message: 'Incorrect Password or Email 🤷'})
+      return res.status(401).json({message: 'Invalid Email 🤷'})
     }
-
-    if(manager.tscm_password === inputPassword) {
-
-      const user = { val_mananger: manager.login_id };
-
-      const accessToken = jwt.sign(user, 'super secret key', {expiresIn: '10m'})
-      res.json({ accessToken })
+    else if(bcrypt.compareSync(inputPassword,manager.tscm_password)) {
+      const user = {user: manager.email};
+      const token =jwt.sign(user, process.env.secretKey);
+      console.log(token)
+      console.log(`Admin ${manager.tscm_first} ${manager.tscm_last}, welcome back!`)
+      res.json({token: token})
     }
-  } catch (error) {
-    console.error('Something really went wrong, check if DB is running 🤷' , error)
-    res.status(500).json({ message: 'Service unavailable 🤷'})
-    console.log('bad')
+    else
+      return res.status(401).json({ message:'Invalid Password 🤷'})
   }
-})
+    
+   
+ })
+ 
+  
+    
+ 
 
 // Need to think about this more, because we need to update student records and calendar records BEFORE we delete any manager records otherwise we are violating foreign keys
 
@@ -278,8 +316,29 @@ app.delete("/events/:id", async (req, res, next) => {
   res.send('Sucessfully Deleted Event Record!');
 })
 
-// -----------------------------------------------------------------------------------------------------------------------------------------
 
+app.get('/managers/login/isAuthorized',(req,res)=>{
+    let user = isAuthorized(req,res);
+    if (!user)  return res.status(401).json({message: 'Unauthorized'})
+    console.log('Welcome back, Admin')
+    res.json({message: user})
+})
+// -----------------------------------------------------------------------------------------------------------------------------------------
+function isAuthorized(req,res){
+  let auth = req.headers.authorization;
+  
+  if (!auth)  {
+    return false;
+  }
+  const token = auth.replace('Bearer ', '');
+  try {
+  return jwt.verify(token,process.env.secretKey) //verify if token is valid, and get user email
+
+  } catch(e) {
+    return false;
+  }
+  
+}
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Internal Server Error");

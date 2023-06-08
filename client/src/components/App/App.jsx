@@ -9,24 +9,47 @@ import CareerServicesHub from '../CareerServicesHub/CareerServicesHub'
 import LogInPage from '../logIn/logInPage'
 
 const App = () => {
-  const [loggedInfo, setLoggedInfo] = useState("");
-
+  const [loggedInfo, setLoggedInfo] = useState(false);
+  const url = 'http://localhost:8000'
+  console.log(url+ `/managers/login/isAuthorized`)
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    
-    if (token) {
-      // If a token is stored in local storage, consider the user as logged in.
-      setLoggedInfo(token);
+        const fetchData = async()=>{
+          const cookies = document.cookie.split(";");
+          const found = cookies.find(element=> element.startsWith('jwt='))
+          console.log((found?found.split('jwt=')[1]:''))
+          const response = await fetch(`${url}/managers/login/isAuthorized`, {
+            method: "GET",
+           
+            headers: {
+              "Content-Type": "application/json", 
+              Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
+            },
+          });
+          console.log(response.status)
+         if (!response.ok)  throw new Error('esfwf')
+          const result = await response.json(); console.log(result)
+          return result;
+          }
+
+          fetchData().then(auth=>setLoggedInfo(true)).catch(e=>setLoggedInfo(false)) //fetches data, if no error set loggedInfo, else empty it.
+
+      },[])
+
+      
+
+  const handleLogin = (data) => {
+    try {
+      setLoggedInfo(data);
     }
-  }, [loggedInfo]);
-
+    catch(e)
+    {
+      setLoggedInfo(false)
+    } //fetches data, if no error set loggedInfo, else empty it.
+  }
   const handleLogOff = () => {
-    localStorage.removeItem('authToken');
-    setLoggedInfo('');
-  };
+    document.cookie = `jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`  //expires immediately. The day is the very beginning of the timeDate for first computer
 
-  const handleLogin = (info) => {
-    setLoggedInfo(info);
+    setLoggedInfo('');
   };
 
   return (

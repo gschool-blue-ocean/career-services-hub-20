@@ -4,6 +4,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import bcrypt from 'bcrypt';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -84,16 +85,16 @@ const seedServiceManager = async () => {
     const careerManager = [];  // Initialize array that will temp hold all the fake managers before SQL insertion
 
     // Generate multiple manager objects and push it to careerManager Array
-    for (let i = 0; i < SEED_CAREER_MANAGER; i++){
-        careerManager.push({
-            tscm_first: faker.name.firstName(),             // Use faker method to generate fake manager first name
-            tscm_last: faker.name.lastName(),               // Use faker method to generate fake manager last name
-            login_id: faker.internet.userName(),            // Use faker method to generate fake manager username
-            tscm_password: faker.internet.password(10),     // Use faker method to generate fake manager password for login
-            tscm_email: faker.internet.email(),             // Use faker method to generate fake manager email for login
-            tscm_avatar: faker.internet.avatar(),           // Use faker method to generate URL for fake manager profile pic
-        });
-    }
+    // for (let i = 0; i < SEED_CAREER_MANAGER; i++){
+    //     careerManager.push({
+    //         tscm_first: faker.name.firstName(),             // Use faker method to generate fake manager first name
+    //         tscm_last: faker.name.lastName(),               // Use faker method to generate fake manager last name
+    //         login_id: faker.internet.userName(),            // Use faker method to generate fake manager username
+    //         tscm_password: faker.internet.password(10),     // Use faker method to generate fake manager password for login
+    //         tscm_email: faker.internet.email(),             // Use faker method to generate fake manager email for login
+    //         tscm_avatar: faker.internet.avatar(),           // Use faker method to generate URL for fake manager profile pic
+    //     });
+    // }
 
     try {
         await db.query('TRUNCATE TABLE service_manager CASCADE');                       // DROP TABLES already in the SQL database
@@ -101,11 +102,12 @@ const seedServiceManager = async () => {
         const queryString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) 
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
 
+        await db.query(queryString,['jone','smith','113','$2b$10$kAhzAdYUCtgUVOJsLme0fu/o3Jn6sfUz1TishpuiE7pfsqt4eBbKS','admin@gmail.com','https://www.google.com'])
         // For each manager, query SQL database with INSERT statement to add manager
-        for (let i = 0; i < SEED_CAREER_MANAGER; i++){
-            const {tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar} = careerManager[i];
-            await db.query(queryString, [tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar]);
-        }
+        // for (let i = 0; i < SEED_CAREER_MANAGER; i++){
+        //     const {tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar} = careerManager[i];
+        //     await db.query(queryString, [tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar]);
+        // }
     console.log('TSCM seeded successfully');
     } catch (err) {
         console.log('Error seeding TSCM', err);
