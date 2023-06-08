@@ -1,6 +1,10 @@
 body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(180deg, rgba(21,4,89,1) 22%, rgba(247,130,24,1) 100%);
-    background-attachment: fixed;
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(21, 4, 89, 1) 22%,
+    rgba(247, 130, 24, 1) 100%
+  );
+  background-attachment: fixed;
 }

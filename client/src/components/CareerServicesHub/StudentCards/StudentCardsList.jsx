@@ -46,7 +46,7 @@ export default function StudentCardslist({
     selectedManager
   );
 
-   // Update the currentStudents state whenever the students list changes
+  // Update the currentStudents state whenever the students list changes
   useEffect(() => {
     setCurrentStudents(students);
   }, [students]);
@@ -60,11 +60,10 @@ export default function StudentCardslist({
   // Function to handle updating an existing student object in the list
   function handleUpdateExistingStudent(existingStudentObj) {
     const updatedStudents = filteredStudents.map((student) => {
-
-        if (student.student_id === existingStudentObj.student_id) {
-          return existingStudentObj; // Replace the existing student with the updated student object
-        }
-        return student;
+      if (student.student_id === existingStudentObj.student_id) {
+        return existingStudentObj; // Replace the existing student with the updated student object
+      }
+      return student;
     });
 
     filteredStudents = updatedStudents; // Update the filtered students list
@@ -81,14 +80,19 @@ export default function StudentCardslist({
         {filterStudents != null
           ? filteredStudents.map((student) => {
               if (student.student_first === "Test") {
-                return <div key ="test" className="loading-card">Loading...</div>;
+                return (
+                  <div key="test" className="loading-card">
+                    Loading...
+                  </div>
+                );
               } else {
                 return (
                   <div key={student.student_id}>
-                    <StudentCard 
-                    currentStudents={currentStudents}
-                    handleUpdateExistingStudent={handleUpdateExistingStudent}
-                    student={student} />
+                    <StudentCard
+                      currentStudents={currentStudents}
+                      handleUpdateExistingStudent={handleUpdateExistingStudent}
+                      student={student}
+                    />
                   </div>
                 );
               }

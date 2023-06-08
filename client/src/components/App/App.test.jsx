@@ -65,14 +65,13 @@ const server = setupServer();
 //   server.close();
 // });
 
-it('test always passes', async () => {
+it("test always passes", async () => {
   expect(true).toBe(true);
 });
 
 // it('test always fails', async () => {
 //   expect(true).toBe(false);
 // });
-
 
 // it("deletes a task when clicked", async () => {
 //   const { findByText } = render(<App />);
