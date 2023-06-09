@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './loginPage.css'
 import galvanizeLogo from './galvanizeLogo.webp'
-import StudentCard from "../CareerServicesHub/StudentCards/StudentCard";
 
 const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
 
