@@ -59,7 +59,17 @@ export function StudentsContextProvider ({children}) {
         // Get latest students data from SQL database
         const fetchData = async () => {
             try {
-                const response = await fetch(`${url}/students`);
+                const cookies = document.cookie.split(";");
+                const found = cookies.find(element=> element.trim().startsWith('jwt='))
+                const response = await fetch(`${url}/students`, {
+                  method: "GET",
+                  
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization:(found?found.split('jwt=')[1]:''),
+                  }
+                });
+                
                 const students = await response.json();
                 const fullStudents = []; // Create array that will hold all students
                 // Once a student has been achieved, run all milestone GET request for that student

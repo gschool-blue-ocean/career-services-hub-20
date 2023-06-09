@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import './loginPage.css'
 import galvanizeLogo from './galvanizeLogo.webp'
+import StudentCard from "../CareerServicesHub/StudentCards/StudentCard";
 
-const LogInPage = ({ handleLogin }) => {
+const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
 
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -10,6 +11,7 @@ const LogInPage = ({ handleLogin }) => {
   const [opacity, setOpacity] = useState(0);
 
   useEffect(() => {
+    //if (isStudent)  document.body.classList = 'student-background'
     const timer = setTimeout(() => setOpacity(1), 100); // delay to let the DOM update
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
@@ -19,9 +21,9 @@ const LogInPage = ({ handleLogin }) => {
 
 
   async function loginUser(email, password) {
-    //try {
+    try {
       const cookies = document.cookie.split(";");
-      const found = cookies.find(element=> element.startsWith('jwt='))
+      const found = cookies.find(element=> element.trim().startsWith('jwt=')) //looks into cookies if it is a jwt token
       const response = await fetch(`${url}/managers/login`, {
         method: "POST",
         
@@ -42,20 +44,32 @@ const LogInPage = ({ handleLogin }) => {
         const timeExpire = 1000* 60 * 15;
         console.log(timeExpire)
         console.log(responseData.token);
-        document.cookie = `jwt=${responseData.token}; expires=${new Date(Date.now() + timeExpire)}; path=/; SameSite=Strict;`;
+        document.cookie = `jwt=${responseData.token}; expires=${new Date(Date.now() + timeExpire).toUTCString()}; path=/; SameSite=Strict;`;
         handleLogin(true); // Call the handleLogin function passed as a prop
         
       } else {
         setErrorRelay('Something has gone horribly wrong 😢');
       }
-  //  }
-  //  catch (error) {
-  //    setErrorRelay("Get out of here imposter 😠");
-  //  }
+   }
+   catch (error) {
+     setErrorRelay("Get out of here imposter 😠");
+   }
   }
 
   // Upon submit email and password is passed into the Log in user function
-
+  const toggle = ()=>{
+    console.error(isStudent);
+    if (isStudent)
+    {
+      setIsStudent(false);
+      document.body.classList.remove('student-background');
+    }
+    else
+    {
+      setIsStudent(true);
+      document.body.classList.add('student-background');
+    }
+  }
   const handleUserLogin = (e) => {
     e.preventDefault();
   
@@ -71,6 +85,7 @@ const LogInPage = ({ handleLogin }) => {
   return (
     <div style={{ opacity: opacity, transition: 'opacity 2s' }}>
       <div className="login-background">
+        <button className='login-student' onClick={()=>toggle()}>{isStudent?'login as Admin':'Login as Student'}</button>
         <form className="login-Container" onSubmit={handleUserLogin}>
         <img src={galvanizeLogo} ></img>
           <input

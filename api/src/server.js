@@ -23,7 +23,6 @@ app.use(express.json());
 app.use(
   cors({
     origin: "*",
-    //exposedHeaders: ['Set-Cookie']
   })
 );
 app.use(function(req,res,next){
@@ -36,7 +35,7 @@ app.use(function(req,res,next){
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
 app.get("/students", async (req, res, next) => {
   // Check if the data is cached.
-  
+   // if (!isAuthorized(req,res)) return res.status(401).json({message: 'Unauthorized'});
     try {
       const results = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
                                       FROM student 
@@ -189,17 +188,9 @@ app.patch("/managers/:id", async (req, res, next) => {
 
 
 app.post('/managers/login', async (req, res, next) => {
-   try{
-    const user =isAuthorized(req,res);
-    console.log(user)
-    if(!user)
-      throw new Error('Unauthorized');
-    return res.json({message: user})
- }
-  catch (e) {
     const email = req.body.email;
     const inputPassword = req.body.password;
-    
+    console.log(email);
     const results = await db.query(`SELECT * FROM service_manager WHERE tscm_email = $1`,[email]);
     const manager = results.rows[0]
     console.log(manager)
@@ -208,16 +199,14 @@ app.post('/managers/login', async (req, res, next) => {
       return res.status(401).json({message: 'Invalid Email 🤷'})
     }
     else if(bcrypt.compareSync(inputPassword,manager.tscm_password)) {
-      const user = {user: manager.email};
-      const token =jwt.sign(user, process.env.secretKey);
+      const user = {user: `${manager.tscm_first} ${manager.tscm_last}`};
+      const token =jwt.sign(user, process.env.SECRET_KEY);
       console.log(token)
-      console.log(`Admin ${manager.tscm_first} ${manager.tscm_last}, welcome back!`)
+      console.log(`Admin ${user.user}, welcome back!`)
       res.json({token: token})
     }
     else
       return res.status(401).json({ message:'Invalid Password 🤷'})
-  }
-    
    
  })
  
@@ -300,19 +289,19 @@ app.delete("/events/:id", async (req, res, next) => {
 app.get('/managers/login/isAuthorized',(req,res)=>{
     let user = isAuthorized(req,res);
     if (!user)  return res.status(401).json({message: 'Unauthorized'})
-    console.log('Welcome back, Admin')
+    console.log(`Welcome back, Admin ${user.user}`)
     res.json({message: user})
 })
 // -----------------------------------------------------------------------------------------------------------------------------------------
+
 function isAuthorized(req,res){
   let auth = req.headers.authorization;
-  
   if (!auth)  {
     return false;
   }
   const token = auth.replace('Bearer ', '');
   try {
-  return jwt.verify(token,process.env.secretKey) //verify if token is valid, and get user email
+  return jwt.verify(token,process.env.SECRET_KEY) //verify if token is valid, and get user email
 
   } catch(e) {
     return false;

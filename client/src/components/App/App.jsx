@@ -10,21 +10,36 @@ import LogInPage from '../logIn/logInPage'
 
 const App = () => {
   const [loggedInfo, setLoggedInfo] = useState(false);
+  const [isStudent,setIsStudent] = useState(false);
   const url = 'http://localhost:8000'
   console.log(url+ `/managers/login/isAuthorized`)
   useEffect(() => {
         const fetchData = async()=>{
           const cookies = document.cookie.split(";");
           const found = cookies.find(element=> element.startsWith('jwt='))
-          console.log((found?found.split('jwt=')[1]:''))
-          const response = await fetch(`${url}/managers/login/isAuthorized`, {
-            method: "GET",
-           
-            headers: {
-              "Content-Type": "application/json", 
-              Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
-            },
-          });
+          let response;
+          if (!isStudent)
+          {
+            response = await fetch(`${url}/managers/login/isAuthorized`, {
+              method: "GET",
+            
+              headers: {
+                "Content-Type": "application/json", 
+                Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
+              },
+            });
+          }
+          else
+          {
+            response = await fetch(`${url}/students/login/isAuthorized`, {
+              method: "GET",
+            
+              headers: {
+                "Content-Type": "application/json", 
+                Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
+              },//student_email student_password
+            });
+          }  
           console.log(response.status)
          if (!response.ok)  throw new Error('esfwf')
           const result = await response.json(); console.log(result)
@@ -59,7 +74,7 @@ const App = () => {
           <FieldsContextProvider>
             {loggedInfo ? (
                 <CareerServicesHub handleLogOff={handleLogOff} loggedInfo={loggedInfo}/>
-            ) : <LogInPage handleLogin={handleLogin} /> }
+            ) : <LogInPage handleLogin={handleLogin} setIsStudent={setIsStudent} isStudent={isStudent}/> }
           </FieldsContextProvider>
         </ManagersContextProvider>
       </StudentsContextProvider>
