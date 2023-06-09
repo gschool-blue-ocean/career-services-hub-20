@@ -264,6 +264,9 @@ const seedMilestone = async () => {
 };
 
 // Seed the database in the order described below
+
+
 seedServiceManager().then(() =>
   seedStudents().then(() => seedCalendar().then(() => seedMilestone()))
 );
+

@@ -66,6 +66,8 @@ app.get("/students/:id", async (req, res, next) => {
 app.post("/students", async (req, res, next) => {
   const firstName = req.body.student_first;
   const lastName = req.body.student_last;
+  const email = req.body.student_email;
+  const password = req.body.student_password;
   const cohort = req.body.cohort;
   const sercurityClearance = req.body.sec_clearance;
   const careerStatus = req.body.career_status;
@@ -75,10 +77,13 @@ app.post("/students", async (req, res, next) => {
 
   const result = await db
     .query(
-      "INSERT INTO student(student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+
+      "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
       [
         firstName,
         lastName,
+        email,
+        password,
         cohort,
         sercurityClearance,
         careerStatus,
@@ -133,12 +138,50 @@ app.delete("/students/:id", async (req, res, next) => {
   res.send({ message: "Sucessfully Deleted Student Record!" });
 });
 
+app.post("/students/login", async (req, res, next) => {
+  const email = req.body.email;
+  const inputPassword = req.body.password;
+
+
+  try {
+    const results = await db.query(
+      "SELECT * FROM student WHERE student_email = $1",
+      [email]
+    );
+    const student = results.rows[0];
+
+    if (!student) {
+      return res
+        .status(404)
+        .json({ message: "Incorrect Password or Email 🤷" });
+    }
+
+    if (student.student_password === inputPassword) {
+      const user = { val_student: student.email };
+
+      const accessToken = jwt.sign(user, "super secret key", {
+        expiresIn: "10m",
+      });
+      res.json({ accessToken });
+    }
+  } catch (error) {
+    console.error(
+      "Something really went wrong, check if DB is running 🤷",
+      error
+    );
+    res.status(500).json({ message: "Service unavailable 🤷" });
+    console.log("bad");
+  }
+});
+
+
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
 
 app.get("/students/:id/milestones", async (req, res, next) => {
   const id = req.params.id;
 
   const result = await db
+
     .query(`SELECT * FROM milestone WHERE milestone.student_id = ${id}`)
     .catch(next);
   res.send(result.rows);
@@ -158,6 +201,7 @@ app.post("/students/:studentId/milestones", async (req, res, next) => {
     .catch(next);
   res.send(result.rows);
 });
+
 
 app.patch(
   "/students/:studentId/milestones/:milestoneId",

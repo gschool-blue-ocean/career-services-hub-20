@@ -14,7 +14,10 @@ const LogInPage = ({ handleLogin }) => {
   }, []);
 
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
-  const url = "https://career-services-server.onrender.com";
+
+  const url = 'http://localhost:8000';
+
+
 
   async function loginUser(email, password) {
     try {
