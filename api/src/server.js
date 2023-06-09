@@ -298,12 +298,10 @@ app.post('/managers/login', async (req, res, next) => {
       console.log(`Admin ${user.user}, welcome back!`)
       res.json({token: token})
     }
-  } catch (error) {
-    console.error('Something really went wrong, check if DB is running 🤷' , error)
-    res.status(500).json({ message: 'Service unavailable 🤷'})
-    console.log('bad')
-  }
-})
+    else{
+      res.status(401).json({message: 'Invalid Password 🤷'})
+    }
+  });
 
 // Need to think about this more, because we need to update student records and calendar records BEFORE we delete any manager records otherwise we are violating foreign keys
 
