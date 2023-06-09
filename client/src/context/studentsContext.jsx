@@ -53,36 +53,31 @@ export function StudentsContextProvider({ children }) {
     },
   ]);
 
-  // This allows the app to run in both development (locally) and deployed (on render)
-  const url =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:8000"
-      : "https://career-services-server.onrender.com";
-
-  // Run once, until page is refreshed
-  useEffect(() => {
-    // Get latest students data from SQL database
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${url}/students`);
-        const students = await response.json();
-        const fullStudents = []; // Create array that will hold all students
-        // Once a student has been achieved, run all milestone GET request for that student
-        for (const student of students) {
-          const milestonesResponse = await fetch(
-            `${url}/students/${student.student_id}/milestones`
-          );
-          const milestones = await milestonesResponse.json();
-          student.milestones = milestones; // Combine new student with thier respective milestones
-          fullStudents.push(student); // Push latest student to array that is holding all the students
-        }
-        setStudentsData(fullStudents); // Update state with all students and thier milestones
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData(); // Execute fetch above
-  }, [update]);
+    // This allows the app to run in both development (locally) and deployed (on render)
+    const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
+    
+    // Run once, until page is refreshed
+    useEffect(() =>{
+        // Get latest students data from SQL database
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${url}/students`);
+                const students = await response.json();
+                const fullStudents = []; // Create array that will hold all students
+                // Once a student has been achieved, run all milestone GET request for that student
+                for (const student of students) {
+                    const milestonesResponse = await fetch(`${url}/students/${student.student_id}/milestones`);
+                    const milestones = await milestonesResponse.json();
+                    student.milestones = milestones; // Combine new student with thier respective milestones
+                    fullStudents.push(student); // Push latest student to array that is holding all the students
+                }
+                setStudentsData(fullStudents); // Update state with all students and thier milestones
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData(); // Execute fetch above
+    }, [update]);
 
   return (
     <StudentsContext.Provider value={{ studentsData, setUpdate, update }}>
