@@ -10,7 +10,10 @@ const { Pool } = pg;
 
 const db = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 const PORT = process.env.PORT;
@@ -41,32 +44,37 @@ app.get("/students", async (req, res, next) => {
                                       FROM student 
                                       JOIN service_manager ON service_manager.tscm_id = student.tscm_id`);
 
-      // Send the data.
-      res.send(results.rows);
-    } catch (error) {
-      next(error);
-    }
+    // Send the data.
+    res.send(results.rows);
+  } catch (error) {
+    next(error);
+  }
 });
 
-app.get("/students/:id", async (req, res, next) =>{
+app.get("/students/:id", async (req, res, next) => {
   const id = req.params.id;
 
-  const result = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last 
+  const result = await db
+    .query(
+      `SELECT student.*, service_manager.tscm_first, service_manager.tscm_last 
                                   FROM student 
                                   JOIN service_manager ON service_manager.tscm_id = student.tscm_id 
-                                  WHERE student.student_id = ${id}`)
-                            .catch(next);
+                                  WHERE student.student_id = ${id}`
+    )
+    .catch(next);
 
-                  if (result.rows.length === 0) {
-                        res.sendStatus(404);
-                      } else {
-                        res.send(result.rows);
-                      }
-})
+  if (result.rows.length === 0) {
+    res.sendStatus(404);
+  } else {
+    res.send(result.rows);
+  }
+});
 
 app.post("/students", async (req, res, next) => {
   const firstName = req.body.student_first;
   const lastName = req.body.student_last;
+  const email = req.body.student_email;
+  const password = req.body.student_password;
   const cohort = req.body.cohort;
   const sercurityClearance = req.body.sec_clearance;
   const careerStatus = req.body.career_status;
@@ -75,10 +83,25 @@ app.post("/students", async (req, res, next) => {
   const tscm_id = req.body.tscm_id;
 
   const result = await db
-    .query("INSERT INTO student(student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *", [firstName, lastName, cohort, sercurityClearance, careerStatus, courseStatus, collegeDegree, tscm_id])
+    .query(
+
+      "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
+      [
+        firstName,
+        lastName,
+        email,
+        password,
+        cohort,
+        sercurityClearance,
+        careerStatus,
+        courseStatus,
+        collegeDegree,
+        tscm_id,
+      ]
+    )
     .catch(next);
   res.send(result.rows[0]);
-})
+});
 
 app.patch("/students/:id", async (req, res, next) => {
   console.log(req.body);
@@ -93,64 +116,129 @@ app.patch("/students/:id", async (req, res, next) => {
   const tscm_id = req.body.tscm_id;
 
   const result = await db
-    .query("UPDATE student SET student_first = $1, student_last = $2, cohort = $3, sec_clearance = $4, career_status = $5, course_status = $6, college_degree=$7, tscm_id = $8 WHERE student_id = $9 RETURNING *", [firstName, lastName, cohort, sercurityClearance, careerStatus, courseStatus, collegeDegree, tscm_id, id])
+    .query(
+      "UPDATE student SET student_first = $1, student_last = $2, cohort = $3, sec_clearance = $4, career_status = $5, course_status = $6, college_degree=$7, tscm_id = $8 WHERE student_id = $9 RETURNING *",
+      [
+        firstName,
+        lastName,
+        cohort,
+        sercurityClearance,
+        careerStatus,
+        courseStatus,
+        collegeDegree,
+        tscm_id,
+        id,
+      ]
+    )
     .catch(next);
   res.send(result.rows[0]);
-})
+});
 
 app.delete("/students/:id", async (req, res, next) => {
   const id = req.params.id;
 
-  await db.query("DELETE FROM milestone WHERE milestone.student_id = $1", [id])
+  await db.query("DELETE FROM milestone WHERE milestone.student_id = $1", [id]);
 
-  await db.query("DELETE FROM student WHERE student.student_id = $1", [id])
+  await db
+    .query("DELETE FROM student WHERE student.student_id = $1", [id])
     .catch(next);
-  res.send({message: "Sucessfully Deleted Student Record!"});
-})
+  res.send({ message: "Sucessfully Deleted Student Record!" });
+});
+
+app.post("/students/login", async (req, res, next) => {
+  const email = req.body.email;
+  const inputPassword = req.body.password;
+
+
+  try {
+    const results = await db.query(
+      "SELECT * FROM student WHERE student_email = $1",
+      [email]
+    );
+    const student = results.rows[0];
+
+    if (!student) {
+      return res
+        .status(404)
+        .json({ message: "Incorrect Password or Email 🤷" });
+    }
+
+    if (student.student_password === inputPassword) {
+      const user = { val_student: student.email };
+
+      const accessToken = jwt.sign(user, "super secret key", {
+        expiresIn: "10m",
+      });
+      res.json({ accessToken });
+    }
+  } catch (error) {
+    console.error(
+      "Something really went wrong, check if DB is running 🤷",
+      error
+    );
+    res.status(500).json({ message: "Service unavailable 🤷" });
+    console.log("bad");
+  }
+});
+
 
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
 
-app.get("/students/:id/milestones", async (req, res, next) =>{
+app.get("/students/:id/milestones", async (req, res, next) => {
   const id = req.params.id;
 
-  const result = await db.query(`SELECT * FROM milestone WHERE milestone.student_id = ${id}`)
-                            .catch(next);
-  res.send(result.rows);
-})
+  const result = await db
 
-app.post("/students/:studentId/milestones", async (req, res, next) =>{
+    .query(`SELECT * FROM milestone WHERE milestone.student_id = ${id}`)
+    .catch(next);
+  res.send(result.rows);
+});
+
+app.post("/students/:studentId/milestones", async (req, res, next) => {
   const studentId = req.params.studentId;
 
   const mileName = req.body.mile_name;
   const progress = req.body.progress_stat;
 
-  const result = await db.query(`INSERT INTO milestone (mile_name, progress_stat, student_id ) VALUES( $1, $2, $3 ) RETURNING *`, [mileName, progress, studentId])
-                            .catch(next);
+  const result = await db
+    .query(
+      `INSERT INTO milestone (mile_name, progress_stat, student_id ) VALUES( $1, $2, $3 ) RETURNING *`,
+      [mileName, progress, studentId]
+    )
+    .catch(next);
   res.send(result.rows);
-})
+});
 
-app.patch("/students/:studentId/milestones/:milestoneId", async (req, res, next) =>{
-  console.log(req.body)
-  const milestoneId = req.params.milestoneId;
-  const studentId = req.params.studentId;
 
-  const mileName = req.body.mile_name;
-  const progress = req.body.progress_stat;
+app.patch(
+  "/students/:studentId/milestones/:milestoneId",
+  async (req, res, next) => {
+    console.log(req.body);
+    const milestoneId = req.params.milestoneId;
+    const studentId = req.params.studentId;
 
-  const result = await db.query(`UPDATE milestone SET mile_name = $1, progress_stat = $2, student_id = $3 WHERE milestone.mile_id = $4 RETURNING *`, [mileName, progress, studentId, milestoneId])
-                            .catch(next);
-                            console.log(result.rows)
-  res.send(result.rows);
-})
+    const mileName = req.body.mile_name;
+    const progress = req.body.progress_stat;
+
+    const result = await db
+      .query(
+        `UPDATE milestone SET mile_name = $1, progress_stat = $2, student_id = $3 WHERE milestone.mile_id = $4 RETURNING *`,
+        [mileName, progress, studentId, milestoneId]
+      )
+      .catch(next);
+    console.log(result.rows);
+    res.send(result.rows);
+  }
+);
 
 // --------------------------------------------- MANAGERS ROUTES ----------------------------------------------------------------------------
 
-app.get ("/managers", async (req, res, next) => {
+app.get("/managers", async (req, res, next) => {
   const results = await db.query(`SELECT * FROM service_manager`).catch(next);
-  res.send(results.rows)
-})
+  res.send(results.rows);
+});
 
-app.get ("/managers/:id", async (req, res, next) => {
+app.get("/managers/:id", async (req, res, next) => {
   const id = req.params.id;
   const results = await db.query(`SELECT * FROM service_manager WHERE tscm_id = ${id}`).catch(next);
   res.send(results.rows)
@@ -165,10 +253,13 @@ app.post("/managers", async (req, res, next) => {
   const avatar = req.body.tscm_avatar;
 
   const result = await db
-    .query("INSERT INTO service_manager(tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [firstName, lastName, login_id, password, email, avatar])
+    .query(
+      "INSERT INTO service_manager(tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [firstName, lastName, login_id, password, email, avatar]
+    )
     .catch(next);
   res.send(result.rows[0]);
-})
+});
 
 app.patch("/managers/:id", async (req, res, next) => {
   const id = req.params.id;
@@ -181,10 +272,13 @@ app.patch("/managers/:id", async (req, res, next) => {
   const avatar = req.body.tscm_avatar;
 
   const result = await db
-    .query("UPDATE service_manager SET tscm_first = $1, tscm_last = $2, login_id = $3, tscm_password = $4, tscm_email = $5, tscm_avatar = $6  WHERE tscm_id = $7 RETURNING *", [firstName, lastName, login_id, password, email, avatar, id])
+    .query(
+      "UPDATE service_manager SET tscm_first = $1, tscm_last = $2, login_id = $3, tscm_password = $4, tscm_email = $5, tscm_avatar = $6  WHERE tscm_id = $7 RETURNING *",
+      [firstName, lastName, login_id, password, email, avatar, id]
+    )
     .catch(next);
   res.send(result.rows[0]);
-})
+});
 
 
 app.post('/managers/login', async (req, res, next) => {
@@ -219,33 +313,44 @@ app.post('/managers/login', async (req, res, next) => {
 app.delete("/managers/:id", async (req, res, next) => {
   const id = req.params.id;
 
-    await db.query("DELETE FROM service_manager WHERE service_manager.tscm_id = $1", [id])
+  await db
+    .query("DELETE FROM service_manager WHERE service_manager.tscm_id = $1", [
+      id,
+    ])
 
     .catch(next);
-    res.json({ message: 'Sucessfully Deleted Manager Records!' });
-})
+  res.json({ message: "Sucessfully Deleted Manager Records!" });
+});
 
 // -------------------------------------------------------------- EVENTS ROUTES -------------------------------------------------------------
 
-app.get ("/events", async (req, res, next) => {
-  const results = await db.query(`SELECT calendar.*, service_manager.tscm_first, service_manager.tscm_last FROM calendar
-                                  JOIN service_manager ON service_manager.tscm_id = calendar.tscm_id`).catch(next);
-  res.send(results.rows)
-})
+app.get("/events", async (req, res, next) => {
+  const results = await db
+    .query(
+      `SELECT calendar.*, service_manager.tscm_first, service_manager.tscm_last FROM calendar
+                                  JOIN service_manager ON service_manager.tscm_id = calendar.tscm_id`
+    )
+    .catch(next);
+  res.send(results.rows);
+});
 
-app.get ("/events/:id", async (req, res, next) => {
+app.get("/events/:id", async (req, res, next) => {
   const id = req.params.id;
 
-  const result = await db.query(`SELECT calendar.*, service_manager.tscm_first, service_manager.tscm_last FROM calendar
+  const result = await db
+    .query(
+      `SELECT calendar.*, service_manager.tscm_first, service_manager.tscm_last FROM calendar
                                   JOIN service_manager ON service_manager.tscm_id = calendar.tscm_id
-                                  WHERE event_id = ${id}`).catch(next);
+                                  WHERE event_id = ${id}`
+    )
+    .catch(next);
 
-                      if (result.rows.length === 0) {
-                        res.sendStatus(404);
-                      } else {
-                        res.send(result.rows[0]);
-                      }
-})
+  if (result.rows.length === 0) {
+    res.sendStatus(404);
+  } else {
+    res.send(result.rows[0]);
+  }
+});
 
 app.post("/events", async (req, res, next) => {
   const eventName = req.body.event_name;
@@ -256,7 +361,10 @@ app.post("/events", async (req, res, next) => {
   const description = req.body.event_descrip;
 
   const result = await db
-    .query("INSERT INTO calendar(event_name, tscm_id, event_date, event_time, speak_con, event_descrip) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [eventName, tscmId, date, time, speakersContacted, description])
+    .query(
+      "INSERT INTO calendar(event_name, tscm_id, event_date, event_time, speak_con, event_descrip) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [eventName, tscmId, date, time, speakersContacted, description]
+    )
     .catch(next);
   res.send(result.rows[0]);
 });
@@ -272,25 +380,28 @@ app.patch("/events/:id", async (req, res, next) => {
   const description = req.body.event_descrip;
 
   const result = await db
-    .query("UPDATE calendar SET event_name = $1, tscm_id = $2, event_date = $3, event_time = $4, speak_con = $5, event_descrip = $6 WHERE event_id = $7 RETURNING *", [eventName, tscmId, date, time, speakersContacted, description, id])
+    .query(
+      "UPDATE calendar SET event_name = $1, tscm_id = $2, event_date = $3, event_time = $4, speak_con = $5, event_descrip = $6 WHERE event_id = $7 RETURNING *",
+      [eventName, tscmId, date, time, speakersContacted, description, id]
+    )
     .catch(next);
   res.send(result.rows[0]);
-})
+});
 
 app.delete("/events/:id", async (req, res, next) => {
   const id = req.params.id;
 
-  await db.query("DELETE FROM calendar WHERE calendar.event_id = $1", [id])
+  await db
+    .query("DELETE FROM calendar WHERE calendar.event_id = $1", [id])
     .catch(next);
   res.send('Sucessfully Deleted Event Record!');
 })
 
-
-app.get('/managers/login/isAuthorized',(req,res)=>{
-    let user = isAuthorized(req,res);
-    if (!user)  return res.status(401).json({message: 'Unauthorized'})
-    console.log(`Welcome back, Admin ${user.user}`)
-    res.json({message: user})
+pp.get('/managers/login/isAuthorized',(req,res)=>{
+  let user = isAuthorized(req,res);
+  if (!user)  return res.status(401).json({message: 'Unauthorized'})
+  console.log(`Welcome back, Admin ${user.user}`)
+  res.json({message: user})
 })
 // -----------------------------------------------------------------------------------------------------------------------------------------
 

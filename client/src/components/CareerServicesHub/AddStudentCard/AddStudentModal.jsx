@@ -4,7 +4,12 @@ import CSVInputRevised from "./CSVInputRevised";
 import AddStudentRevised from "./AddStudentRevised";
 import "./AddStudentCard.css";
 
-function Add_Student_Modal({ addStudent, handleAddStudentModalToggle, setAddStudent, handleUpdateNewStudent }) {
+function Add_Student_Modal({
+  addStudent,
+  handleAddStudentModalToggle,
+  setAddStudent,
+  handleUpdateNewStudent,
+}) {
   // State variable to switch between the bulk import and single student modes
   const [btnSwitch, setBtnSwitch] = useState(true);
 

@@ -1,40 +1,44 @@
-.import-results-table{
-    display: table;
-    width: 95%;
-    margin: auto;
-    border: solid white 3px;
-    border-radius: 10px;
+.import-results-table {
+  display: table;
+  width: 95%;
+  margin: auto;
+  border: solid white 3px;
+  border-radius: 10px;
 }
 
-.results-student-row{
-    display: table-row;
+.results-student-row {
+  display: table-row;
 }
 
-.results-student-cell{
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
-    margin: 5px;
+.results-student-cell {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  margin: 5px;
 
-    border: solid white 1px;
+  border: solid white 1px;
 }
 
-.header{
-    color: rgb(255, 255, 255);
-    font-weight: 900;
-    padding: 5px;
+.header {
+  color: rgb(255, 255, 255);
+  font-weight: 900;
+  padding: 5px;
 }
 
 .header-row {
-    background: linear-gradient(135deg, rgba(21,4,89,1) 30%, rgba(247,130,24,1) 125%);
+  background: linear-gradient(
+    135deg,
+    rgba(21, 4, 89, 1) 30%,
+    rgba(247, 130, 24, 1) 125%
+  );
 }
 
-.results-upload-button-container{
-   width: 100%;
+.results-upload-button-container {
+  width: 100%;
 
-   display: flex;
-   justify-content: center;
+  display: flex;
+  justify-content: center;
 
-   margin-top: 20px;
-   margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

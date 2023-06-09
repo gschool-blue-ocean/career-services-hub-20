@@ -1,154 +1,156 @@
 #add-card {
-    background: linear-gradient(135deg, rgba(21,4,89,.8) 30%, rgba(247,130,24,.8) 125%);
-    height: 110px;
-    width: 140px;
-    border: none;
-    padding: 5%;
-    text-align: center;
-    border-radius: 10px;
-    margin: 5px;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-content: center;
+  background: linear-gradient(
+    135deg,
+    rgba(21, 4, 89, 0.8) 30%,
+    rgba(247, 130, 24, 0.8) 125%
+  );
+  height: 110px;
+  width: 140px;
+  border: none;
+  padding: 5%;
+  text-align: center;
+  border-radius: 10px;
+  margin: 5px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-content: center;
 }
 
 #add-card-name {
-    color: white;
-    font-size: 70px;
-    height: 100%;
-    width: 100%;
-    border:none;
-    border-radius:10px;
-    white-space: nowrap;
-    background: none;  
-    transition:ease 0.4s; 
+  color: white;
+  font-size: 70px;
+  height: 100%;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  white-space: nowrap;
+  background: none;
+  transition: ease 0.4s;
 }
 
-#add-card-name:hover{
-    background: linear-gradient(135deg, rgba(21,4,89,1) 30%, rgba(247,130,24,1) 125%); 
-    cursor: pointer;
-    transform: scale(1.13);
-    color: white;
-    transition: ease 0.4s;
+#add-card-name:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(21, 4, 89, 1) 30%,
+    rgba(247, 130, 24, 1) 125%
+  );
+  cursor: pointer;
+  transform: scale(1.13);
+  color: white;
+  transition: ease 0.4s;
 }
 
+.modal-overlay-container {
+  display: flex;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
 
-.modal-overlay-container{
-    display: flex;
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    left: 0;
+  height: 100%;
+  width: 100%;
 
-    height: 100%;
-    width: 100%;
-
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .add-container {
-    display: grid;
-    
+  display: grid;
 }
 
 #add-text {
-    font-size: 20px;
-    margin-right: 1%;
+  font-size: 20px;
+  margin-right: 1%;
 }
 
 .submit-student-button {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .add-subcontainer {
-    display: flex;
-    margin-top: 1%;
-    margin-bottom: 1%;
+  display: flex;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
 
-.add_modal{
-    transition: ease .5s;
-    position: fixed;
-    z-index: 1001;
-    height: fit-content;
-    width: 50vw;
-    padding: 20px;
-    font-family: 'KelsonSans';
-    color: white;
-    border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.678); 
-    justify-content: center;
+.add_modal {
+  transition: ease 0.5s;
+  position: fixed;
+  z-index: 1001;
+  height: fit-content;
+  width: 50vw;
+  padding: 20px;
+  font-family: "KelsonSans";
+  color: white;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.678);
+  justify-content: center;
 }
 
 .add_modal #add-text {
-    font-family: 'KelsonSans-Bold';
-    font-size: larger;
-    font-weight: bold;
+  font-family: "KelsonSans-Bold";
+  font-size: larger;
+  font-weight: bold;
 }
 
 .add-student-info-title {
-    text-align: center;
-    font-family: 'KelsonSans-Bold';
-    font-size:xx-large;
-    font-weight: bold;
+  text-align: center;
+  font-family: "KelsonSans-Bold";
+  font-size: xx-large;
+  font-weight: bold;
 }
 
-.filt_overlay:hover + .add_modal{
-    color: white;
-    transform: scale(.95);
-    filter: blur(10px);
-
+.filt_overlay:hover + .add_modal {
+  color: white;
+  transform: scale(0.95);
+  filter: blur(10px);
 }
 
-.add_modal input{
-    color:white;
-    border:solid rgb(116, 116, 116) 1px;
-    border-radius: 5px;
-    background-color: transparent;
+.add_modal input {
+  color: white;
+  border: solid rgb(116, 116, 116) 1px;
+  border-radius: 5px;
+  background-color: transparent;
 }
 
 .add-import-input {
-    margin: none;
+  margin: none;
 }
 
-
 .add-student-button {
-width: fit-content;
-display: block;
-text-align: center;
-color:white;
-    border:solid rgb(116, 116, 116) 1px;
-    border-radius: 5px;
-    background-color: transparent;
+  width: fit-content;
+  display: block;
+  text-align: center;
+  color: white;
+  border: solid rgb(116, 116, 116) 1px;
+  border-radius: 5px;
+  background-color: transparent;
 }
 
 .add-modal-buttons-container {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    margin-bottom: 10px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-
-.add_modal select{
-    font-family: 'kelsonsans';
-    color:white;
-    border:solid rgb(116, 116, 116) 1px;
-    border-radius: 5px;
-    background-color: transparent;
+.add_modal select {
+  font-family: "kelsonsans";
+  color: white;
+  border: solid rgb(116, 116, 116) 1px;
+  border-radius: 5px;
+  background-color: transparent;
 }
 
-
-.add_modal option{
-    background-color: black;
+.add_modal option {
+  background-color: black;
 }
 
-.add_modal input{
-    font-family: 'kelsonsans';
-    color:white;
-    border:solid rgb(116, 116, 116) 1px;
-    border-radius: 5px;
-    background-color: transparent;
+.add_modal input {
+  font-family: "kelsonsans";
+  color: white;
+  border: solid rgb(116, 116, 116) 1px;
+  border-radius: 5px;
+  background-color: transparent;
 }

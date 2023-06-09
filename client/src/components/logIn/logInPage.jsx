@@ -19,6 +19,7 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
   const url = 'http://localhost:8000';
 
 
+
   async function loginUser(email, password) {
     try {
       const cookies = document.cookie.split(";");
@@ -34,6 +35,7 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
       });
       console.log(response);
       const responseData = await response.json();
+
       if (!response.ok)
       {
         throw new Error('Invalid email or password');
@@ -47,7 +49,7 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
         handleLogin(true); // Call the handleLogin function passed as a prop
         
       } else {
-        setErrorRelay('Something has gone horribly wrong 😢');
+        setErrorRelay("Something has gone horribly wrong 😢");
       }
    }
    catch (error) {
@@ -71,30 +73,30 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
   }
   const handleUserLogin = (e) => {
     e.preventDefault();
-  
+
     // Check if both email and password fields are not empty
     if (email === "" || pass === "") {
-      setErrorRelay("Please fill in both email and password fields 🤦"); 
+      setErrorRelay("Please fill in both email and password fields 🤦");
     } else {
       loginUser(email, pass);
-      setErrorRelay('Logging in...')
+      setErrorRelay("Logging in...");
     }
   };
 
   return (
-    <div style={{ opacity: opacity, transition: 'opacity 2s' }}>
+    <div style={{ opacity: opacity, transition: "opacity 2s" }}>
       <div className="login-background">
         <button className='login-student' onClick={()=>toggle()}>{isStudent?'login as Admin':'Login as Student'}</button>
         <form className="login-Container" onSubmit={handleUserLogin}>
-        <img src={galvanizeLogo} ></img>
+          <img src={galvanizeLogo}></img>
           <input
             className="login-value"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
             placeholder="YourEmail@galvanize.com"
-            id="email">
-          </input>
+            id="email"
+          ></input>
           <input
             className="login-value"
             value={pass}
@@ -104,10 +106,14 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
             id="password"
           ></input>
           <button className="login-button">Log In</button>
-          {errorRelay ? <p className="error-message">{errorRelay}</p> : <p className="easter-egg">🌮</p>} 
+          {errorRelay ? (
+            <p className="error-message">{errorRelay}</p>
+          ) : (
+            <p className="easter-egg">🌮</p>
+          )}
         </form>
       </div>
     </div>
   );
-}
+};
 export default LogInPage;

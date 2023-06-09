@@ -1,11 +1,11 @@
 .login-Container {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .student-background{
     background: linear-gradient(180deg, #107874 22%, rgba(247,130,24,1) 100%);
@@ -18,54 +18,59 @@
     top: 5%;
 }
 .login-value {
-    border-radius: 5em;
-    height: 40px;
-    width: 250px;
-    margin-top: 40px;
-    box-shadow:  inset 2px 2px 5px #BABECC, inset -5px -5px 10px #FFF;
-    transition: all 0.2s ease-in-out;
-    appearance: none;
-    -webkit-appearance: none;
-    border: 0;
-    padding-left: 10px;
+  border-radius: 5em;
+  height: 40px;
+  width: 250px;
+  margin-top: 40px;
+  box-shadow: inset 2px 2px 5px #babecc, inset -5px -5px 10px #fff;
+  transition: all 0.2s ease-in-out;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  padding-left: 10px;
 }
 
 .login-value:focus {
-    box-shadow:  inset 1px 1px 5px #1a1c23, inset -3px -3px 5px #9d9d9d;
-    outline: none;
+  box-shadow: inset 1px 1px 5px #1a1c23, inset -3px -3px 5px #9d9d9d;
+  outline: none;
 }
 
 .login-button {
-    margin-top: 20px;
-    padding: 15px 30px;
-    text-align: center;
-    transition: 0.5s;
-    background-size: 200% auto;
-    color: white;
-    border-radius: 10px;
-    display: block;
-    border: 0px;
-    font-weight: 700;
-    box-shadow: 0px 0px 14px -7px #2b373d;
-    background-image: linear-gradient(45deg, #FF512F 0%, #F09819  51%, #FF512F  100%);
-    cursor: pointer;
-    touch-action: manipulation;
-    }
-    
-.login-button:hover {
-    background-position: right center;
-    color: #fff;
-    text-decoration: none;
+  margin-top: 20px;
+  padding: 15px 30px;
+  text-align: center;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  border-radius: 10px;
+  display: block;
+  border: 0px;
+  font-weight: 700;
+  box-shadow: 0px 0px 14px -7px #2b373d;
+  background-image: linear-gradient(
+    45deg,
+    #ff512f 0%,
+    #f09819 51%,
+    #ff512f 100%
+  );
+  cursor: pointer;
+  touch-action: manipulation;
 }
-    
-    .login-button:active {
-    transform: scale(0.95);
+
+.login-button:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+}
+
+.login-button:active {
+  transform: scale(0.95);
 }
 
 .error-message {
-    color: white;
+  color: white;
 }
 
 .easter-egg {
-    color: transparent;
+  color: transparent;
 }

@@ -2,54 +2,56 @@ import React, { useState, useEffect, createContext } from "react";
 
 export const StudentsContext = createContext();
 
-export function StudentsContextProvider ({children}) {
-    //Update hook is used in the use effect for later so that when a component does a task the student state gets updated along with DB
-    const [update, setUpdate] = useState(true)
-    const [studentsData, setStudentsData] = useState([{
-        student_first : "Test",
-        student_id : 1,
-        student_last : "Test",
-        career_status : "Searching",
-        cohort : "MCSP-18",
-        college_degree : "Associate Not in CS/STEM",
-        course_status : "Graduate",
-        sec_clearance : "Undetermined",        
-        milestones : [
-            {
-                mile_id :  1,
-                mile_name : "Cover Letter",
-                progress_stat : "Un-Satisfactory",
-                student_id : 1
-            },
-            {
-                mile_id :  2,
-                mile_name : "Resume",
-                progress_stat : "Un-Satisfactory",
-                student_id : 1
-            },
-            {
-                mile_id :  3,
-                mile_name : "LinkedIn",
-                progress_stat : "Completed",
-                student_id : 1
-            },
-            {
-                mile_id :  4,
-                mile_name : "Personal Narrative",
-                progress_stat : "Un-Satisfactory",
-                student_id : 1
-            },
-            {
-                mile_id :  5,
-                mile_name : "Huntr Access",
-                progress_stat : "Un-Satisfactory",
-                student_id : 1
-            }            
-        ],
-        tscm_first : "Cade",
-        tscm_id : 6,
-        tscm_last : "Nienow"
-    }]);
+export function StudentsContextProvider({ children }) {
+  //Update hook is used in the use effect for later so that when a component does a task the student state gets updated along with DB
+  const [update, setUpdate] = useState(true);
+  const [studentsData, setStudentsData] = useState([
+    {
+      student_first: "Test",
+      student_id: 1,
+      student_last: "Test",
+      career_status: "Searching",
+      cohort: "MCSP-18",
+      college_degree: "Associate Not in CS/STEM",
+      course_status: "Graduate",
+      sec_clearance: "Undetermined",
+      milestones: [
+        {
+          mile_id: 1,
+          mile_name: "Cover Letter",
+          progress_stat: "Un-Satisfactory",
+          student_id: 1,
+        },
+        {
+          mile_id: 2,
+          mile_name: "Resume",
+          progress_stat: "Un-Satisfactory",
+          student_id: 1,
+        },
+        {
+          mile_id: 3,
+          mile_name: "LinkedIn",
+          progress_stat: "Completed",
+          student_id: 1,
+        },
+        {
+          mile_id: 4,
+          mile_name: "Personal Narrative",
+          progress_stat: "Un-Satisfactory",
+          student_id: 1,
+        },
+        {
+          mile_id: 5,
+          mile_name: "Huntr Access",
+          progress_stat: "Un-Satisfactory",
+          student_id: 1,
+        },
+      ],
+      tscm_first: "Cade",
+      tscm_id: 6,
+      tscm_last: "Nienow",
+    },
+  ]);
 
     // This allows the app to run in both development (locally) and deployed (on render)
     const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
@@ -59,17 +61,7 @@ export function StudentsContextProvider ({children}) {
         // Get latest students data from SQL database
         const fetchData = async () => {
             try {
-                const cookies = document.cookie.split(";");
-                const found = cookies.find(element=> element.trim().startsWith('jwt='))
-                const response = await fetch(`${url}/students`, {
-                  method: "GET",
-                  
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization:(found?found.split('jwt=')[1]:''),
-                  }
-                });
-                
+                const response = await fetch(`${url}/students`);
                 const students = await response.json();
                 const fullStudents = []; // Create array that will hold all students
                 // Once a student has been achieved, run all milestone GET request for that student
@@ -87,9 +79,9 @@ export function StudentsContextProvider ({children}) {
         fetchData(); // Execute fetch above
     }, [update]);
 
-    return(
-        <StudentsContext.Provider value={{studentsData, setUpdate, update}}>
-            {children}
-        </StudentsContext.Provider>
-    );
+  return (
+    <StudentsContext.Provider value={{ studentsData, setUpdate, update }}>
+      {children}
+    </StudentsContext.Provider>
+  );
 }

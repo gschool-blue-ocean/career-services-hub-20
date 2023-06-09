@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./App.module.css";
 
-import { EventsContextProvider } from '../../context/eventsContext'
-import { StudentsContextProvider } from '../../context/studentsContext'
-import { ManagersContextProvider } from '../../context/managersContext'
-import { FieldsContextProvider } from '../../context/fieldsContext'
-import CareerServicesHub from '../CareerServicesHub/CareerServicesHub'
-import LogInPage from '../logIn/logInPage'
+import { EventsContextProvider } from "../../context/eventsContext";
+import { StudentsContextProvider } from "../../context/studentsContext";
+import { ManagersContextProvider } from "../../context/managersContext";
+import { FieldsContextProvider } from "../../context/fieldsContext";
+import CareerServicesHub from "../CareerServicesHub/CareerServicesHub";
+import LogInPage from "../logIn/logInPage";
 
 const App = () => {
   const [loggedInfo, setLoggedInfo] = useState(false);

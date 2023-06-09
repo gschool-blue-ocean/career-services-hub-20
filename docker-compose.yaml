@@ -37,8 +37,8 @@ services:
       # filesystem to the container's.
       - ./api/src:/code/src
       # Sleep time added for seeding since things get kinda weird if you don't wait.
+      # To reset database with Admin seeded, change command to "/bin/sh -c "sleep 2 && npm run seed && npm run dev""
     command: /bin/sh -c "sleep 2 && npm run seed && npm run dev"
-
 
   app:
     build: ./client
@@ -54,18 +54,18 @@ services:
       # filesystem to the container's.
       - ./client/src:/code/src
     command: npm run dev
-  
+
   tests:
-      build: ./tests
-      env_file: .env
-      environment:
-        DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database/${POSTGRES_DB}
-        NODE_ENV: development
-      depends_on:
-        - database
-      ports: 
-        - "${TEST_PORT}:8040"
-      command: npm test
+    build: ./tests
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database/${POSTGRES_DB}
+      NODE_ENV: development
+    depends_on:
+      - database
+    ports:
+      - "${TEST_PORT}:8040"
+    command: /bin/sh -c "sleep 20 && npm test"
 
 volumes:
   pg-data:
