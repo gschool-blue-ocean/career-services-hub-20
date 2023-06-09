@@ -281,6 +281,7 @@ app.patch("/managers/:id", async (req, res, next) => {
 
 
 app.post('/managers/login', async (req, res, next) => {
+  try {
     const email = req.body.email;
     const inputPassword = req.body.password;
     console.log(email);
@@ -298,10 +299,13 @@ app.post('/managers/login', async (req, res, next) => {
       console.log(`Admin ${user.user}, welcome back!`)
       res.json({token: token})
     }
-    else{
-      res.status(401).json({message: 'Invalid Password 🤷'})
-    }
-  });
+  } catch (error) {
+    console.error('Something really went wrong, check if DB is running 🤷' , error)
+    res.status(500).json({ message: 'Service unavailable 🤷'})
+    console.log('bad')
+  }
+});
+
 
 // Need to think about this more, because we need to update student records and calendar records BEFORE we delete any manager records otherwise we are violating foreign keys
 
