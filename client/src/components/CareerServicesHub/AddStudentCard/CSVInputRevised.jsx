@@ -1,11 +1,15 @@
 import React, { useState, useContext, useRef } from "react";
 import ImportResults from "../Excel Import Button/ImportResults";
 import { ManagersContext } from "../../../context/managersContext";
-import "../Excel Import Button/CSVInputModal.css"
+import "../Excel Import Button/CSVInputModal.css";
 
-import exportFromJSON from 'export-from-json';
+import exportFromJSON from "export-from-json";
 
-function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpdateNewStudent}) {
+function CSVInputRevised({
+  setAddStudent,
+  handleAddStudentModalToggle,
+  handleUpdateNewStudent,
+}) {
   // Have a temp object hold a single new student from the bulk being imported
   const initialStudents = [
     {
@@ -36,7 +40,7 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
     setFile(e.target.files[0]);
   }
 
-  // Once Submit button is pressed, read in the MCSP/Service Manager input fields and the .csv file that was attached 
+  // Once Submit button is pressed, read in the MCSP/Service Manager input fields and the .csv file that was attached
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -58,14 +62,14 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
 
   // Convert .csv data into Array of students
   const csvFileToArray = (string) => {
-    var array = string.toString().split(",");  // Since its a csv file, seperate the data using commas
+    var array = string.toString().split(","); // Since its a csv file, seperate the data using commas
     var data = [];
 
     // For each row in the input csv file
     for (const element of array) {
-      let row = element.toString().split("\n");  // Split apart into an element in the array using the new-line character
+      let row = element.toString().split("\n"); // Split apart into an element in the array using the new-line character
       for (const element2 of row) // For each cell in that row
-        data.push(element2);   // Push into a string into that array
+        data.push(element2); // Push into a string into that array
     }
 
     // Establish heading array using the first few elements in the data array (HARDCODED since we are assuming the user will follow the provided csv template)
@@ -83,19 +87,25 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
       }
       ans_array.push(obj);
     }
-    setNewStudents(ans_array);  // Once complete, set local state to the resultant array
-    const newResultsToggle = !resultsToggle; // Invert Results Flag 
-    setResultsToggle(newResultsToggle);  // Set new results flag to signal the import is finished
+    setNewStudents(ans_array); // Once complete, set local state to the resultant array
+    const newResultsToggle = !resultsToggle; // Invert Results Flag
+    setResultsToggle(newResultsToggle); // Set new results flag to signal the import is finished
   };
 
   // Once csv template button is clicked, generate and download an example csv the user can use to import more students
-  function excelImportTemplate(){
-    const fields = ['student_first', 'student_last', 'sec_clearance'];     // Set the headers of the template
-    const data = [{student_first :'David', student_last : 'Garcia', sec_clearance : 'TOP SECRET//SCI'}]; // Set a single example data row
-    const fileName = `ImportStudentTemplate`;  // Give it a filename
-    const exportType = exportFromJSON.types.csv;  // Give it a file type of csv
+  function excelImportTemplate() {
+    const fields = ["student_first", "student_last", "sec_clearance"]; // Set the headers of the template
+    const data = [
+      {
+        student_first: "David",
+        student_last: "Garcia",
+        sec_clearance: "TOP SECRET//SCI",
+      },
+    ]; // Set a single example data row
+    const fileName = `ImportStudentTemplate`; // Give it a filename
+    const exportType = exportFromJSON.types.csv; // Give it a file type of csv
 
-    exportFromJSON({data, fileName, fields: fields, exportType});   // Call the method that will generate and download csv in clients browser
+    exportFromJSON({ data, fileName, fields: fields, exportType }); // Call the method that will generate and download csv in clients browser
   }
 
   return (
@@ -106,7 +116,10 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
           Please choose a MCSP/Career Service Manager and upload a .csv file
           with information about the students
         </span>
-        <a className="import-modal-description-text header-buttons" onClick={excelImportTemplate}>
+        <a
+          className="import-modal-description-text header-buttons"
+          onClick={excelImportTemplate}
+        >
           {" "}
           Click for csv template{" "}
         </a>
@@ -135,7 +148,12 @@ function CSVInputRevised({setAddStudent , handleAddStudentModalToggle, handleUpd
             })}
           </select>
           <div className="import-file-input-container">
-            <input className='header-buttons' type="file" accept=".csv" onChange={handleFileUpload} />
+            <input
+              className="header-buttons"
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+            />
           </div>
         </div>
         <input

@@ -10,6 +10,10 @@ This repo contains an example of a full-stack application with an ExpressJS API 
 
 ## Current Features
 
+Login with the following Email and password or get list of users with localhost/8000/managers once running in Docker. 
+Email: admin@admin.com 
+Password: admin
+
 Currently, the project has a login page and a main hub page that is available once logged in. In the main-hub, you can see that there is a side bar and a main card container that comprises of all the student cards in the postgresSQL database. 
 
 You will also notice that the each student card has a certain color (Red, Yellow or Green). This is determined by the overall status of the career asset "milestones". 

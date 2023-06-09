@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import './loginPage.css'
-import galvanizeLogo from './galvanizeLogo.webp'
+import "./loginPage.css";
+import galvanizeLogo from "./galvanizeLogo.webp";
 
 const LogInPage = ({ handleLogin }) => {
-
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
@@ -14,8 +13,8 @@ const LogInPage = ({ handleLogin }) => {
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
 
-  const url = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : 'https://career-services-server.onrender.com';
-
+  // switch between localhost8000 or your deployed site, hard coded career-services for now.
+  const url = "https://career-services-server.onrender.com";
 
   async function loginUser(email, password) {
     try {
@@ -34,14 +33,12 @@ const LogInPage = ({ handleLogin }) => {
       const responseData = await response.json();
 
       if (responseData) {
-        localStorage.setItem('authToken', responseData.accessToken);
+        localStorage.setItem("authToken", responseData.accessToken);
         handleLogin(responseData.accessToken); // Call the handleLogin function passed as a prop
-        
       } else {
-        setErrorRelay('Something has gone horribly wrong 😢');
+        setErrorRelay("Something has gone horribly wrong 😢");
       }
-    }
-    catch (error) {
+    } catch (error) {
       setErrorRelay("Get out of here imposter 😠");
     }
   }
@@ -50,29 +47,29 @@ const LogInPage = ({ handleLogin }) => {
 
   const handleUserLogin = (e) => {
     e.preventDefault();
-  
+
     // Check if both email and password fields are not empty
     if (email === "" || pass === "") {
-      setErrorRelay("Please fill in both email and password fields 🤦"); 
+      setErrorRelay("Please fill in both email and password fields 🤦");
     } else {
       loginUser(email, pass);
-      setErrorRelay('Logging in...')
+      setErrorRelay("Logging in...");
     }
   };
 
   return (
-    <div style={{ opacity: opacity, transition: 'opacity 2s' }}>
+    <div style={{ opacity: opacity, transition: "opacity 2s" }}>
       <div className="login-background">
         <form className="login-Container" onSubmit={handleUserLogin}>
-        <img src={galvanizeLogo} ></img>
+          <img src={galvanizeLogo}></img>
           <input
             className="login-value"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
             placeholder="YourEmail@galvanize.com"
-            id="email">
-          </input>
+            id="email"
+          ></input>
           <input
             className="login-value"
             value={pass}
@@ -82,10 +79,14 @@ const LogInPage = ({ handleLogin }) => {
             id="password"
           ></input>
           <button className="login-button">Log In</button>
-          {errorRelay ? <p className="error-message">{errorRelay}</p> : <p className="easter-egg">🌮</p>} 
+          {errorRelay ? (
+            <p className="error-message">{errorRelay}</p>
+          ) : (
+            <p className="easter-egg">🌮</p>
+          )}
         </form>
       </div>
     </div>
   );
-}
+};
 export default LogInPage;
