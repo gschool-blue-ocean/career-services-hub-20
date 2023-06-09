@@ -240,6 +240,7 @@ app.get("/managers", async (req, res, next) => {
 
 app.get("/managers/:id", async (req, res, next) => {
   const id = req.params.id;
+  
   const results = await db.query(`SELECT * FROM service_manager WHERE tscm_id = ${id}`).catch(next);
   res.send(results.rows)
 })
@@ -282,6 +283,7 @@ app.patch("/managers/:id", async (req, res, next) => {
 
 
 app.post('/managers/login', async (req, res, next) => {
+  try {
     const email = req.body.email;
     const inputPassword = req.body.password;
     console.log(email);
@@ -404,6 +406,7 @@ app.get('/managers/login/isAuthorized',(req,res)=>{
     console.log(`Welcome back, Admin ${user.user}`)
     res.json({message: user})
 })
+
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
