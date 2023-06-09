@@ -21,6 +21,7 @@ async function migration() {
             tscm_avatar text
         )`);
   console.log("TSCM table created");
+
   const queryTSCMString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email) 
                     VALUES ($1, $2, $3, $4, $5) RETURNING *`;
   await db.query(queryTSCMString, [
@@ -32,6 +33,7 @@ async function migration() {
   ]);
   console.log("TSCM admin created");
   //   await delay(2000); // 2-second delay
+
 
   // Student table
   await db.query(`DROP TABLE IF EXISTS student CASCADE`);
@@ -49,6 +51,7 @@ async function migration() {
             tscm_id INTEGER NOT NULL REFERENCES service_manager (tscm_id)
         )`);
   console.log("Student table created");
+
   const queryStudentString = `INSERT INTO student (student_first, student_last, student_email, student_password, cohort, 
     sec_clearance, career_status, course_status, college_degree, tscm_id) 
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
@@ -67,6 +70,7 @@ async function migration() {
   console.log("Student data created");
   //   await delay(2000); // 2-second delay
 
+
   // Calendar table
   await db.query(`DROP TABLE IF EXISTS calendar CASCADE`);
   await db.query(`CREATE TABLE calendar (
@@ -79,7 +83,9 @@ async function migration() {
             event_descrip text NOT NULL
         )`);
   console.log("Calendar table created");
+
   //   await delay(2000); // 2-second delay
+
 
   // Milestone table
   await db.query(`DROP TABLE IF EXISTS milestone CASCADE`);
@@ -90,6 +96,7 @@ async function migration() {
             student_id INTEGER REFERENCES student (student_id)
         )`);
   console.log("Milestone table created");
+
   const studentMilestone = [
     "Cover Letter",
     "Resume",
@@ -108,6 +115,7 @@ async function migration() {
       1,
     ]); // Insert milestone into SQL database
   }
+
 }
 
 migration();

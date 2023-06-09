@@ -77,6 +77,7 @@ app.post("/students", async (req, res, next) => {
 
   const result = await db
     .query(
+
       "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
       [
         firstName,
@@ -141,6 +142,7 @@ app.post("/students/login", async (req, res, next) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
 
+
   try {
     const results = await db.query(
       "SELECT * FROM student WHERE student_email = $1",
@@ -172,12 +174,14 @@ app.post("/students/login", async (req, res, next) => {
   }
 });
 
+
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
 
 app.get("/students/:id/milestones", async (req, res, next) => {
   const id = req.params.id;
 
   const result = await db
+
     .query(`SELECT * FROM milestone WHERE milestone.student_id = ${id}`)
     .catch(next);
   res.send(result.rows);
@@ -197,6 +201,7 @@ app.post("/students/:studentId/milestones", async (req, res, next) => {
     .catch(next);
   res.send(result.rows);
 });
+
 
 app.patch(
   "/students/:studentId/milestones/:milestoneId",

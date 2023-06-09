@@ -1,96 +1,93 @@
 .student-backdrop {
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    z-index: 2;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
-    background-color: rgba(0, 0, 0, 0.678);
-    backdrop-filter: blur(5px);
-    transition: ease .5s;
-    
+  background-color: rgba(0, 0, 0, 0.678);
+  backdrop-filter: blur(5px);
+  transition: ease 0.5s;
 }
 
 .student-tracker-modal {
-    font-family: 'KelsonSans';
-    font-size:larger;
-    color: white;
-    border-radius: 10px;
-    position: fixed;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 20px;
-    height: fit-content;
-    width: 30vw;
-    z-index: 3;
-    background-color: rgba(0, 0, 0, 0.678); 
-    transition:ease .5s;
+  font-family: "KelsonSans";
+  font-size: larger;
+  color: white;
+  border-radius: 10px;
+  position: fixed;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  height: fit-content;
+  width: 30vw;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.678);
+  transition: ease 0.5s;
 }
 
 .student-tracker-modal-name {
-    text-align: center;
-    font-family: 'KelsonSans-Bold';
-    font-size:xx-large;
-    font-weight: bold;
+  text-align: center;
+  font-family: "KelsonSans-Bold";
+  font-size: xx-large;
+  font-weight: bold;
 }
 
 .student-tracker-modal-mcsp {
-    text-align: center;
-    font-family: 'KelsonSans-Bold';
-    font-size:larger;
-    font-weight: bold;
+  text-align: center;
+  font-family: "KelsonSans-Bold";
+  font-size: larger;
+  font-weight: bold;
 }
 
 .student-tracker-modal-milestones-div {
-    font-family: 'KelsonSans-Bold';
-    font-size: x-large;
-    font-weight: bold;
+  font-family: "KelsonSans-Bold";
+  font-size: x-large;
+  font-weight: bold;
 }
 
 .student-tracker-modal-additional-information {
-    font-family: 'KelsonSans-Bold';
-    font-size: x-large;
-    font-weight: bold;
+  font-family: "KelsonSans-Bold";
+  font-size: x-large;
+  font-weight: bold;
 }
 
 .update-student-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .update-student {
-    color:white;
-    border:solid rgb(116, 116, 116) 1px;
-    border-radius: 5px;
-    background-color: transparent;
+  color: white;
+  border: solid rgb(116, 116, 116) 1px;
+  border-radius: 5px;
+  background-color: transparent;
 }
 
-
-.student-backdrop:hover{
-    cursor: pointer;
-    background-color: rgba(61, 61, 63, 0);
-    backdrop-filter: blur(0px);
+.student-backdrop:hover {
+  cursor: pointer;
+  background-color: rgba(61, 61, 63, 0);
+  backdrop-filter: blur(0px);
 }
 
-.student-backdrop:hover + .student-tracker-modal{
-    color: white;
-    transform: scale(.95);
-    filter: blur(10px);
-    
+.student-backdrop:hover + .student-tracker-modal {
+  color: white;
+  transform: scale(0.95);
+  filter: blur(10px);
 }
 
-.student-tracker-modal select{
-    font-family: 'kelsonsans';
-    color:white;
-    border:solid rgb(116, 116, 116) 1px;
-    border-radius: 5px;
-    background-color: transparent;
+.student-tracker-modal select {
+  font-family: "kelsonsans";
+  color: white;
+  border: solid rgb(116, 116, 116) 1px;
+  border-radius: 5px;
+  background-color: transparent;
 }
 
-.student-tracker-modal option{
-    background-color: black;
+.student-tracker-modal option {
+  background-color: black;
 }

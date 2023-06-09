@@ -5,6 +5,7 @@
   "description": "",
   "main": "vite.config.js",
   "scripts": {
+    "lint": "prettier --check .",
     "dev": "cross-env NODE_ENV=development nodemon src/server.js",
     "start": "node src/server.js",
     "test": "echo 'add tests'",
@@ -26,6 +27,7 @@
     "memory-cache": "^0.2.0",
     "node-cache": "^5.1.2",
     "nodemon": "^2.0.22",
-    "pg": "^8.10.0"
+    "pg": "^8.10.0",
+    "prettier": "^2.8.8"
   }
 }

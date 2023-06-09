@@ -4,7 +4,11 @@ import { ManagersContext } from "../../../context/managersContext";
 import { StudentsContext } from "../../../context/studentsContext";
 import { FieldsContext } from "../../../context/fieldsContext";
 
-function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleUpdateNewStudent }) {
+function AddStudentRevised({
+  setAddStudent,
+  handleAddStudentModalToggle,
+  handleUpdateNewStudent,
+}) {
   // Retrieve the API URL based on the environment (development or production)
   const url =
     process.env.NODE_ENV === "development"
@@ -22,8 +26,8 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
   // Retrieve data from context providers
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
-  const setUpdate = studentContext.setUpdate
-  const update = studentContext.update
+  const setUpdate = studentContext.setUpdate;
+  const update = studentContext.update;
 
   const fieldsContext = useContext(FieldsContext);
   const fields = fieldsContext.fieldsData;
@@ -88,7 +92,7 @@ function AddStudentRevised({ setAddStudent, handleAddStudentModalToggle, handleU
           body: JSON.stringify(newMilestone),
         });
       });
-      setUpdate(!update)
+      setUpdate(!update);
       // Update the UI with the newly added student
       handleUpdateNewStudent(newStudentObj);
       return addedStudent;
