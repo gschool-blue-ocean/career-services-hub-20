@@ -85,6 +85,8 @@ const seedStudents = async () => {
     studentList.push({
       student_first: faker.name.firstName(), // Use faker method to generate fake student first name
       student_last: faker.name.lastName(), // Use faker method to generate fake student last name
+      student_email: faker.internet.email(),  // Use faker method to generate fake student email
+      student_password: await generateBcrypt(faker.internet.password(10)), // Use faker method to generate fake student password
       cohort: cohorts[randomNumber5], // Randomly pick a element in the self-defined cohorts array
       sec_clearance: secClearance[randomNumber3], // Randomly pick a element in the self-defined secClearance array
       career_status: careerStatus[randomNumber], // Randomly pick a element in the self-defined careerStatus array
@@ -97,14 +99,16 @@ const seedStudents = async () => {
   try {
     await db.query("TRUNCATE TABLE student CASCADE"); // DROP TABLES already in the SQL database
     await db.query("ALTER SEQUENCE student_student_id_seq RESTART WITH 1"); // Reset students entity primary key to 1
-    const queryString = `INSERT INTO student (student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) 
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+    const queryString = `INSERT INTO student (student_first, student_last,student_email,student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) 
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
 
     // For each student, query SQL database with INSERT statement to add student
     for (let i = 0; i < SEED_STUDENT_ROWS; i++) {
       const {
         student_first,
         student_last,
+        student_email,
+        student_password,
         cohort,
         sec_clearance,
         career_status,
@@ -115,6 +119,8 @@ const seedStudents = async () => {
       await db.query(queryString, [
         student_first,
         student_last,
+        student_email,
+        student_password,
         cohort,
         sec_clearance,
         career_status,

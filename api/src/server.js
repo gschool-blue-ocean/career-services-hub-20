@@ -397,7 +397,7 @@ app.delete("/events/:id", async (req, res, next) => {
   res.send('Sucessfully Deleted Event Record!');
 })
 
-pp.get('/managers/login/isAuthorized',(req,res)=>{
+app.get('/managers/login/isAuthorized',(req,res)=>{
   let user = isAuthorized(req,res);
   if (!user)  return res.status(401).json({message: 'Unauthorized'})
   console.log(`Welcome back, Admin ${user.user}`)
