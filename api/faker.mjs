@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import bcrypt from 'bcrypt';
 dotenv.config();
-console.log(process.env.PASSWD)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -75,7 +74,7 @@ const seedStudents = async () => {
   const studentList = []; // Initialize array that will temp hold all the fake students before SQL insertion
 
   // Generate multiple student objects and push it to studentList Array
-  for (let i = 0; i < SEED_STUDENT_ROWS; i++) {
+  for (let i = 0; i < SEED_STUDENT_ROWS-1; i++) {
     let randomNumber = Math.floor(Math.random() * 3); // Generates a random number between 0-2
     let randomNumber2 = Math.floor(Math.random() * 2); // Generates a random number between 0-1
     let randomNumber3 = Math.floor(Math.random() * 5); // Generates a random number between 0-4
@@ -103,7 +102,8 @@ const seedStudents = async () => {
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
 
     // For each student, query SQL database with INSERT statement to add student
-    for (let i = 0; i < SEED_STUDENT_ROWS; i++) {
+    
+    for (let i = 0; i < SEED_STUDENT_ROWS-1; i++) {
       const {
         student_first,
         student_last,
@@ -116,12 +116,7 @@ const seedStudents = async () => {
         college_degree,
         tscm__id,
       } = studentList[i];
-       await db.query(queryString,['Bill','Musk',process.env.STUDENT_EMAIL,process.env.STUDENT_PASSWD,cohorts[ Math.floor(Math.random() * 7)], secClearance[Math.floor(Math.random() * 5)], 
-      careerStatus[Math.floor(Math.random() * 3)], 
-      courseStatus[Math.floor(Math.random() * 2)], 
-      collegeDegree[Math.floor(Math.random() * 8)], 
-      faker.datatype.number({ min: 1, max: SEED_CAREER_MANAGER })
-    ]) 
+       
       await db.query(queryString, [
         student_first,
         student_last,
@@ -135,6 +130,12 @@ const seedStudents = async () => {
         tscm__id,
       ]);
     }
+    await db.query(queryString,['Bill','Musk',process.env.STUDENT_EMAIL,process.env.STUDENT_PASSWD,cohorts[ Math.floor(Math.random() * 7)], secClearance[Math.floor(Math.random() * 5)], 
+      careerStatus[Math.floor(Math.random() * 3)], 
+      courseStatus[Math.floor(Math.random() * 2)], 
+      collegeDegree[Math.floor(Math.random() * 8)], 
+      faker.datatype.number({ min: 1, max: SEED_CAREER_MANAGER })
+    ]) 
     console.log("Students seeded successfully");
   } catch (err) {
     console.log("Error seeding students", err);

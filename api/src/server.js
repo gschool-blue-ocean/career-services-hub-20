@@ -52,8 +52,11 @@ app.get("/students", async (req, res, next) => {
 });
 
 app.get("/students/:id", async (req, res, next) => {
-  const id = req.params.id;
-
+  let id = req.params.id;
+  const user= isAuthorized(req,res);
+  if (user){
+    if (user.id)  id = user.id;
+  }
   const result = await db
     .query(
       `SELECT student.*, service_manager.tscm_first, service_manager.tscm_last 
@@ -104,7 +107,6 @@ app.post("/students", async (req, res, next) => {
 });
 
 app.patch("/students/:id", async (req, res, next) => {
-  console.log(req.body);
   const id = req.params.id;
   const firstName = req.body.student_first;
   const lastName = req.body.student_last;
@@ -144,22 +146,25 @@ app.delete("/students/:id", async (req, res, next) => {
     .catch(next);
   res.send({ message: "Sucessfully Deleted Student Record!" });
 });
-
+app.get('/students/login/isAuthorized',(req,res)=>{
+  let user = isAuthorized(req,res);
+  if (!user)  return res.status(401).json({message: 'Unauthorized'})
+  else if (user.admin)
+  return res.status(204).json({message: 'This is an admin account!'})
+  console.log(`Welcome back, Student ${user.user}`)
+  res.json({message: user})
+})
 app.post('/students/login', async (req, res, next) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
-  console.log(email);
   const results = await db.query(`SELECT * FROM student WHERE student_email = $1`,[email]);
   const student = results.rows[0]
-  console.log(student)
-  console.log('student')
   if(!student) {
     return res.status(401).json({message: 'Invalid Email 🤷'})
   }
   else if(bcrypt.compareSync(inputPassword,student.student_password)) {
-    const user = {user: `${student.student_first} ${student.student_last}`};
+    const user = {user: `${student.student_first} ${student.student_last}`, id: student.student_id};
     const token =jwt.sign(user, process.env.SECRET_KEY);
-    console.log(token)
     console.log(`Student ${user.user}, welcome back!`)
     res.json({token: token})
   }
@@ -200,7 +205,6 @@ app.post("/students/:studentId/milestones", async (req, res, next) => {
 app.patch(
   "/students/:studentId/milestones/:milestoneId",
   async (req, res, next) => {
-    console.log(req.body);
     const milestoneId = req.params.milestoneId;
     const studentId = req.params.studentId;
 
@@ -213,7 +217,6 @@ app.patch(
         [mileName, progress, studentId, milestoneId]
       )
       .catch(next);
-    console.log(result.rows);
     res.send(result.rows);
   }
 );
@@ -271,18 +274,14 @@ app.patch("/managers/:id", async (req, res, next) => {
 app.post('/managers/login', async (req, res, next) => {
     const email = req.body.email;
     const inputPassword = req.body.password;
-    console.log(email);
     const results = await db.query(`SELECT * FROM service_manager WHERE tscm_email = $1`,[email]);
     const manager = results.rows[0]
-    console.log(manager)
-    console.log('manager')
     if(!manager) {
       return res.status(401).json({message: 'Invalid Email 🤷'})
     }
     else if(bcrypt.compareSync(inputPassword,manager.tscm_password)) {
-      const user = {user: `${manager.tscm_first} ${manager.tscm_last}`};
+      const user = {user: `${manager.tscm_first} ${manager.tscm_last}`, isAdmin: true};
       const token =jwt.sign(user, process.env.SECRET_KEY);
-      console.log(token)
       console.log(`Admin ${user.user}, welcome back!`)
       res.json({token: token})
     }
@@ -387,7 +386,7 @@ app.delete("/events/:id", async (req, res, next) => {
 
 app.get('/managers/login/isAuthorized',(req,res)=>{
   let user = isAuthorized(req,res);
-  if (!user)  return res.status(401).json({message: 'Unauthorized'})
+  if (!user.isAdmin)  return res.status(401).json({message: 'Unauthorized'})
   console.log(`Welcome back, Admin ${user.user}`)
   res.json({message: user})
 })
