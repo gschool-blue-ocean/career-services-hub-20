@@ -58,9 +58,7 @@ jobs:
         run: ls -la
 
       - name: Set environment variables
-        run: |
-          cat ../.env >> $GITHUB_ENV
-        working-directory: ../
+        run: cat .env >> $GITHUB_ENV
 
 
       - name: Lowercase the repo name and username
