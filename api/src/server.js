@@ -282,7 +282,6 @@ app.patch("/managers/:id", async (req, res, next) => {
 
 
 app.post('/managers/login', async (req, res, next) => {
-  try {
     const email = req.body.email;
     const inputPassword = req.body.password;
     console.log(email);
@@ -395,6 +394,7 @@ app.delete("/events/:id", async (req, res, next) => {
   await db
     .query("DELETE FROM calendar WHERE calendar.event_id = $1", [id])
     .catch(next);
+
   res.send('Sucessfully Deleted Event Record!');
 })
 
