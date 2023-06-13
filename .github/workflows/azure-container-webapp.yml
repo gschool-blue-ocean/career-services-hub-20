@@ -58,6 +58,9 @@ jobs:
         run: |
           cat ../.env >> $GITHUB_ENV
         working-directory: ../
+        
+      - name: List directory contents
+        run: ls -la
 
 
       - name: Lowercase the repo name and username
