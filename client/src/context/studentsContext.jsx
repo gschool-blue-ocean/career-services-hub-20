@@ -68,7 +68,31 @@ export function StudentsContextProvider({ children }) {
                 for (const student of students) {
                     const milestonesResponse = await fetch(`${url}/students/${student.student_id}/milestones`);
                     const milestones = await milestonesResponse.json();
-                    student.milestones = milestones; // Combine new student with thier respective milestones
+                    const studMilestones = [
+                    {
+                      mile_name: 'Cover Letter',
+                      progress_stat: milestones[0].progress_stat
+                    },
+                    {
+                      mile_name: 'Resume',
+                      progress_stat: milestones[1].progress_stat
+                    },
+                    {
+                      mile_name: 'LinkedIn',
+                      progress_stat: milestones[2].progress_stat
+                    },
+                    {
+                      mile_name: 'Personal Narrative',
+                      progress_stat: milestones[3].progress_stat
+                    },
+                    {
+                      mile_name: 'Hunter Access',
+                      progress_stat: milestones[4].progress_stat
+                    },
+                    
+                  ]
+                    // console.log(milestones);
+                    student.milestones = studMilestones; // Combine new student with thier respective milestones
                     fullStudents.push(student); // Push latest student to array that is holding all the students
                 }
                 setStudentsData(fullStudents); // Update state with all students and thier milestones
