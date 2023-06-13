@@ -36,9 +36,13 @@ services:
       # This allows live reload inside a docker container by mapping your
       # filesystem to the container's.
       - ./api/src:/code/src
-      # Sleep time added for seeding since things get kinda weird if you don't wait.
-    command: /bin/sh -c "sleep 2 && npm run seed && npm run dev"
-
+      # Sleep time added for seeding database with Admin user.
+      # To reset database with Admin seeded, run "RESET_DB=true docker-compose up" in terminal.
+    command: /bin/sh -c 'if [ "$RESET_DB" = "true" ]; then
+              sleep 2 && npm run seed && npm run dev;
+            else
+              npm run dev;
+            fi'
 
   app:
     build: ./client
@@ -54,18 +58,18 @@ services:
       # filesystem to the container's.
       - ./client/src:/code/src
     command: npm run dev
-  
+
   tests:
-      build: ./tests
-      env_file: .env
-      environment:
-        DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database/${POSTGRES_DB}
-        NODE_ENV: development
-      depends_on:
-        - database
-      ports: 
-        - "${TEST_PORT}:8040"
-      command: npm test
+    build: ./tests
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database/${POSTGRES_DB}
+      NODE_ENV: development
+    depends_on:
+      - database
+    ports:
+      - "${TEST_PORT}:8040"
+    command: /bin/sh -c "sleep 20 && npm test"
 
 volumes:
   pg-data:

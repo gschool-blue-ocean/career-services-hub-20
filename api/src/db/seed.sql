@@ -1,0 +1,2 @@
+INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) 
+                    VALUES ('jone','smith','113','$2b$10$kAhzAdYUCtgUVOJsLme0fu/o3Jn6sfUz1TishpuiE7pfsqt4eBbKS','admin@gmail.com','https://www.google.com');

@@ -18,10 +18,21 @@ async function migration() {
             login_id VARCHAR(50) NOT NULL,
             tscm_password text NOT NULL,
             tscm_email text NOT NULL,
-            tscm_avatar text NOT NULL
+            tscm_avatar text
         )`);
   console.log("TSCM table created");
-  await delay(2000); // 2-second delay
+
+  const queryTSCMString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email) 
+                    VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+  await db.query(queryTSCMString, [
+    "tscm_admin",
+    "tscm_last",
+    "admin_id",
+    "admin",
+    "admin@admin.com",
+  ]);
+  console.log("TSCM admin created");
+  //   await delay(2000); // 2-second delay
 
   // Student table
   await db.query(`DROP TABLE IF EXISTS student CASCADE`);
@@ -29,6 +40,8 @@ async function migration() {
             student_id SERIAL PRIMARY KEY NOT NULL,
             student_first VARCHAR(50) NOT NULL,
             student_last VARCHAR(50) NOT NULL,
+            student_email text NOT NULL,
+            student_password text NOT NULL,
             cohort VARCHAR(50) NOT NULL,
             sec_clearance VARCHAR(50),
             career_status VARCHAR(50),
@@ -37,7 +50,24 @@ async function migration() {
             tscm_id INTEGER NOT NULL REFERENCES service_manager (tscm_id)
         )`);
   console.log("Student table created");
-  await delay(2000); // 2-second delay
+
+  const queryStudentString = `INSERT INTO student (student_first, student_last, student_email, student_password, cohort, 
+    sec_clearance, career_status, course_status, college_degree, tscm_id) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
+  await db.query(queryStudentString, [
+    "test",
+    "student",
+    "student@student.com",
+    "student",
+    "MCSP-16",
+    "Undetermined",
+    "Searching",
+    "Student",
+    "Undetermined",
+    1,
+  ]);
+  console.log("Student data created");
+  //   await delay(2000); // 2-second delay
 
   // Calendar table
   await db.query(`DROP TABLE IF EXISTS calendar CASCADE`);
@@ -51,7 +81,8 @@ async function migration() {
             event_descrip text NOT NULL
         )`);
   console.log("Calendar table created");
-  await delay(2000); // 2-second delay
+
+  //   await delay(2000); // 2-second delay
 
   // Milestone table
   await db.query(`DROP TABLE IF EXISTS milestone CASCADE`);
@@ -62,6 +93,25 @@ async function migration() {
             student_id INTEGER REFERENCES student (student_id)
         )`);
   console.log("Milestone table created");
+
+  const studentMilestone = [
+    "Cover Letter",
+    "Resume",
+    "LinkedIn",
+    "Personal Narrative",
+    "Hunter Access",
+  ];
+  const progress_stat = ["In-Progress", "Completed", "Un-Satisfactory"];
+  const queryMilestoneString = `INSERT INTO milestone (mile_name, progress_stat, student_id) 
+                    VALUES ($1, $2, $3) RETURNING *`;
+  for (let i = 0; i < studentMilestone.length; i++) {
+    let randomNumber = Math.floor(Math.random() * 3); // Randomly generate a number between 0-2
+    await db.query(queryMilestoneString, [
+      studentMilestone[i],
+      progress_stat[randomNumber],
+      1,
+    ]); // Insert milestone into SQL database
+  }
 }
 
 migration();

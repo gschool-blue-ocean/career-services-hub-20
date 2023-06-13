@@ -4,7 +4,9 @@ import path from "path";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-
+import bcrypt from "bcrypt";
+dotenv.config();
+console.log(process.env.PASSWD);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -83,6 +85,8 @@ const seedStudents = async () => {
     studentList.push({
       student_first: faker.name.firstName(), // Use faker method to generate fake student first name
       student_last: faker.name.lastName(), // Use faker method to generate fake student last name
+      student_email: faker.internet.email(), // Use faker method to generate fake student email
+      student_password: await generateBcrypt(faker.internet.password(10)), // Use faker method to generate fake student password
       cohort: cohorts[randomNumber5], // Randomly pick a element in the self-defined cohorts array
       sec_clearance: secClearance[randomNumber3], // Randomly pick a element in the self-defined secClearance array
       career_status: careerStatus[randomNumber], // Randomly pick a element in the self-defined careerStatus array
@@ -95,14 +99,16 @@ const seedStudents = async () => {
   try {
     await db.query("TRUNCATE TABLE student CASCADE"); // DROP TABLES already in the SQL database
     await db.query("ALTER SEQUENCE student_student_id_seq RESTART WITH 1"); // Reset students entity primary key to 1
-    const queryString = `INSERT INTO student (student_first, student_last, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) 
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
+    const queryString = `INSERT INTO student (student_first, student_last,student_email,student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) 
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
 
     // For each student, query SQL database with INSERT statement to add student
     for (let i = 0; i < SEED_STUDENT_ROWS; i++) {
       const {
         student_first,
         student_last,
+        student_email,
+        student_password,
         cohort,
         sec_clearance,
         career_status,
@@ -113,6 +119,8 @@ const seedStudents = async () => {
       await db.query(queryString, [
         student_first,
         student_last,
+        student_email,
+        student_password,
         cohort,
         sec_clearance,
         career_status,
@@ -130,25 +138,32 @@ const seedStudents = async () => {
 const seedServiceManager = async () => {
   const careerManager = []; // Initialize array that will temp hold all the fake managers before SQL insertion
 
-  // Generate multiple manager objects and push it to careerManager Array
+  //Generate multiple manager objects and push it to careerManager Array
   for (let i = 0; i < SEED_CAREER_MANAGER; i++) {
     careerManager.push({
       tscm_first: faker.name.firstName(), // Use faker method to generate fake manager first name
       tscm_last: faker.name.lastName(), // Use faker method to generate fake manager last name
       login_id: faker.internet.userName(), // Use faker method to generate fake manager username
-      tscm_password: faker.internet.password(10), // Use faker method to generate fake manager password for login
+      tscm_password: await generateBcrypt(faker.internet.password(10)), // Use faker method to generate fake manager password for login
       tscm_email: faker.internet.email(), // Use faker method to generate fake manager email for login
       tscm_avatar: faker.internet.avatar(), // Use faker method to generate URL for fake manager profile pic
     });
   }
-
   try {
     await db.query("TRUNCATE TABLE service_manager CASCADE"); // DROP TABLES already in the SQL database
     await db.query("ALTER SEQUENCE service_manager_tscm_id_seq RESTART WITH 1"); // Reset managers entity primary key to 1
     const queryString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) 
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
 
-    // For each manager, query SQL database with INSERT statement to add manager
+    await db.query(queryString, [
+      "Elon",
+      "Gates",
+      faker.internet.userName(),
+      process.env.PASSWD,
+      process.env.ADMIN_EMAIL,
+      faker.internet.avatar(),
+    ]);
+    //For each manager, query SQL database with INSERT statement to add manager
     for (let i = 0; i < SEED_CAREER_MANAGER; i++) {
       const {
         tscm_first,
@@ -172,7 +187,10 @@ const seedServiceManager = async () => {
     console.log("Error seeding TSCM", err);
   }
 };
-
+async function generateBcrypt(str) {
+  //const salt = await bcrypt.genSalt(10);
+  return bcrypt.hashSync(str, 10);
+}
 const seedCalendar = async () => {
   const calendarEvent = []; // Initialize array that will temp hold all the fake events before SQL insertion
 
@@ -264,6 +282,7 @@ const seedMilestone = async () => {
 };
 
 // Seed the database in the order described below
+
 seedServiceManager().then(() =>
   seedStudents().then(() => seedCalendar().then(() => seedMilestone()))
 );

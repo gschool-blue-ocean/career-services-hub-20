@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS milestone, student, service_manager, calendar;
+DROP TABLE IF EXISTS milestone, student, service_manager, calendar, sessions;
 
 CREATE TABLE service_manager (
   tscm_id SERIAL PRIMARY KEY NOT NULL,
@@ -14,6 +14,8 @@ CREATE TABLE student (
   student_id SERIAL PRIMARY KEY NOT NULL,
   student_first VARCHAR(50) NOT NULL,
   student_last VARCHAR(50) NOT NULL,
+  student_email TEXT NOT NULL,
+  student_password TEXT NOT NULL,
   cohort VARCHAR(50) NOT NULL,
   sec_clearance TEXT,
   career_status TEXT,
@@ -43,7 +45,6 @@ CREATE TABLE calendar (
   event_descrip TEXT NOT NULL,
   FOREIGN KEY (tscm_id) REFERENCES service_manager (tscm_id)
 );
-
 -- CREATE TABLE tasks (
 --   id SERIAL PRIMARY KEY,
 --   description TEXT
