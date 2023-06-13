@@ -19,7 +19,6 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
   const url = 'http://localhost:8000';
 
 
-
   async function loginUser(email, password) {
     try {
       const cookies = document.cookie.split(";");
@@ -35,7 +34,7 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
       });
       console.log(response);
       const responseData = await response.json();
-
+      
       if (!response.ok)
       {
         throw new Error('Invalid email or password');

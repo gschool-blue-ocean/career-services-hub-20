@@ -394,6 +394,7 @@ app.delete("/events/:id", async (req, res, next) => {
   await db
     .query("DELETE FROM calendar WHERE calendar.event_id = $1", [id])
     .catch(next);
+
   res.send('Sucessfully Deleted Event Record!');
 })
 
@@ -403,6 +404,7 @@ app.get('/managers/login/isAuthorized',(req,res)=>{
   console.log(`Welcome back, Admin ${user.user}`)
   res.json({message: user})
 })
+
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
 function isAuthorized(req,res){

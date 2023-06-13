@@ -154,8 +154,7 @@ const seedServiceManager = async () => {
         await db.query('ALTER SEQUENCE service_manager_tscm_id_seq RESTART WITH 1');    // Reset managers entity primary key to 1
         const queryString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) 
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
-
-        
+     
         await db.query(queryString,['Elon','Gates',faker.internet.userName(),process.env.PASSWD,process.env.ADMIN_EMAIL,faker.internet.avatar()])    
         //For each manager, query SQL database with INSERT statement to add manager
         for (let i = 0; i < SEED_CAREER_MANAGER; i++){
