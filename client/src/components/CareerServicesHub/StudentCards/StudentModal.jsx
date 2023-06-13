@@ -50,35 +50,22 @@ export default function StudentModal({
     // Creating a new updated student object
     let newUpdatedStudent = {};
     let existingStudentObj = {};
-    // let milestones = [];
-    // existingStudentObj.milestones = [];
 
-    // Copying the existing milestones with their data
-    // student.milestones.forEach((milestone) => {
-    //   let newMilestone = {};
-    //   newMilestone.mile_name = milestone.mile_name;
-    //   newMilestone.mile_id = milestone.mile_id;
-    //   newMilestone.student_id = milestone.student_id;
-    //   milestones.push(newMilestone);
-    // });
-
-    // Updating the progress status for each milestone based on the selected values
+    // Updating the fields in the updated student object
+    newUpdatedStudent.student_id = student.student_id;
+    newUpdatedStudent.student_first = student.student_first;
+    newUpdatedStudent.student_last = student.student_last;
+    newUpdatedStudent.cohort = student.cohort;
+    newUpdatedStudent.sec_clearance = clearanceInputRef.current.value;
+    newUpdatedStudent.career_status = careerInputRef.current.value;
+    newUpdatedStudent.course_status = courseInputRef.current.value;
+    newUpdatedStudent.college_degree = degreeInputRef.current.value;
     newUpdatedStudent.cover_letter = coverLetterInputRef.current.value;
     newUpdatedStudent.resume = resumeInputRef.current.value;
     newUpdatedStudent.linkedin = linkedInInputRef.current.value;
     newUpdatedStudent.personal_narrative = narrativeInputRef.current.value;
     newUpdatedStudent.hunter_access = huntrInputRef.current.value;
-
-    // Updating other fields in the updated student object
-    newUpdatedStudent.career_status = careerInputRef.current.value;
-    newUpdatedStudent.course_status = courseInputRef.current.value;
-    newUpdatedStudent.sec_clearance = clearanceInputRef.current.value;
-    newUpdatedStudent.college_degree = degreeInputRef.current.value;
     newUpdatedStudent.tscm_id = student.tscm_id;
-    newUpdatedStudent.student_first = student.student_first;
-    newUpdatedStudent.student_last = student.student_last;
-    newUpdatedStudent.cohort = student.cohort;
-    newUpdatedStudent.student_id = student.student_id;
     existingStudentObj = newUpdatedStudent;
     // existingStudentObj.milestones = milestones;
 

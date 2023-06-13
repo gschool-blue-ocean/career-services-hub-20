@@ -15,38 +15,11 @@ export function StudentsContextProvider({ children }) {
       college_degree: "Associate Not in CS/STEM",
       course_status: "Graduate",
       sec_clearance: "Undetermined",
-      milestones: [
-        {
-          mile_id: 1,
-          mile_name: "Cover Letter",
-          progress_stat: "Un-Satisfactory",
-          student_id: 1,
-        },
-        {
-          mile_id: 2,
-          mile_name: "Resume",
-          progress_stat: "Un-Satisfactory",
-          student_id: 1,
-        },
-        {
-          mile_id: 3,
-          mile_name: "LinkedIn",
-          progress_stat: "Completed",
-          student_id: 1,
-        },
-        {
-          mile_id: 4,
-          mile_name: "Personal Narrative",
-          progress_stat: "Un-Satisfactory",
-          student_id: 1,
-        },
-        {
-          mile_id: 5,
-          mile_name: "Huntr Access",
-          progress_stat: "Un-Satisfactory",
-          student_id: 1,
-        },
-      ],
+      cover_letter: "Un-Satisfactory",
+      resume: "Un-Satisfactory",
+      linkedin: "Completed",
+      personal_narrative: "Un-Satisfactory",
+      hunter_access: "Un-Satisfactory",
       tscm_first: "Cade",
       tscm_id: 6,
       tscm_last: "Nienow",
@@ -63,39 +36,7 @@ export function StudentsContextProvider({ children }) {
             try {
                 const response = await fetch(`${url}/students`);
                 const students = await response.json();
-                const fullStudents = []; // Create array that will hold all students
-                // Once a student has been achieved, run all milestone GET request for that student
-                for (const student of students) {
-                    const milestonesResponse = await fetch(`${url}/students/${student.student_id}/milestones`);
-                    const milestones = await milestonesResponse.json();
-                    const studMilestones = [
-                    {
-                      mile_name: 'Cover Letter',
-                      progress_stat: milestones[0].progress_stat
-                    },
-                    {
-                      mile_name: 'Resume',
-                      progress_stat: milestones[1].progress_stat
-                    },
-                    {
-                      mile_name: 'LinkedIn',
-                      progress_stat: milestones[2].progress_stat
-                    },
-                    {
-                      mile_name: 'Personal Narrative',
-                      progress_stat: milestones[3].progress_stat
-                    },
-                    {
-                      mile_name: 'Hunter Access',
-                      progress_stat: milestones[4].progress_stat
-                    },
-                    
-                  ]
-                    // console.log(milestones);
-                    student.milestones = studMilestones; // Combine new student with thier respective milestones
-                    fullStudents.push(student); // Push latest student to array that is holding all the students
-                }
-                setStudentsData(fullStudents); // Update state with all students and thier milestones
+                setStudentsData(students); // Update state with all students and thier milestones
             } catch (error) {
                 console.log(error);
             }
