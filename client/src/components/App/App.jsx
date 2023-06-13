@@ -20,7 +20,7 @@ const App = () => {
   useEffect(() => {
         const fetchData = async()=>{
           const cookies = document.cookie.split(";");
-          const found = cookies.find(element=> element.startsWith('jwt='))
+          const found = cookies.find(element=> element.trim().startsWith('jwt='))
           let response;
 
             //check if its manager token
@@ -34,7 +34,6 @@ const App = () => {
             });
             //if not check if its student token
             if (!response.ok){
-              
               response = await fetch(`${url}/students/login/isAuthorized`, {
                 method: "GET",
               

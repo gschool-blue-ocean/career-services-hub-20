@@ -13,6 +13,7 @@ export default function CareerServicesHub({
   isTransitioning,
   setIsTransitioning,
   loggedInfo,
+  isStudent
 }) {
   // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,7 +38,9 @@ export default function CareerServicesHub({
 
   useEffect(() => {
     setOpacity(1);
-  }, []);
+    if(isStudent)console.log('is a student')
+    else console.log('not student')
+  }, [isStudent]);
 
   // Filter the list of students based on the current filter
   const filterStudents = (

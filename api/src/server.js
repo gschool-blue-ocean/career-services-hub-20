@@ -53,7 +53,8 @@ app.get("/students", async (req, res, next) => {
 
 app.get("/students/:id", async (req, res, next) => {
   let id = req.params.id;
-  const user= isAuthorized(req,res);
+  const user = isAuthorized(req,res);
+  console.log(user)
   if (user){
     if (user.id)  id = user.id;
   }
@@ -148,6 +149,7 @@ app.delete("/students/:id", async (req, res, next) => {
 });
 app.get('/students/login/isAuthorized',(req,res)=>{
   let user = isAuthorized(req,res);
+  console.log(user)
   if (!user)  return res.status(401).json({message: 'Unauthorized'})
   else if (user.admin)
   return res.status(204).json({message: 'This is an admin account!'})

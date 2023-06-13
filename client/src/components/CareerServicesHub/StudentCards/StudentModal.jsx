@@ -54,6 +54,7 @@ export default function StudentModal({
     existingStudentObj.milestones = [];
 
     // Copying the existing milestones with their data
+    console.log('TESTETEETETEST')
     student.milestones.forEach((milestone) => {
       let newMilestone = {};
       newMilestone.mile_name = milestone.mile_name;
