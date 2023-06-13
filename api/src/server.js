@@ -2,7 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import pg from 'pg';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt'
+import cookieParser from 'cookie-parser';
 
 const { Pool } = pg;
 
@@ -238,7 +240,6 @@ app.get("/managers", async (req, res, next) => {
 
 app.get("/managers/:id", async (req, res, next) => {
   const id = req.params.id;
-  
   const results = await db.query(`SELECT * FROM service_manager WHERE tscm_id = ${id}`).catch(next);
   res.send(results.rows)
 })
@@ -299,13 +300,14 @@ app.post('/managers/login', async (req, res, next) => {
       console.log(`Admin ${user.user}, welcome back!`)
       res.json({token: token})
     }
-  } catch (error) {
-    console.error('Something really went wrong, check if DB is running 🤷' , error)
-    res.status(500).json({ message: 'Service unavailable 🤷'})
-    console.log('bad')
-  }
-});
-
+    else
+      return res.status(401).json({ message:'Invalid Password 🤷'})
+   
+ })
+ 
+  
+    
+ 
 
 // Need to think about this more, because we need to update student records and calendar records BEFORE we delete any manager records otherwise we are violating foreign keys
 
@@ -393,15 +395,14 @@ app.delete("/events/:id", async (req, res, next) => {
   await db
     .query("DELETE FROM calendar WHERE calendar.event_id = $1", [id])
     .catch(next);
-  res.send("Sucessfully Deleted Event Record!");
-});
-
+  res.send('Sucessfully Deleted Event Record!');
+})
 
 app.get('/managers/login/isAuthorized',(req,res)=>{
-    let user = isAuthorized(req,res);
-    if (!user)  return res.status(401).json({message: 'Unauthorized'})
-    console.log(`Welcome back, Admin ${user.user}`)
-    res.json({message: user})
+  let user = isAuthorized(req,res);
+  if (!user)  return res.status(401).json({message: 'Unauthorized'})
+  console.log(`Welcome back, Admin ${user.user}`)
+  res.json({message: user})
 })
 
 // -----------------------------------------------------------------------------------------------------------------------------------------

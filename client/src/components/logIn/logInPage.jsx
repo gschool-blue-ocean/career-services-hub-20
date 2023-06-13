@@ -16,7 +16,6 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
   }, []);
 
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
-
   const url = 'http://localhost:8000';
 
 
@@ -36,6 +35,7 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
       });
       console.log(response);
       const responseData = await response.json();
+
       if (!response.ok)
       {
         throw new Error('Invalid email or password');
