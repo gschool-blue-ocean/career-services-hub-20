@@ -116,6 +116,12 @@ const seedStudents = async () => {
         college_degree,
         tscm__id,
       } = studentList[i];
+       await db.query(queryString,['Bill','Musk',process.env.STUDENT_EMAIL,process.env.STUDENT_PASSWD,cohorts[ Math.floor(Math.random() * 7)], secClearance[Math.floor(Math.random() * 5)], 
+      careerStatus[Math.floor(Math.random() * 3)], 
+      courseStatus[Math.floor(Math.random() * 2)], 
+      collegeDegree[Math.floor(Math.random() * 8)], 
+      faker.datatype.number({ min: 1, max: SEED_CAREER_MANAGER })
+    ]) 
       await db.query(queryString, [
         student_first,
         student_last,

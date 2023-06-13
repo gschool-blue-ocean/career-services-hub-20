@@ -145,41 +145,28 @@ app.delete("/students/:id", async (req, res, next) => {
   res.send({ message: "Sucessfully Deleted Student Record!" });
 });
 
-app.post("/students/login", async (req, res, next) => {
+app.post('/students/login', async (req, res, next) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
-
-
-  try {
-    const results = await db.query(
-      "SELECT * FROM student WHERE student_email = $1",
-      [email]
-    );
-    const student = results.rows[0];
-
-    if (!student) {
-      return res
-        .status(404)
-        .json({ message: "Incorrect Password or Email 🤷" });
-    }
-
-    if (student.student_password === inputPassword) {
-      const user = { val_student: student.email };
-
-      const accessToken = jwt.sign(user, "super secret key", {
-        expiresIn: "10m",
-      });
-      res.json({ accessToken });
-    }
-  } catch (error) {
-    console.error(
-      "Something really went wrong, check if DB is running 🤷",
-      error
-    );
-    res.status(500).json({ message: "Service unavailable 🤷" });
-    console.log("bad");
+  console.log(email);
+  const results = await db.query(`SELECT * FROM student WHERE student_email = $1`,[email]);
+  const student = results.rows[0]
+  console.log(student)
+  console.log('student')
+  if(!student) {
+    return res.status(401).json({message: 'Invalid Email 🤷'})
   }
-});
+  else if(bcrypt.compareSync(inputPassword,student.student_password)) {
+    const user = {user: `${student.student_first} ${student.student_last}`};
+    const token =jwt.sign(user, process.env.SECRET_KEY);
+    console.log(token)
+    console.log(`Student ${user.user}, welcome back!`)
+    res.json({token: token})
+  }
+  else
+    return res.status(401).json({ message:'Invalid Password 🤷'})
+ 
+})
 
 
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
