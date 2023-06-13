@@ -34,6 +34,7 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
       });
       console.log(response);
       const responseData = await response.json();
+      
       if (!response.ok)
       {
         throw new Error('Invalid email or password');

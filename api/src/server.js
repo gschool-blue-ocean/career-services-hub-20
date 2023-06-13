@@ -240,7 +240,6 @@ app.get("/managers", async (req, res, next) => {
 
 app.get("/managers/:id", async (req, res, next) => {
   const id = req.params.id;
-  
   const results = await db.query(`SELECT * FROM service_manager WHERE tscm_id = ${id}`).catch(next);
   res.send(results.rows)
 })
@@ -283,7 +282,6 @@ app.patch("/managers/:id", async (req, res, next) => {
 
 
 app.post('/managers/login', async (req, res, next) => {
-  try {
     const email = req.body.email;
     const inputPassword = req.body.password;
     console.log(email);
@@ -396,17 +394,16 @@ app.delete("/events/:id", async (req, res, next) => {
   await db
     .query("DELETE FROM calendar WHERE calendar.event_id = $1", [id])
     .catch(next);
-  res.send("Sucessfully Deleted Event Record!");
-});
 
-
-app.get('/managers/login/isAuthorized',(req,res)=>{
-    let user = isAuthorized(req,res);
-    if (!user)  return res.status(401).json({message: 'Unauthorized'})
-    console.log(`Welcome back, Admin ${user.user}`)
-    res.json({message: user})
+  res.send('Sucessfully Deleted Event Record!');
 })
 
+app.get('/managers/login/isAuthorized',(req,res)=>{
+  let user = isAuthorized(req,res);
+  if (!user)  return res.status(401).json({message: 'Unauthorized'})
+  console.log(`Welcome back, Admin ${user.user}`)
+  res.json({message: user})
+})
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
 

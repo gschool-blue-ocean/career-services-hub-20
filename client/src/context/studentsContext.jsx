@@ -62,7 +62,6 @@ export function StudentsContextProvider({ children }) {
         const fetchData = async () => {
             try {
                 const response = await fetch(`${url}/students`);
-                const response = await fetch(`${url}/students`);
                 const students = await response.json();
                 const fullStudents = []; // Create array that will hold all students
                 // Once a student has been achieved, run all milestone GET request for that student
@@ -80,9 +79,9 @@ export function StudentsContextProvider({ children }) {
         fetchData(); // Execute fetch above
     }, [update]);
 
-    return(
-        <StudentsContext.Provider value={{studentsData, setUpdate, update}}>
-            {children}
-        </StudentsContext.Provider>
-    );
+  return (
+    <StudentsContext.Provider value={{ studentsData, setUpdate, update }}>
+      {children}
+    </StudentsContext.Provider>
+  );
 }

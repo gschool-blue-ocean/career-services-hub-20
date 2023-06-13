@@ -14,6 +14,8 @@ CREATE TABLE student (
   student_id SERIAL PRIMARY KEY NOT NULL,
   student_first VARCHAR(50) NOT NULL,
   student_last VARCHAR(50) NOT NULL,
+  student_email TEXT NOT NULL,
+  student_password TEXT NOT NULL,
   cohort VARCHAR(50) NOT NULL,
   sec_clearance TEXT,
   career_status TEXT,
