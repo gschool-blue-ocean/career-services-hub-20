@@ -53,14 +53,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
+          
+      - name: List directory contents
+        run: ls -la
 
       - name: Set environment variables
         run: |
           cat ../.env >> $GITHUB_ENV
         working-directory: ../
-        
-      - name: List directory contents
-        run: ls -la
 
 
       - name: Lowercase the repo name and username
