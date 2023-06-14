@@ -188,51 +188,53 @@ app.post("/students/login", async (req, res, next) => {
 
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
 
-app.get("/students/:id/milestones", async (req, res, next) => {
-  const id = req.params.id;
+// app.get("/students/:id/milestones", async (req, res, next) => {
+//   const id = req.params.id;
 
-  const result = await db
+//   const result = await db
 
-    .query(`SELECT * FROM milestone WHERE milestone.student_id = ${id}`)
-    .catch(next);
-  res.send(result.rows);
-});
+//     .query(`SELECT * FROM milestone WHERE milestone.student_id = ${id}`)
+//     .catch(next);
+//   res.send(result.rows);
+// });
 
-app.post("/students/:studentId/milestones", async (req, res, next) => {
-  const studentId = req.params.studentId;
+// app.post("/students/:studentId/milestones", async (req, res, next) => {
+//   const studentId = req.params.studentId;
 
-  const mileName = req.body.mile_name;
-  const progress = req.body.progress_stat;
+//   const mileName = req.body.mile_name;
+//   const progress = req.body.progress_stat;
 
-  const result = await db
-    .query(
-      `INSERT INTO milestone (mile_name, progress_stat, student_id ) VALUES( $1, $2, $3 ) RETURNING *`,
-      [mileName, progress, studentId]
-    )
-    .catch(next);
-  res.send(result.rows);
-});
+//   const result = await db
+//     .query(
+//       `INSERT INTO milestone (mile_name, progress_stat, student_id ) VALUES( $1, $2, $3 ) RETURNING *`,
+//       [mileName, progress, studentId]
+//     )
+//     .catch(next);
+//   res.send(result.rows);
+// });
 
-app.patch(
-  "/students/:studentId/milestones/:milestoneId",
-  async (req, res, next) => {
-    console.log(req.body);
-    const milestoneId = req.params.milestoneId;
-    const studentId = req.params.studentId;
 
-    const mileName = req.body.mile_name;
-    const progress = req.body.progress_stat;
+// app.patch(
+//   "/students/:studentId/milestones/:milestoneId",
+//   async (req, res, next) => {
+//     console.log(req.body);
+//     const milestoneId = req.params.milestoneId;
+//     const studentId = req.params.studentId;
 
-    const result = await db
-      .query(
-        `UPDATE milestone SET mile_name = $1, progress_stat = $2, student_id = $3 WHERE milestone.mile_id = $4 RETURNING *`,
-        [mileName, progress, studentId, milestoneId]
-      )
-      .catch(next);
-    console.log(result.rows);
-    res.send(result.rows);
-  }
-);
+//     const mileName = req.body.mile_name;
+//     const progress = req.body.progress_stat;
+
+//     const result = await db
+//       .query(
+//         `UPDATE milestone SET mile_name = $1, progress_stat = $2, student_id = $3 WHERE milestone.mile_id = $4 RETURNING *`,
+//         [mileName, progress, studentId, milestoneId]
+//       )
+//       .catch(next);
+//     console.log(result.rows);
+//     res.send(result.rows);
+//   }
+// );
+
 
 // --------------------------------------------- MANAGERS ROUTES ----------------------------------------------------------------------------
 
