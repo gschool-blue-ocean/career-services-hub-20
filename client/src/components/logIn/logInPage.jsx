@@ -20,15 +20,13 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
   async function loginUser(email, password) {
     try {
       const cookies = document.cookie.split(";");
-      const found = cookies.find((element) =>
-        element.trim().startsWith("jwt=")
-      ); //looks into cookies if it is a jwt token
-      const response = await fetch(`${url}/managers/login`, {
+      const found = cookies.find(element=> element.trim().startsWith('jwt=')) //looks into cookies if it is a jwt token
+      const path = isStudent? `${url}/students/login` : `${url}/managers/login`;
+      const response = await fetch(path, {
         method: "POST",
 
         headers: {
           "Content-Type": "application/json",
-          Authorization: found ? found.split("jwt=")[1] : null,
         },
         body: JSON.stringify({ email, password }),
       });
@@ -58,10 +56,10 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
     console.error(isStudent);
     if (isStudent) {
       setIsStudent(false);
-      document.body.classList.remove("student-background");
-    } else {
+    }
+    else
+    {
       setIsStudent(true);
-      document.body.classList.add("student-background");
     }
   };
   const handleUserLogin = (e) => {

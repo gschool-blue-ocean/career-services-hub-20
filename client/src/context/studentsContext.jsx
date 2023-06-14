@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 
 export const StudentsContext = createContext();
 
-export function StudentsContextProvider({ children }) {
+export function StudentsContextProvider({ children, loggedInfo,isStudent }) {
   //Update hook is used in the use effect for later so that when a component does a task the student state gets updated along with DB
   const [update, setUpdate] = useState(true);
   const [studentsData, setStudentsData] = useState([
@@ -34,15 +34,31 @@ export function StudentsContextProvider({ children }) {
         // Get latest students data from SQL database
         const fetchData = async () => {
             try {
-                const response = await fetch(`${url}/students`);
+              const cookies = document.cookie.split(";");
+              const found = cookies.find(element=> element.startsWith('jwt='))
+              let response;
+                if (isStudent)
+                {
+                  response = await fetch(`${url}/students/1`,{
+                    method:'GET',
+                    headers: {'Content-Type': 'application/json', 'Authorization': (found?`Bearer ${found.split('jwt=')[1]}`:'')}
+                  })
+                  
+                }
+                else
+                {
+                  response = await fetch(`${url}/students`);
+                }
+                
                 const students = await response.json();
                 setStudentsData(students); // Update state with all students and thier milestones
             } catch (error) {
                 console.log(error);
             }
         };
-        fetchData(); // Execute fetch above
-    }, [update]);
+        if (loggedInfo)
+          fetchData(); // Execute fetch above
+    }, [loggedInfo]);
 
   return (
     <StudentsContext.Provider value={{ studentsData, setUpdate, update }}>
