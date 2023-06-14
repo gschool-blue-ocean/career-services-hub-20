@@ -12,14 +12,15 @@ export default function StudentCard({
   const [modalToggle, setModalToggle] = useState(false); // State for modal toggle
   let count = 0;
   let unSatisfactoryFlag = false;
+  const milestones = [student.cover_letter, student.resume, student.linkedin, student.personal_narrative, student.hunter_access]
 
   useEffect(() => {
     // Calculate the milestone progress and update the state
-    student.milestones.forEach((milestone) => {
-      if (milestone.progress_stat == "Un-Satisfactory") {
+    milestones.forEach((milestone) => {
+      if (milestone == "Un-Satisfactory") {
         unSatisfactoryFlag = true; // Set the flag if any milestone is unsatisfactory
         return;
-      } else if (milestone.progress_stat == "In-Progress") {
+      } else if (milestone == "In-Progress") {
         count = count + 1; // Increment count for milestones in progress
       }
     });

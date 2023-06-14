@@ -1,10 +1,10 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import pg from 'pg';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt'
-import cookieParser from 'cookie-parser';
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import pg from "pg";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import cookieParser from "cookie-parser";
 
 const { Pool } = pg;
 
@@ -20,7 +20,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 app.use(cookieParser());
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(express.json());
 
 app.use(
@@ -28,19 +28,26 @@ app.use(
     origin: "*",
   })
 );
-app.use(function(req,res,next){
-  res.header('Access-Control-Allow-Credentials',true);
-  res.header('Access-Control-Allow-Origin',req.headers.origin);
-  res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,UPDATE,OPTIONS');
-  res.header('Access-Control-Allow-Headers','X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,PUT,POST,DELETE,UPDATE,OPTIONS"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
+  );
   next();
-})
+});
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
 app.get("/students", async (req, res, next) => {
   // Check if the data is cached.
-   // if (!isAuthorized(req,res)) return res.status(401).json({message: 'Unauthorized'});
-    try {
-      const results = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
+  // if (!isAuthorized(req,res)) return res.status(401).json({message: 'Unauthorized'});
+  try {
+    const results =
+      await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
                                       FROM student 
                                       JOIN service_manager ON service_manager.tscm_id = student.tscm_id`);
 
@@ -88,7 +95,6 @@ app.post("/students", async (req, res, next) => {
 
   const result = await db
     .query(
-
       "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
       [
         firstName,
@@ -170,38 +176,35 @@ app.post('/students/login', async (req, res, next) => {
     console.log(`Student ${user.user}, welcome back!`)
     res.json({token: token})
   }
-  else
-    return res.status(401).json({ message:'Invalid Password 🤷'})
- 
-})
+});
 
 
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
 
-app.get("/students/:id/milestones", async (req, res, next) => {
-  const id = req.params.id;
+// app.get("/students/:id/milestones", async (req, res, next) => {
+//   const id = req.params.id;
 
-  const result = await db
+//   const result = await db
 
-    .query(`SELECT * FROM milestone WHERE milestone.student_id = ${id}`)
-    .catch(next);
-  res.send(result.rows);
-});
+//     .query(`SELECT * FROM milestone WHERE milestone.student_id = ${id}`)
+//     .catch(next);
+//   res.send(result.rows);
+// });
 
-app.post("/students/:studentId/milestones", async (req, res, next) => {
-  const studentId = req.params.studentId;
+// app.post("/students/:studentId/milestones", async (req, res, next) => {
+//   const studentId = req.params.studentId;
 
-  const mileName = req.body.mile_name;
-  const progress = req.body.progress_stat;
+//   const mileName = req.body.mile_name;
+//   const progress = req.body.progress_stat;
 
-  const result = await db
-    .query(
-      `INSERT INTO milestone (mile_name, progress_stat, student_id ) VALUES( $1, $2, $3 ) RETURNING *`,
-      [mileName, progress, studentId]
-    )
-    .catch(next);
-  res.send(result.rows);
-});
+//   const result = await db
+//     .query(
+//       `INSERT INTO milestone (mile_name, progress_stat, student_id ) VALUES( $1, $2, $3 ) RETURNING *`,
+//       [mileName, progress, studentId]
+//     )
+//     .catch(next);
+//   res.send(result.rows);
+// });
 
 
 app.patch(
@@ -219,6 +222,7 @@ app.patch(
         [mileName, progress, studentId, milestoneId]
       )
       .catch(next);
+    console.log(result.rows);
     res.send(result.rows);
   }
 );
@@ -232,9 +236,11 @@ app.get("/managers", async (req, res, next) => {
 
 app.get("/managers/:id", async (req, res, next) => {
   const id = req.params.id;
-  const results = await db.query(`SELECT * FROM service_manager WHERE tscm_id = ${id}`).catch(next);
-  res.send(results.rows)
-})
+  const results = await db
+    .query(`SELECT * FROM service_manager WHERE tscm_id = ${id}`)
+    .catch(next);
+  res.send(results.rows);
+});
 
 app.post("/managers", async (req, res, next) => {
   const firstName = req.body.tscm_first;
@@ -383,8 +389,8 @@ app.delete("/events/:id", async (req, res, next) => {
     .query("DELETE FROM calendar WHERE calendar.event_id = $1", [id])
     .catch(next);
 
-  res.send('Sucessfully Deleted Event Record!');
-})
+  res.send("Sucessfully Deleted Event Record!");
+});
 
 app.get('/managers/login/isAuthorized',(req,res)=>{
   let user = isAuthorized(req,res);
@@ -395,19 +401,17 @@ app.get('/managers/login/isAuthorized',(req,res)=>{
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
-function isAuthorized(req,res){
+function isAuthorized(req, res) {
   let auth = req.headers.authorization;
-  if (!auth)  {
+  if (!auth) {
     return false;
   }
-  const token = auth.replace('Bearer ', '');
+  const token = auth.replace("Bearer ", "");
   try {
-  return jwt.verify(token,process.env.SECRET_KEY) //verify if token is valid, and get user email
-
-  } catch(e) {
+    return jwt.verify(token, process.env.SECRET_KEY); //verify if token is valid, and get user email
+  } catch (e) {
     return false;
   }
-  
 }
 app.use((err, req, res, next) => {
   console.error(err.stack);

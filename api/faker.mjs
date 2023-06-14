@@ -1,10 +1,10 @@
-import faker from 'faker';
-import pg from 'pg';
-import path from 'path';
-import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import bcrypt from 'bcrypt';
+import faker from "faker";
+import pg from "pg";
+import path from "path";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import bcrypt from "bcrypt";
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -38,7 +38,7 @@ const cohorts = [
   "MCSP-21",
   "MCSP-22",
 ];
-const careerStatus = ["Searching", "Hired", "Not Started"];
+const careerStatus = ["Searching", "Hired", "Not Currently Searching"];
 const courseStatus = ["Student", "Graduate"];
 const secClearance = [
   "Undetermined",
@@ -84,13 +84,18 @@ const seedStudents = async () => {
     studentList.push({
       student_first: faker.name.firstName(), // Use faker method to generate fake student first name
       student_last: faker.name.lastName(), // Use faker method to generate fake student last name
-      student_email: faker.internet.email(),  // Use faker method to generate fake student email
+      student_email: faker.internet.email(), // Use faker method to generate fake student email
       student_password: await generateBcrypt(faker.internet.password(10)), // Use faker method to generate fake student password
       cohort: cohorts[randomNumber5], // Randomly pick a element in the self-defined cohorts array
       sec_clearance: secClearance[randomNumber3], // Randomly pick a element in the self-defined secClearance array
       career_status: careerStatus[randomNumber], // Randomly pick a element in the self-defined careerStatus array
       course_status: courseStatus[randomNumber2], // Randomly pick a element in the self-defined courseStatus array
       college_degree: collegeDegree[randomNumber4], // Randomly pick a element in the self-defined collegeDegree array
+      cover_letter: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      resume: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      linkedin: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      personal_narrative: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      hunter_access: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
       tscm__id: faker.datatype.number({ min: 1, max: SEED_CAREER_MANAGER }), // Use faker method to create random number between 1 and MAX # of managers
     });
   }
@@ -98,8 +103,8 @@ const seedStudents = async () => {
   try {
     await db.query("TRUNCATE TABLE student CASCADE"); // DROP TABLES already in the SQL database
     await db.query("ALTER SEQUENCE student_student_id_seq RESTART WITH 1"); // Reset students entity primary key to 1
-    const queryString = `INSERT INTO student (student_first, student_last,student_email,student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) 
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
+    const queryString = `INSERT INTO student (student_first, student_last,student_email,student_password, cohort, sec_clearance, career_status, course_status, college_degree, cover_letter, resume, linkedin, personal_narrative, hunter_access ,tscm_id) 
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *`;
 
     // For each student, query SQL database with INSERT statement to add student
     
@@ -114,6 +119,11 @@ const seedStudents = async () => {
         career_status,
         course_status,
         college_degree,
+        cover_letter,
+        resume,
+        linkedin,
+        personal_narrative,
+        hunter_access,
         tscm__id,
       } = studentList[i];
        
@@ -127,6 +137,11 @@ const seedStudents = async () => {
         career_status,
         course_status,
         college_degree,
+        cover_letter,
+        resume,
+        linkedin,
+        personal_narrative,
+        hunter_access,
         tscm__id,
       ]);
     }
@@ -145,38 +160,58 @@ const seedStudents = async () => {
 const seedServiceManager = async () => {
   const careerManager = []; // Initialize array that will temp hold all the fake managers before SQL insertion
 
-    //Generate multiple manager objects and push it to careerManager Array
-    for (let i = 0; i < SEED_CAREER_MANAGER; i++){
-        careerManager.push({
-            tscm_first: faker.name.firstName(),             // Use faker method to generate fake manager first name
-            tscm_last: faker.name.lastName(),               // Use faker method to generate fake manager last name
-            login_id: faker.internet.userName(),            // Use faker method to generate fake manager username
-            tscm_password: await generateBcrypt(faker.internet.password(10)),     // Use faker method to generate fake manager password for login
-            tscm_email: faker.internet.email(),             // Use faker method to generate fake manager email for login
-            tscm_avatar: faker.internet.avatar(),           // Use faker method to generate URL for fake manager profile pic
-        });
-    }
-    try {
-        await db.query('TRUNCATE TABLE service_manager CASCADE');                       // DROP TABLES already in the SQL database
-        await db.query('ALTER SEQUENCE service_manager_tscm_id_seq RESTART WITH 1');    // Reset managers entity primary key to 1
-        const queryString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) 
+  //Generate multiple manager objects and push it to careerManager Array
+  for (let i = 0; i < SEED_CAREER_MANAGER; i++) {
+    careerManager.push({
+      tscm_first: faker.name.firstName(), // Use faker method to generate fake manager first name
+      tscm_last: faker.name.lastName(), // Use faker method to generate fake manager last name
+      login_id: faker.internet.userName(), // Use faker method to generate fake manager username
+      tscm_password: await generateBcrypt(faker.internet.password(10)), // Use faker method to generate fake manager password for login
+      tscm_email: faker.internet.email(), // Use faker method to generate fake manager email for login
+      tscm_avatar: faker.internet.avatar(), // Use faker method to generate URL for fake manager profile pic
+    });
+  }
+  try {
+    await db.query("TRUNCATE TABLE service_manager CASCADE"); // DROP TABLES already in the SQL database
+    await db.query("ALTER SEQUENCE service_manager_tscm_id_seq RESTART WITH 1"); // Reset managers entity primary key to 1
+    const queryString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) 
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
-     
-        await db.query(queryString,['Elon','Gates',faker.internet.userName(),process.env.PASSWD,process.env.ADMIN_EMAIL,faker.internet.avatar()])    
-        //For each manager, query SQL database with INSERT statement to add manager
-        for (let i = 0; i < SEED_CAREER_MANAGER; i++){
-            const {tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar} = careerManager[i];
-            await db.query(queryString, [tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar]);
-        }
-    console.log('TSCM seeded successfully');
-    } catch (err) {
-        console.log('Error seeding TSCM', err);
+
+    await db.query(queryString, [
+      "Elon",
+      "Gates",
+      faker.internet.userName(),
+      process.env.PASSWD,
+      process.env.ADMIN_EMAIL,
+      faker.internet.avatar(),
+    ]);
+    //For each manager, query SQL database with INSERT statement to add manager
+    for (let i = 0; i < SEED_CAREER_MANAGER; i++) {
+      const {
+        tscm_first,
+        tscm_last,
+        login_id,
+        tscm_password,
+        tscm_email,
+        tscm_avatar,
+      } = careerManager[i];
+      await db.query(queryString, [
+        tscm_first,
+        tscm_last,
+        login_id,
+        tscm_password,
+        tscm_email,
+        tscm_avatar,
+      ]);
     }
-}
-async function generateBcrypt(str)
-{
+    console.log("TSCM seeded successfully");
+  } catch (err) {
+    console.log("Error seeding TSCM", err);
+  }
+};
+async function generateBcrypt(str) {
   //const salt = await bcrypt.genSalt(10);
-  return bcrypt.hashSync(str,10);
+  return bcrypt.hashSync(str, 10);
 }
 const seedCalendar = async () => {
   const calendarEvent = []; // Initialize array that will temp hold all the fake events before SQL insertion
@@ -242,36 +277,7 @@ const seedCalendar = async () => {
   }
 };
 
-const seedMilestone = async () => {
-  let currentStudentNumber = 1;
-
-  try {
-    await db.query("TRUNCATE TABLE milestone CASCADE"); // DROP TABLES already in the SQL database
-    await db.query("ALTER SEQUENCE milestone_mile_id_seq RESTART WITH 1"); // Reset milestones entity primary key to 1
-    const queryString = `INSERT INTO milestone (mile_name, progress_stat, student_id) VALUES ($1, $2, $3) RETURNING *`;
-
-    // For every student inside database, have a nested for loop to create each milestone for each every student
-    for (let i = 0; i < SEED_STUDENT_ROWS; i++) {
-      for (let i = 0; i < studentMilestone.length; i++) {
-        let randomNumber = Math.floor(Math.random() * 3); // Randomly generate a number between 0-2
-        await db.query(queryString, [
-          studentMilestone[i],
-          progress_stat[randomNumber],
-          currentStudentNumber,
-        ]); // Insert milestone into SQL database
-      }
-      currentStudentNumber++; // Go to the next student
-    }
-    console.log("Milestone seeded successfully");
-  } catch (err) {
-    console.log("Error seeding Calendar", err);
-  }
-};
-
-// Seed the database in the order described below
-
 
 seedServiceManager().then(() =>
-  seedStudents().then(() => seedCalendar().then(() => seedMilestone()))
+  seedStudents()
 );
-

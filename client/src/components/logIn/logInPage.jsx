@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import './loginPage.css'
-import galvanizeLogo from './galvanizeLogo.webp'
+import "./loginPage.css";
+import galvanizeLogo from "./galvanizeLogo.webp";
 
-const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
-
+const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
@@ -16,8 +15,7 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
   }, []);
 
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
-  const url = 'http://localhost:8000';
-
+  const url = "http://localhost:8000";
 
   async function loginUser(email, password) {
     try {
@@ -26,7 +24,7 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
       const path = isStudent? `${url}/students/login` : `${url}/managers/login`;
       const response = await fetch(path, {
         method: "POST",
-        
+
         headers: {
           "Content-Type": "application/json",
         },
@@ -34,40 +32,36 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
       });
       console.log(response);
       const responseData = await response.json();
-      
-      if (!response.ok)
-      {
-        throw new Error('Invalid email or password');
-      }
-        
-      else if (responseData) {
-        const timeExpire = 1000* 60 * 15;
-        console.log(timeExpire)
+
+      if (!response.ok) {
+        throw new Error("Invalid email or password");
+      } else if (responseData) {
+        const timeExpire = 1000 * 60 * 15;
+        console.log(timeExpire);
         console.log(responseData.token);
-        document.cookie = `jwt=${responseData.token}; expires=${new Date(Date.now() + timeExpire).toUTCString()}; path=/; SameSite=Strict;`;
+        document.cookie = `jwt=${responseData.token}; expires=${new Date(
+          Date.now() + timeExpire
+        ).toUTCString()}; path=/; SameSite=Strict;`;
         handleLogin(true); // Call the handleLogin function passed as a prop
-        
       } else {
         setErrorRelay("Something has gone horribly wrong 😢");
       }
-   }
-   catch (error) {
-     setErrorRelay("Get out of here imposter 😠");
-   }
+    } catch (error) {
+      setErrorRelay("Get out of here imposter 😠");
+    }
   }
 
   // Upon submit email and password is passed into the Log in user function
-  const toggle = ()=>{
+  const toggle = () => {
     console.error(isStudent);
-    if (isStudent)
-    {
+    if (isStudent) {
       setIsStudent(false);
     }
     else
     {
       setIsStudent(true);
     }
-  }
+  };
   const handleUserLogin = (e) => {
     e.preventDefault();
 
@@ -83,7 +77,9 @@ const LogInPage = ({ handleLogin,setIsStudent,isStudent }) => {
   return (
     <div style={{ opacity: opacity, transition: "opacity 2s" }}>
       <div className="login-background">
-        <button className='login-student' onClick={()=>toggle()}>{isStudent?'login as Admin':'Login as Student'}</button>
+        <button className="login-student" onClick={() => toggle()}>
+          {isStudent ? "login as Admin" : "Login as Student"}
+        </button>
         <form className="login-Container" onSubmit={handleUserLogin}>
           <img src={galvanizeLogo}></img>
           <input

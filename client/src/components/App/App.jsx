@@ -60,16 +60,14 @@ const App = () => {
   const handleLogin = (data) => {
     try {
       setLoggedInfo(data);
-    }
-    catch(e)
-    {
-      setLoggedInfo(false)
+    } catch (e) {
+      setLoggedInfo(false);
     } //fetches data, if no error set loggedInfo, else empty it.
-  }
+  };
   const handleLogOff = () => {
-    document.cookie = `jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`  //expires immediately. The day is the very beginning of the timeDate for first computer
+    document.cookie = `jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`; //expires immediately. The day is the very beginning of the timeDate for first computer
 
-    setLoggedInfo('');
+    setLoggedInfo("");
   };
 
   return (
