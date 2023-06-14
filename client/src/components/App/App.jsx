@@ -10,44 +10,53 @@ import LogInPage from "../logIn/logInPage";
 
 const App = () => {
   const [loggedInfo, setLoggedInfo] = useState(false);
-  const [isStudent, setIsStudent] = useState(false);
-  const url = "http://localhost:8000";
-  console.log(url + `/managers/login/isAuthorized`);
+  const [isStudent,setIsStudent] = useState(false);
+  const url = 'http://localhost:8000'
+
+  useEffect(()=>{
+    if (!isStudent) document.body.classList.remove('student-background');
+    else document.body.classList.add('student-background');
+  },[isStudent])
   useEffect(() => {
-    const fetchData = async () => {
-      const cookies = document.cookie.split(";");
-      const found = cookies.find((element) => element.startsWith("jwt="));
-      let response;
-      if (!isStudent) {
-        response = await fetch(`${url}/managers/login/isAuthorized`, {
-          method: "GET",
+        const fetchData = async()=>{
+          const cookies = document.cookie.split(";");
+          const found = cookies.find(element=> element.trim().startsWith('jwt='))
+          let response;
 
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
-          },
-        });
-      } else {
-        response = await fetch(`${url}/students/login/isAuthorized`, {
-          method: "GET",
+            //check if its manager token
+            response = await fetch(`${url}/managers/login/isAuthorized`, {
+              method: "GET",
+            
+              headers: {
+                "Content-Type": "application/json", 
+                Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
+              },
+            });
+            //if not check if its student token
+            if (!response.ok){
+              
+              response = await fetch(`${url}/students/login/isAuthorized`, {
+                method: "GET",
+              
+                headers: {
+                  "Content-Type": "application/json", 
+                  Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
+                },//student_email student_password
+              });
+              //if its still not ok, then throw an error.
+              if (!response.ok)  {
+                  throw new Error('Not Authorized')
+                }
+                setIsStudent(true);
+                const result = await response.json(); console.log(result)
+                return result;
+              }
+            }
+          fetchData().then(auth=>setLoggedInfo(true)).catch(e=>setLoggedInfo(false)) //fetches data, if no error set loggedInfo, else empty it.
 
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
-          }, //student_email student_password
-        });
-      }
-      console.log(response.status);
-      if (!response.ok) throw new Error("esfwf");
-      const result = await response.json();
-      console.log(result);
-      return result;
-    };
+      },[])
 
-    fetchData()
-      .then((auth) => setLoggedInfo(true))
-      .catch((e) => setLoggedInfo(false)); //fetches data, if no error set loggedInfo, else empty it.
-  }, []);
+      
 
   const handleLogin = (data) => {
     try {
@@ -63,22 +72,13 @@ const App = () => {
   };
 
   return (
-    <EventsContextProvider>
-      <StudentsContextProvider>
-        <ManagersContextProvider>
+    <EventsContextProvider loggedInfo={loggedInfo}>
+      <StudentsContextProvider loggedInfo={loggedInfo} isStudent={isStudent}>
+        <ManagersContextProvider loggedInfo={loggedInfo}>
           <FieldsContextProvider>
             {loggedInfo ? (
-              <CareerServicesHub
-                handleLogOff={handleLogOff}
-                loggedInfo={loggedInfo}
-              />
-            ) : (
-              <LogInPage
-                handleLogin={handleLogin}
-                setIsStudent={setIsStudent}
-                isStudent={isStudent}
-              />
-            )}
+                <CareerServicesHub handleLogOff={handleLogOff} loggedInfo={loggedInfo} isStudent={isStudent}/>
+            ) : <LogInPage handleLogin={handleLogin} setIsStudent={setIsStudent} isStudent={isStudent}/> }
           </FieldsContextProvider>
         </ManagersContextProvider>
       </StudentsContextProvider>

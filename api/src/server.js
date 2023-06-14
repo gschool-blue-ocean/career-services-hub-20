@@ -59,8 +59,11 @@ app.get("/students", async (req, res, next) => {
 });
 
 app.get("/students/:id", async (req, res, next) => {
-  const id = req.params.id;
-
+  let id = req.params.id;
+  const user= isAuthorized(req,res);
+  if (user){
+    if (user.id)  id = user.id;
+  }
   const result = await db
     .query(
       `SELECT student.*, service_manager.tscm_first, service_manager.tscm_last 
@@ -122,7 +125,6 @@ app.post("/students", async (req, res, next) => {
 });
 
 app.patch("/students/:id", async (req, res, next) => {
-  console.log(req.body);
   const id = req.params.id;
   const firstName = req.body.student_first;
   const lastName = req.body.student_last;
@@ -171,39 +173,27 @@ app.delete("/students/:id", async (req, res, next) => {
     .catch(next);
   res.send({ message: "Sucessfully Deleted Student Record!" });
 });
-
-app.post("/students/login", async (req, res, next) => {
+app.get('/students/login/isAuthorized',(req,res)=>{
+  let user = isAuthorized(req,res);
+  if (!user)  return res.status(401).json({message: 'Unauthorized'})
+  else if (user.admin)
+  return res.status(204).json({message: 'This is an admin account!'})
+  console.log(`Welcome back, Student ${user.user}`)
+  res.json({message: user})
+})
+app.post('/students/login', async (req, res, next) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
-
-  try {
-    const results = await db.query(
-      "SELECT * FROM student WHERE student_email = $1",
-      [email]
-    );
-    const student = results.rows[0];
-
-    if (!student) {
-      return res
-        .status(404)
-        .json({ message: "Incorrect Password or Email 🤷" });
-    }
-
-    if (student.student_password === inputPassword) {
-      const user = { val_student: student.email };
-
-      const accessToken = jwt.sign(user, "super secret key", {
-        expiresIn: "10m",
-      });
-      res.json({ accessToken });
-    }
-  } catch (error) {
-    console.error(
-      "Something really went wrong, check if DB is running 🤷",
-      error
-    );
-    res.status(500).json({ message: "Service unavailable 🤷" });
-    console.log("bad");
+  const results = await db.query(`SELECT * FROM student WHERE student_email = $1`,[email]);
+  const student = results.rows[0]
+  if(!student) {
+    return res.status(401).json({message: 'Invalid Email 🤷'})
+  }
+  else if(bcrypt.compareSync(inputPassword,student.student_password)) {
+    const user = {user: `${student.student_first} ${student.student_last}`, id: student.student_id};
+    const token =jwt.sign(user, process.env.SECRET_KEY);
+    console.log(`Student ${user.user}, welcome back!`)
+    res.json({token: token})
   }
 });
 
@@ -258,27 +248,29 @@ app.patch("/managers/:id", async (req, res, next) => {
   res.send(result.rows[0]);
 });
 
-app.post("/managers/login", async (req, res, next) => {
-  const email = req.body.email;
-  const inputPassword = req.body.password;
-  console.log(email);
-  const results = await db.query(
-    `SELECT * FROM service_manager WHERE tscm_email = $1`,
-    [email]
-  );
-  const manager = results.rows[0];
-  console.log(manager);
-  console.log("manager");
-  if (!manager) {
-    return res.status(401).json({ message: "Invalid Email 🤷" });
-  } else if (bcrypt.compareSync(inputPassword, manager.tscm_password)) {
-    const user = { user: `${manager.tscm_first} ${manager.tscm_last}` };
-    const token = jwt.sign(user, process.env.SECRET_KEY);
-    console.log(token);
-    console.log(`Admin ${user.user}, welcome back!`);
-    res.json({ token: token });
-  } else return res.status(401).json({ message: "Invalid Password 🤷" });
-});
+
+app.post('/managers/login', async (req, res, next) => {
+    const email = req.body.email;
+    const inputPassword = req.body.password;
+    const results = await db.query(`SELECT * FROM service_manager WHERE tscm_email = $1`,[email]);
+    const manager = results.rows[0]
+    if(!manager) {
+      return res.status(401).json({message: 'Invalid Email 🤷'})
+    }
+    else if(bcrypt.compareSync(inputPassword,manager.tscm_password)) {
+      const user = {user: `${manager.tscm_first} ${manager.tscm_last}`, isAdmin: true};
+      const token =jwt.sign(user, process.env.SECRET_KEY);
+      console.log(`Admin ${user.user}, welcome back!`)
+      res.json({token: token})
+    }
+    else
+      return res.status(401).json({ message:'Invalid Password 🤷'})
+   
+ })
+ 
+  
+    
+ 
 
 // Need to think about this more, because we need to update student records and calendar records BEFORE we delete any manager records otherwise we are violating foreign keys
 
@@ -370,12 +362,12 @@ app.delete("/events/:id", async (req, res, next) => {
   res.send("Sucessfully Deleted Event Record!");
 });
 
-app.get("/managers/login/isAuthorized", (req, res) => {
-  let user = isAuthorized(req, res);
-  if (!user) return res.status(401).json({ message: "Unauthorized" });
-  console.log(`Welcome back, Admin ${user.user}`);
-  res.json({ message: user });
-});
+app.get('/managers/login/isAuthorized',(req,res)=>{
+  let user = isAuthorized(req,res);
+  if (!user.isAdmin)  return res.status(401).json({message: 'Unauthorized'})
+  console.log(`Welcome back, Admin ${user.user}`)
+  res.json({message: user})
+})
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
