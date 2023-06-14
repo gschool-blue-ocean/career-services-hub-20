@@ -1,4 +1,22 @@
-DROP TABLE IF EXISTS milestone, student, service_manager, calendar, sessions;
+DROP TABLE IF EXISTS student, service_manager, calendar, sessions;
+CREATE TYPE status AS ENUM ('In-Progress', 'Completed', 'Un-Satisfactory');
+CREATE TYPE education AS ENUM ('Undetermined',
+  'None',
+  'Associate in CS/STEM',
+  'Associate Not in CS/STEM',
+  'Bachelor in CS/STEM',
+  'Bachelor Not in CS/STEM',
+  'Masters in CS/STEM',
+  'Masters Not in CS/STEM');
+
+
+CREATE TYPE career AS ENUM ('Searching', 'Hired', 'Not Currently Searching');
+
+CREATE TYPE course AS ENUM ('Student', 'Graduate');
+
+
+
+
 
 CREATE TABLE service_manager (
   tscm_id SERIAL PRIMARY KEY NOT NULL,
@@ -18,21 +36,18 @@ CREATE TABLE student (
   student_password TEXT NOT NULL,
   cohort VARCHAR(50) NOT NULL,
   sec_clearance TEXT,
-  career_status TEXT,
-  course_status TEXT,
-  college_degree TEXT,
+  career_status career,
+  course_status course,
+  college_degree education,
+  cover_letter status,
+  resume status,
+  linkedin status,
+  personal_narrative status,
+  hunter_access status,
   tscm_id INTEGER NOT NULL,
   FOREIGN KEY (tscm_id) REFERENCES service_manager (tscm_id)
 );
 
-CREATE TABLE milestone (
-  mile_id SERIAL NOT NULL,
-  mile_name TEXT NOT NULL,
-  progress_stat TEXT,
-  student_id INTEGER NOT NULL,
-  FOREIGN KEY (student_id) REFERENCES student (student_id),
-  PRIMARY KEY (mile_id)
-);
 
 
 CREATE TABLE calendar (
@@ -45,7 +60,3 @@ CREATE TABLE calendar (
   event_descrip TEXT NOT NULL,
   FOREIGN KEY (tscm_id) REFERENCES service_manager (tscm_id)
 );
--- CREATE TABLE tasks (
---   id SERIAL PRIMARY KEY,
---   description TEXT
--- );
