@@ -34,7 +34,6 @@ async function migration() {
   console.log("TSCM admin created");
   //   await delay(2000); // 2-second delay
 
-
   // Student table
   await db.query(`DROP TABLE IF EXISTS student CASCADE`);
   await db.query(`CREATE TABLE student (
@@ -70,7 +69,6 @@ async function migration() {
   console.log("Student data created");
   //   await delay(2000); // 2-second delay
 
-
   // Calendar table
   await db.query(`DROP TABLE IF EXISTS calendar CASCADE`);
   await db.query(`CREATE TABLE calendar (
@@ -85,7 +83,6 @@ async function migration() {
   console.log("Calendar table created");
 
   //   await delay(2000); // 2-second delay
-
 
   // Milestone table
   await db.query(`DROP TABLE IF EXISTS milestone CASCADE`);
@@ -115,7 +112,6 @@ async function migration() {
       1,
     ]); // Insert milestone into SQL database
   }
-
 }
 
 migration();

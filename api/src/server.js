@@ -1,10 +1,10 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import pg from 'pg';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt'
-import cookieParser from 'cookie-parser';
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import pg from "pg";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import cookieParser from "cookie-parser";
 
 const { Pool } = pg;
 
@@ -20,7 +20,7 @@ const PORT = process.env.PORT;
 const app = express();
 
 app.use(cookieParser());
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(express.json());
 
 app.use(
@@ -28,19 +28,26 @@ app.use(
     origin: "*",
   })
 );
-app.use(function(req,res,next){
-  res.header('Access-Control-Allow-Credentials',true);
-  res.header('Access-Control-Allow-Origin',req.headers.origin);
-  res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE,UPDATE,OPTIONS');
-  res.header('Access-Control-Allow-Headers','X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,PUT,POST,DELETE,UPDATE,OPTIONS"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
+  );
   next();
-})
+});
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
 app.get("/students", async (req, res, next) => {
   // Check if the data is cached.
-   // if (!isAuthorized(req,res)) return res.status(401).json({message: 'Unauthorized'});
-    try {
-      const results = await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
+  // if (!isAuthorized(req,res)) return res.status(401).json({message: 'Unauthorized'});
+  try {
+    const results =
+      await db.query(`SELECT student.*, service_manager.tscm_first, service_manager.tscm_last
                                       FROM student 
                                       JOIN service_manager ON service_manager.tscm_id = student.tscm_id`);
 
@@ -84,7 +91,6 @@ app.post("/students", async (req, res, next) => {
 
   const result = await db
     .query(
-
       "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
       [
         firstName,
@@ -149,7 +155,6 @@ app.post("/students/login", async (req, res, next) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
 
-
   try {
     const results = await db.query(
       "SELECT * FROM student WHERE student_email = $1",
@@ -180,7 +185,6 @@ app.post("/students/login", async (req, res, next) => {
     console.log("bad");
   }
 });
-
 
 // --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
 
@@ -231,6 +235,7 @@ app.post("/students/login", async (req, res, next) => {
 //   }
 // );
 
+
 // --------------------------------------------- MANAGERS ROUTES ----------------------------------------------------------------------------
 
 app.get("/managers", async (req, res, next) => {
@@ -240,9 +245,11 @@ app.get("/managers", async (req, res, next) => {
 
 app.get("/managers/:id", async (req, res, next) => {
   const id = req.params.id;
-  const results = await db.query(`SELECT * FROM service_manager WHERE tscm_id = ${id}`).catch(next);
-  res.send(results.rows)
-})
+  const results = await db
+    .query(`SELECT * FROM service_manager WHERE tscm_id = ${id}`)
+    .catch(next);
+  res.send(results.rows);
+});
 
 app.post("/managers", async (req, res, next) => {
   const firstName = req.body.tscm_first;
@@ -280,33 +287,27 @@ app.patch("/managers/:id", async (req, res, next) => {
   res.send(result.rows[0]);
 });
 
-
-app.post('/managers/login', async (req, res, next) => {
-    const email = req.body.email;
-    const inputPassword = req.body.password;
-    console.log(email);
-    const results = await db.query(`SELECT * FROM service_manager WHERE tscm_email = $1`,[email]);
-    const manager = results.rows[0]
-    console.log(manager)
-    console.log('manager')
-    if(!manager) {
-      return res.status(401).json({message: 'Invalid Email 🤷'})
-    }
-    else if(bcrypt.compareSync(inputPassword,manager.tscm_password)) {
-      const user = {user: `${manager.tscm_first} ${manager.tscm_last}`};
-      const token =jwt.sign(user, process.env.SECRET_KEY);
-      console.log(token)
-      console.log(`Admin ${user.user}, welcome back!`)
-      res.json({token: token})
-    }
-    else
-      return res.status(401).json({ message:'Invalid Password 🤷'})
-   
- })
- 
-  
-    
- 
+app.post("/managers/login", async (req, res, next) => {
+  const email = req.body.email;
+  const inputPassword = req.body.password;
+  console.log(email);
+  const results = await db.query(
+    `SELECT * FROM service_manager WHERE tscm_email = $1`,
+    [email]
+  );
+  const manager = results.rows[0];
+  console.log(manager);
+  console.log("manager");
+  if (!manager) {
+    return res.status(401).json({ message: "Invalid Email 🤷" });
+  } else if (bcrypt.compareSync(inputPassword, manager.tscm_password)) {
+    const user = { user: `${manager.tscm_first} ${manager.tscm_last}` };
+    const token = jwt.sign(user, process.env.SECRET_KEY);
+    console.log(token);
+    console.log(`Admin ${user.user}, welcome back!`);
+    res.json({ token: token });
+  } else return res.status(401).json({ message: "Invalid Password 🤷" });
+});
 
 // Need to think about this more, because we need to update student records and calendar records BEFORE we delete any manager records otherwise we are violating foreign keys
 
@@ -395,31 +396,29 @@ app.delete("/events/:id", async (req, res, next) => {
     .query("DELETE FROM calendar WHERE calendar.event_id = $1", [id])
     .catch(next);
 
-  res.send('Sucessfully Deleted Event Record!');
-})
+  res.send("Sucessfully Deleted Event Record!");
+});
 
-app.get('/managers/login/isAuthorized',(req,res)=>{
-  let user = isAuthorized(req,res);
-  if (!user)  return res.status(401).json({message: 'Unauthorized'})
-  console.log(`Welcome back, Admin ${user.user}`)
-  res.json({message: user})
-})
+app.get("/managers/login/isAuthorized", (req, res) => {
+  let user = isAuthorized(req, res);
+  if (!user) return res.status(401).json({ message: "Unauthorized" });
+  console.log(`Welcome back, Admin ${user.user}`);
+  res.json({ message: user });
+});
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
-function isAuthorized(req,res){
+function isAuthorized(req, res) {
   let auth = req.headers.authorization;
-  if (!auth)  {
+  if (!auth) {
     return false;
   }
-  const token = auth.replace('Bearer ', '');
+  const token = auth.replace("Bearer ", "");
   try {
-  return jwt.verify(token,process.env.SECRET_KEY) //verify if token is valid, and get user email
-
-  } catch(e) {
+    return jwt.verify(token, process.env.SECRET_KEY); //verify if token is valid, and get user email
+  } catch (e) {
     return false;
   }
-  
 }
 app.use((err, req, res, next) => {
   console.error(err.stack);
