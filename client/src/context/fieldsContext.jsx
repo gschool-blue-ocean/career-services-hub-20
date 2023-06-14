@@ -14,7 +14,7 @@ export function FieldsContextProvider({ children }) {
     "Hunter Access",],
     milestoneProgress: ["In-Progress", "Completed", "Un-Satisfactory"],
     course_status: ["Student", "Graduate"],
-    career_status: ["Searching", "Hired", "Not Started"],
+    career_status: ["Searching", "Hired", "Not Currently Searching"],
     sec_clearance: ["Undetermined",
     "None",
     "SECRET",
