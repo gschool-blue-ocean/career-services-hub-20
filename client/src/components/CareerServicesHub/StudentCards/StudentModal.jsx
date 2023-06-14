@@ -67,7 +67,6 @@ export default function StudentModal({
     newUpdatedStudent.hunter_access = huntrInputRef.current.value;
     newUpdatedStudent.tscm_id = student.tscm_id;
     existingStudentObj = newUpdatedStudent;
-    // existingStudentObj.milestones = milestones;
 
     // Setting the first and last name of the manager for the student
     existingStudentObj.tscm_first =
@@ -84,27 +83,7 @@ export default function StudentModal({
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        //Adding Milestones to Student
-        // milestones.forEach((milestone) => {
-        //   fetch(
-        //     `${url}/students/${data.student_id}/milestones/${milestone.mile_id}`,
-        //     {
-        //       method: "PATCH",
-        //       body: JSON.stringify(milestone),
-        //       headers: {
-        //         "Content-type": "application/json; charset=UTF-8",
-        //       },
-        //     }
-        //   )
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //       // Update Context with response
-        //     })
-        //     .catch(function (error) {
-        //       console.log(error);
-        //     });
-        // });
+      .then(() => {
         setUpdate(!update);
       })
       .catch(function (error) {
