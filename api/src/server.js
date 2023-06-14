@@ -98,7 +98,7 @@ app.post("/students", async (req, res, next) => {
     .query(
       `INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, 
         course_status, college_degree, cover_letter, resume, linkedin, personal_narrative, hunter_access, tscm_id) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *`,
       [
         firstName,
         lastName,
