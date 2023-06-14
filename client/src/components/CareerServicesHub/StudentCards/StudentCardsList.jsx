@@ -23,6 +23,7 @@ export default function StudentCardslist({
   currentClearance,
   educationStatus,
   selectedManager,
+  isStudent
 }) {
   const studentContext = useContext(StudentsContext);
   let students = studentContext.studentsData;

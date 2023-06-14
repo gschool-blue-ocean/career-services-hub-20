@@ -149,6 +149,11 @@ const seedStudents = async () => {
       careerStatus[Math.floor(Math.random() * 3)], 
       courseStatus[Math.floor(Math.random() * 2)], 
       collegeDegree[Math.floor(Math.random() * 8)], 
+      progress_stat[Math.floor(Math.random() * 3)],
+      progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      progress_stat[Math.floor(Math.random() * 3)],
       faker.datatype.number({ min: 1, max: SEED_CAREER_MANAGER })
     ]) 
     console.log("Students seeded successfully");

@@ -1,0 +1,45 @@
+
+
+.studentCard {
+background-color: #fff;
+height: 80vh;
+width: 50%;
+margin: auto;
+display: grid;
+grid-template-columns: 1fr 1fr; /* Two columns with equal width */
+grid-template-rows: 1fr 1fr 1fr; 
+grid-gap: 1px;
+padding-top: 10px;
+border-radius: 40px;
+
+}
+
+.card-item{
+    /* background-color: #fff; */
+    /* border: 1px solid #ccc; */
+    padding: 10px;
+    font-size: 30px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 55px;
+}
+
+.contact{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    border-radius: 50px;
+    padding: 10px;
+    font-size: 30px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
