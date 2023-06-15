@@ -31,7 +31,6 @@ jobs:
       with:
         push: true
         tags: ghcr.io/${{ secrets.AzureAppService_ContainerUsername_b81e884640314884a3c3e8eb98fc65d3 }}/gschool-blue-ocean/gschool-blue-ocean/career-services-hub-20:${{ github.sha }}
-        context: .
         file: ./docker-compose.yml
 
   deploy:
