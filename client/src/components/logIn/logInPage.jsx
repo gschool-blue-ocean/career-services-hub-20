@@ -45,6 +45,7 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
           Date.now() + timeExpire
         ).toUTCString()}; path=/; SameSite=Strict;`;
         handleLogin(true); // Call the handleLogin function passed as a prop
+        console.log('workin')
       } else {
         setErrorRelay("Something has gone horribly wrong 😢");
       }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import StudentCardsList from "./StudentCards/StudentCardsList";
 import "./CareerServicesHub.css";
+import StudentViewCard from "./StudentCards/StudentViewCard";
 
 import Export from "./Export";
 import "./Filter/filter.css";
@@ -13,6 +14,8 @@ export default function CareerServicesHub({
   isTransitioning,
   setIsTransitioning,
   loggedInfo,
+  isStudent,
+  studentInfo 
 }) {
   // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,7 +40,9 @@ export default function CareerServicesHub({
 
   useEffect(() => {
     setOpacity(1);
-  }, []);
+    if(isStudent)console.log('is a student')
+    else console.log('not student')
+  }, [isStudent]);
 
   // Filter the list of students based on the current filter
   const filterStudents = (
@@ -176,51 +181,89 @@ export default function CareerServicesHub({
     const newToggleFiltersBar = !toggleFiltersBar;
     setToggleFiltersBar(newToggleFiltersBar);
   }
+  if(isStudent){
+    return (
+      <StudentViewCard studentInfo={studentInfo}/>
+    )
+  }else{
 
-  return (
-    <div style={{ opacity: opacity, transition: "opacity 2s" }}>
-      <div className="body_container">
-        <div className="left_container">
-          <div
-            className={
-              toggleFiltersBar
-                ? "left-container-filters"
-                : "collapsed-filters-container"
-            }
-          >
-            <img className="logo" src={galvanizeLogo}></img>
-
-            <Filter
-              setSearchTerm={setSearchTerm}
-              searchTerm={searchTerm}
-              currentCohort={currentCohort}
-              setCurrentCohort={setCurrentCohort}
-              setCoverLetter={setCoverLetter}
-              setCurrentCoverStatus={setCurrentCoverStatus}
-              currentCoverStatus={currentCoverStatus}
-              setStudentResume={setStudentResume}
-              setCurrentResumeStatus={setCurrentResumeStatus}
-              currentResumeStatus={currentResumeStatus}
-              setLinkedAccount={setLinkedAccount}
-              linkedAccountStatus={linkedAccountStatus}
-              setLinkedAccountStatus={setLinkedAccountStatus}
-              setPersonalNarrative={setPersonalNarrative}
-              setNarrativeStatus={setNarrativeStatus}
-              narrativeStatus={narrativeStatus}
-              setHunterAccess={setHunterAccess}
-              currentAccess={currentAccess}
-              setCurrentAccess={setCurrentAccess}
-              currentStatus={currentStatus}
-              setCurrentStatus={setCurrentStatus}
-              currentClearance={currentClearance}
-              setCurrentClearance={setCurrentClearance}
-              educationStatus={educationStatus}
-              setEducationStatus={setEducationStatus}
-              selectedManager={selectedManager}
-              setSelectedManager={setSelectedManager}
-              handleClear={handleClear}
-            />
-            <Export
+    return (
+      <div style={{ opacity: opacity, transition: "opacity 2s" }}>
+        <div className="body_container">
+          <div className="left_container">
+            <div
+              className={
+                toggleFiltersBar
+                  ? "left-container-filters"
+                  : "collapsed-filters-container"
+              }
+            >
+              <img className="logo" src={galvanizeLogo}></img>
+  
+              <Filter
+                setSearchTerm={setSearchTerm}
+                searchTerm={searchTerm}
+                currentCohort={currentCohort}
+                setCurrentCohort={setCurrentCohort}
+                setCoverLetter={setCoverLetter}
+                setCurrentCoverStatus={setCurrentCoverStatus}
+                currentCoverStatus={currentCoverStatus}
+                setStudentResume={setStudentResume}
+                setCurrentResumeStatus={setCurrentResumeStatus}
+                currentResumeStatus={currentResumeStatus}
+                setLinkedAccount={setLinkedAccount}
+                linkedAccountStatus={linkedAccountStatus}
+                setLinkedAccountStatus={setLinkedAccountStatus}
+                setPersonalNarrative={setPersonalNarrative}
+                setNarrativeStatus={setNarrativeStatus}
+                narrativeStatus={narrativeStatus}
+                setHunterAccess={setHunterAccess}
+                currentAccess={currentAccess}
+                setCurrentAccess={setCurrentAccess}
+                currentStatus={currentStatus}
+                setCurrentStatus={setCurrentStatus}
+                currentClearance={currentClearance}
+                setCurrentClearance={setCurrentClearance}
+                educationStatus={educationStatus}
+                setEducationStatus={setEducationStatus}
+                selectedManager={selectedManager}
+                setSelectedManager={setSelectedManager}
+                handleClear={handleClear}
+              />
+              <Export
+                filterStudents={filterStudents}
+                currentCohort={currentCohort}
+                coverLetter={coverLetter}
+                currentCoverStatus={currentCoverStatus}
+                studentResume={studentResume}
+                currentResumeStatus={currentResumeStatus}
+                linkedAccount={linkedAccount}
+                linkedAccountStatus={linkedAccountStatus}
+                personalNarrative={personalNarrative}
+                narrativeStatus={narrativeStatus}
+                hunterAccess={hunterAccess}
+                currentAccess={currentAccess}
+                currentStatus={currentStatus}
+                currentClearance={currentClearance}
+                educationStatus={educationStatus}
+                selectedManager={selectedManager}
+              />
+              <div className="profile-container">
+                <button className="header-buttons" onClick={handleLogOff}>
+                  Logout
+                </button>
+              </div>
+            </div>
+            <button
+              className="collapse-filter-button"
+              onClick={handleFilterToggle}
+            >
+              {" "}
+              &#8646;{" "}
+            </button>
+          </div>
+          <div className="right_container">
+            <StudentCardsList
               filterStudents={filterStudents}
               currentCohort={currentCohort}
               coverLetter={coverLetter}
@@ -237,43 +280,17 @@ export default function CareerServicesHub({
               currentClearance={currentClearance}
               educationStatus={educationStatus}
               selectedManager={selectedManager}
+              handleClear={handleClear}
+              isStudent={isStudent}
             />
-            <div className="profile-container">
-              <button className="header-buttons" onClick={handleLogOff}>
-                Logout
-              </button>
-            </div>
           </div>
-          <button
-            className="collapse-filter-button"
-            onClick={handleFilterToggle}
-          >
-            {" "}
-            &#8646;{" "}
-          </button>
-        </div>
-        <div className="right_container">
-          <StudentCardsList
-            filterStudents={filterStudents}
-            currentCohort={currentCohort}
-            coverLetter={coverLetter}
-            currentCoverStatus={currentCoverStatus}
-            studentResume={studentResume}
-            currentResumeStatus={currentResumeStatus}
-            linkedAccount={linkedAccount}
-            linkedAccountStatus={linkedAccountStatus}
-            personalNarrative={personalNarrative}
-            narrativeStatus={narrativeStatus}
-            hunterAccess={hunterAccess}
-            currentAccess={currentAccess}
-            currentStatus={currentStatus}
-            currentClearance={currentClearance}
-            educationStatus={educationStatus}
-            selectedManager={selectedManager}
-            handleClear={handleClear}
-          />
         </div>
       </div>
-    </div>
-  );
-}
+     
+    );
+  }
+  }
+  
+  
+  
+  

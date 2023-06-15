@@ -60,13 +60,14 @@ app.get("/students", async (req, res, next) => {
 
 app.get("/students/:id", async (req, res, next) => {
   let id = req.params.id;
-  const user= isAuthorized(req,res);
+  const user = isAuthorized(req,res);
+  
   if (user){
     if (user.id)  id = user.id;
   }
   const result = await db
     .query(
-      `SELECT student.*, service_manager.tscm_first, service_manager.tscm_last 
+      `SELECT student.*, service_manager.tscm_first, service_manager.tscm_last, service_manager.tscm_email 
                                   FROM student 
                                   JOIN service_manager ON service_manager.tscm_id = student.tscm_id 
                                   WHERE student.student_id = ${id}`
@@ -175,10 +176,12 @@ app.delete("/students/:id", async (req, res, next) => {
 });
 app.get('/students/login/isAuthorized',(req,res)=>{
   let user = isAuthorized(req,res);
+
+  console.log(user)
   if (!user)  return res.status(401).json({message: 'Unauthorized'})
   else if (user.admin)
   return res.status(204).json({message: 'This is an admin account!'})
-  console.log(`Welcome back, Student ${user.user}`)
+  //console.log(`Welcome back, Student ${user.user}`)
   res.json({message: user})
 })
 app.post('/students/login', async (req, res, next) => {
@@ -192,7 +195,6 @@ app.post('/students/login', async (req, res, next) => {
   else if(bcrypt.compareSync(inputPassword,student.student_password)) {
     const user = {user: `${student.student_first} ${student.student_last}`, id: student.student_id};
     const token =jwt.sign(user, process.env.SECRET_KEY);
-    console.log(`Student ${user.user}, welcome back!`)
     res.json({token: token})
   }
 });
@@ -260,7 +262,7 @@ app.post('/managers/login', async (req, res, next) => {
     else if(bcrypt.compareSync(inputPassword,manager.tscm_password)) {
       const user = {user: `${manager.tscm_first} ${manager.tscm_last}`, isAdmin: true};
       const token =jwt.sign(user, process.env.SECRET_KEY);
-      console.log(`Admin ${user.user}, welcome back!`)
+
       res.json({token: token})
     }
     else
@@ -365,7 +367,7 @@ app.delete("/events/:id", async (req, res, next) => {
 app.get('/managers/login/isAuthorized',(req,res)=>{
   let user = isAuthorized(req,res);
   if (!user.isAdmin)  return res.status(401).json({message: 'Unauthorized'})
-  console.log(`Welcome back, Admin ${user.user}`)
+
   res.json({message: user})
 })
 
@@ -373,6 +375,7 @@ app.get('/managers/login/isAuthorized',(req,res)=>{
 
 function isAuthorized(req, res) {
   let auth = req.headers.authorization;
+  console.log(req.headers.authorization)
   if (!auth) {
     return false;
   }
