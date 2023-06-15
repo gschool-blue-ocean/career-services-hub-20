@@ -86,27 +86,7 @@ export default function StudentModal({
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        //Adding Milestones to Student
-        // milestones.forEach((milestone) => {
-        //   fetch(
-        //     `${url}/students/${data.student_id}/milestones/${milestone.mile_id}`,
-        //     {
-        //       method: "PATCH",
-        //       body: JSON.stringify(milestone),
-        //       headers: {
-        //         "Content-type": "application/json; charset=UTF-8",
-        //       },
-        //     }
-        //   )
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //       // Update Context with response
-        //     })
-        //     .catch(function (error) {
-        //       console.log(error);
-        //     });
-        // });
+      .then(() => {
         setUpdate(!update);
       })
       .catch(function (error) {

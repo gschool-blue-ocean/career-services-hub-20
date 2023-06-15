@@ -74,10 +74,10 @@ export default function StudentCardslist({
   return (
     <>
       <div className="student-card-container">
-        <AddStudent
+        {/* <AddStudent
           filterStudents={filterStudents}
           handleUpdateNewStudent={handleUpdateNewStudent}
-        />
+        /> */}
         {filterStudents != null
           ? filteredStudents.map((student) => {
               if (student.student_first === "Test") {
