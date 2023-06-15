@@ -29,7 +29,7 @@ export function FieldsContextProvider({ children }) {
     "Masters in CS/STEM",
     "Masters Not in CS/STEM",],
   });
-
+  const [update,setUpdate] = useState(false);
   const newFieldsData = fieldsData;
 
   // Need to utilize studentsContext for each possible option
@@ -41,17 +41,27 @@ export function FieldsContextProvider({ children }) {
     // First ensure that students array is greater than 1 meaning we have all our students from the API
     if (students.length > 1) {
       // Loop through every student from studentsContext
+      newFieldsData.cohort=[];
       students.forEach((student) => {
         // If the current student cohort value doesnt exist inside newFieldsData.cohort, add it to array of options
         if (newFieldsData.cohort.indexOf(student.cohort) == -1)
           newFieldsData.cohort.push(student.cohort);
       });
-      newFieldsData.cohort.sort();
+      newFieldsData.cohort.sort((a,b)=>{
+        if (a === 'Undetermined')
+          return 1;
+        const numA = parseInt(a.match(/\d+/));
+        const numB = parseInt(b.match(/\d+/));
+        return numA- numB;
+      });
+      setFieldsData(newFieldsData);
+      setUpdate(!update);
+      console.log(fieldsData)
     }
-  }, [students]);
+  }, [students,studentContext.update]);
 
   return (
-    <FieldsContext.Provider value={{ fieldsData }}>
+    <FieldsContext.Provider value={{ fieldsData,setUpdate,update }}>
       {children}
     </FieldsContext.Provider>
   );

@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef,useEffect } from "react";
 import { ManagersContext } from "../../../context/managersContext";
 import { FieldsContext } from "../../../context/fieldsContext";
 import SearchBar from "../SearchFunction/Search";
@@ -47,8 +47,11 @@ function Filter({
   const progress_stat = fields.milestoneProgress;
   const ed_status = fields.college_degree;
 
+  useEffect(()=>{
+    console.log('data');
+  },[fieldsContext.update])
   const handleSearch = (searchTerm) => {
-    setSearchTerm(searchTerm);
+    
   };
 
   const handleCheckedCover = (e) => {

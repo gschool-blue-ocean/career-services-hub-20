@@ -37,6 +37,7 @@ export default function CareerServicesHub({
 
   const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
   const [opacity, setOpacity] = useState(0);
+ 
 
   useEffect(() => {
     setOpacity(1);
