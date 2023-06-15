@@ -48,5 +48,5 @@ jobs:
         app-name: 'blueocean'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_f548754d2ff146db8e06a8a8bf6ea775 }}
-        images: 'ghcr.io/${{ env.REPO }}:${{ github.sha }}'
+        images: '${{ steps.set-image-name.outputs.image-name }}'
 
