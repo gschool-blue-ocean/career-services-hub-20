@@ -27,11 +27,14 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push container image to registry
-      uses: docker/build-push-action@v3
+      uses: docker/compose-action@1.2.0
       with:
-        push: true
-        tags: ghcr.io/${{ secrets.AzureAppService_ContainerUsername_b81e884640314884a3c3e8eb98fc65d3 }}/gschool-blue-ocean/gschool-blue-ocean/career-services-hub-20:${{ github.sha }}
-        file: ./docker-compose.yml
+        compose-file: ./docker-compose.yml
+        context: .
+        push-registry: ghcr.io
+        push-username: ${{ secrets.AzureAppService_ContainerUsername_b81e884640314884a3c3e8eb98fc65d3 }}
+        push-password: ${{ secrets.GITHUB_TOKEN }}
+        images: gschool-blue-ocean/gschool-blue-ocean/career-services-hub-20:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -49,4 +52,5 @@ jobs:
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_f548754d2ff146db8e06a8a8bf6ea775 }}
         images: 'ghcr.io/gschool-blue-ocean/gschool-blue-ocean/gschool-blue-ocean/career-services-hub-20-${{ github.sha }}'
+
 
