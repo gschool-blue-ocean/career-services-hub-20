@@ -62,7 +62,7 @@ export function StudentsContextProvider({ children, loggedInfo,isStudent, studen
 
         if (loggedInfo )
           fetchData(); // Execute fetch above
-    }, [loggedInfo,studentInfo]);
+    }, [loggedInfo, update]);
 
 
   return (
