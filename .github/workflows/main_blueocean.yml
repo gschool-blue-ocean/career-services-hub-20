@@ -23,15 +23,15 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://ghcr.io/
-        username: ${{ github.actor }}
-        password: ${{ github.token }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_38b62335439143a2b50c18f964066fa1 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_f6b273e2c2f24f99a3c68e80dff30736 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: ghcr.io/${{ secrets.AzureAppService_ContainerUsername_b81e884640314884a3c3e8eb98fc65d3 }}/gschool-blue-ocean/gschool-blue-ocean/career-services-hub-20:${{ github.sha }}
-        file: ./api/Dockerfile
+        tags: ghcr.io/${{ secrets.AzureAppService_ContainerUsername_38b62335439143a2b50c18f964066fa1 }}/gschool-blue-ocean/gschool-blue-ocean/gschool-blue-ocean/career-services-hub-20-93907b7019a17561615812b868c93df5b2ce5e48:${{ github.sha }}
+        file: ./Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,6 +47,5 @@ jobs:
       with:
         app-name: 'blueocean'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_f548754d2ff146db8e06a8a8bf6ea775 }}
-        images: 'ghcr.io/gschool-blue-ocean/gschool-blue-ocean/gschool-blue-ocean/career-services-hub-20-${{ github.sha }}'
-
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_244ef9dea7fa4680bf10c8b51c77fba4 }}
+        images: 'ghcr.io/${{ secrets.AzureAppService_ContainerUsername_38b62335439143a2b50c18f964066fa1 }}/gschool-blue-ocean/gschool-blue-ocean/gschool-blue-ocean/career-services-hub-20-93907b7019a17561615812b868c93df5b2ce5e48:${{ github.sha }}'
