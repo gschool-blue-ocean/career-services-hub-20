@@ -30,22 +30,24 @@ const StudentViewCard = (studentInfo, handleLogOff) => {
   console.log(currentStudent)
   return (
     <>
+    <div className='container'>
       <img className="logo" src={galvanizeLogo} alt="Galvanize Logo" />
+      <button className='logoff' onClick={studentInfo.handleLogOff}>Sign Out</button>
       <div>
         <div className="studentCard">
-            <div className='card-item'><p>{currentStudent.student_first} {currentStudent.student_last}</p> </div>
-            <div className='card-item'>Education Level: {currentStudent.college_degree} <p>Personal Narrative: {currentStudent.personal_narrative} </p></div>
-            <div className='card-item'>Cohort: {currentStudent.cohort}<p>CSM: {currentStudent.tscm_first} {currentStudent.tscm_last}</p></div>
-            <div className='card-item'>LinkedIn: {currentStudent.linkedin}<p>Hunter Account: {currentStudent.hunter_access}</p></div>
-            <div className='card-item'>Course Standing: {currentStudent.course_status} <p>Security Clearance: {currentStudent.sec_clearance}</p></div>
-            <div className='card-item'>Cover Letter: {currentStudent.cover_letter} <p>Resume: {currentStudent.resume}</p></div>
+            <div className='card-item'>{currentStudent.student_first} {currentStudent.student_last} </div>
+            <div className='card-item'>• Education Level: {currentStudent.college_degree} <p>• Personal Narrative: {currentStudent.personal_narrative} </p></div>
+            <div className='card-item'>• Cohort: {currentStudent.cohort}<p>• CSM: {currentStudent.tscm_first} {currentStudent.tscm_last}</p></div>
+            <div className='card-item'>• LinkedIn: {currentStudent.linkedin}<p>• Hunter Account: {currentStudent.hunter_access}</p></div>
+            <div className='card-item'>• Course Standing: {currentStudent.course_status} <p>• Security Clearance: {currentStudent.sec_clearance}</p></div>
+            <div className='card-item'>• Cover Letter: {currentStudent.cover_letter} <p>• Resume: {currentStudent.resume}</p></div>
         </div>
             <div className='contact'>
             <div>Contact your TSCM: {currentStudent.tscm_email}</div>
             </div> 
         
       </div>
-      <button onClick={studentInfo.handleLogOff}>log off</button>
+      </div>
     </>
   );
 };
