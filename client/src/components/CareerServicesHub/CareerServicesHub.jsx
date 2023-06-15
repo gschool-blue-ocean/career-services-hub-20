@@ -183,7 +183,7 @@ export default function CareerServicesHub({
   }
   if(isStudent){
     return (
-      <StudentViewCard studentInfo={studentInfo}/>
+      <StudentViewCard studentInfo={studentInfo} handleLogOff={handleLogOff}/>
     )
   }else{
 

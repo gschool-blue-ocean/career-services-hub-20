@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import galvanizeLogo from '../../logIn/galvanizeLogo.webp';
 import './StudentViewCard.css';
 
-const StudentViewCard = (studentInfo) => {
+const StudentViewCard = (studentInfo, handleLogOff) => {
   console.log(studentInfo.studentInfo);
 
   const [currentStudent, setCurrentStudent] = useState({});
   const url = 'http://localhost:8000';
-
   useEffect(() => {
     async function getUser(){
         if(studentInfo.studentInfo.message){
@@ -46,6 +45,7 @@ const StudentViewCard = (studentInfo) => {
             </div> 
         
       </div>
+      <button onClick={studentInfo.handleLogOff}>log off</button>
     </>
   );
 };
