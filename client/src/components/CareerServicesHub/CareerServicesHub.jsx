@@ -105,88 +105,33 @@ export default function CareerServicesHub({
     }
 
     if (coverLetter && currentCoverStatus) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === coverLetter &&
-              milestone.progress_stat === currentCoverStatus
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.cover_letter === currentCoverStatus
+      );
     }
 
     if (studentResume && currentResumeStatus) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === studentResume &&
-              milestone.progress_stat === currentResumeStatus
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.resume === currentResumeStatus
+      );
     }
 
     if (linkedAccount && linkedAccountStatus) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === linkedAccount &&
-              milestone.progress_stat === linkedAccountStatus
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.linkedin === linkedAccountStatus
+      );
     }
 
     if (personalNarrative && narrativeStatus) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === personalNarrative &&
-              milestone.progress_stat === narrativeStatus
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.personal_narrative === narrativeStatus
+      );
     }
 
     if (hunterAccess && currentAccess) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === hunterAccess &&
-              milestone.progress_stat === currentAccess
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.hunter_access === currentAccess
+      );
     }
 
     if (searchTerm) {
