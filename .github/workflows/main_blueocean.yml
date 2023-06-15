@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: ghcr.io/${{ secrets.AzureAppService_ContainerUsername_38b62335439143a2b50c18f964066fa1 }}/gschool-blue-ocean/gschool-blue-ocean/gschool-blue-ocean/career-services-hub-20-93907b7019a17561615812b868c93df5b2ce5e48:${{ github.sha }}
-        file: ./Dockerfile
+        file: ./api/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
