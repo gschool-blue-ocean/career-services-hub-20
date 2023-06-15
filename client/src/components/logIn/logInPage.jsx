@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./loginPage.css";
 import galvanizeLogo from "./galvanizeLogo.webp";
+import RegisterForm from "./RegisterForm";
 
 const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
   const [opacity, setOpacity] = useState(0);
+  const [register,setRegister] = useState(false);
 
   useEffect(() => {
     //if (isStudent)  document.body.classList = 'student-background'
@@ -62,6 +64,15 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
       setIsStudent(true);
     }
   };
+  const toggleRegister = ()=>{
+    if (register) setRegister(false);
+    else
+    {
+      setIsStudent(true);
+      setRegister(true);
+    } 
+    
+  }
   const handleUserLogin = (e) => {
     e.preventDefault();
 
@@ -76,10 +87,24 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
 
   return (
     <div style={{ opacity: opacity, transition: "opacity 2s" }}>
-      <div className="login-background">
-        <button className="login-student" onClick={() => toggle()}>
-          {isStudent ? "login as Admin" : "Login as Student"}
+       <div className='login-nav-background'>
+<nav className='login-nav'>
+          <button className='register-student' onClick={()=>toggleRegister()} >
+          {register ? 'Login' : 'Register'}
         </button>
+        {
+          register?null:<button className="login-student" onClick={() => toggle()}>
+          {isStudent ? "Login as Admin" : "Login as Student"}
+        </button>
+        }
+        
+        </nav>
+        
+        </div>
+      
+      {register?<RegisterForm/>:(<div className="login-background">
+       
+        
         <form className="login-Container" onSubmit={handleUserLogin}>
           <img src={galvanizeLogo}></img>
           <input
@@ -105,7 +130,7 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
             <p className="easter-egg">🌮</p>
           )}
         </form>
-      </div>
+      </div>)}
     </div>
   );
 };

@@ -59,6 +59,7 @@ export default function StudentCardslist({
 
   // Function to handle updating an existing student object in the list
   function handleUpdateExistingStudent(existingStudentObj) {
+    console.log(existingStudentObj)
     const updatedStudents = filteredStudents.map((student) => {
       if (student.student_id === existingStudentObj.student_id) {
         return existingStudentObj; // Replace the existing student with the updated student object

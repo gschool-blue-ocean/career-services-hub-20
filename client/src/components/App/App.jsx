@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./App.module.css";
 
 import { EventsContextProvider } from "../../context/eventsContext";
 import { StudentsContextProvider } from "../../context/studentsContext";

@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext,useState } from "react";
 import { FieldsContext } from "../../../context/fieldsContext";
 import { StudentsContext } from "../../../context/studentsContext";
 import "./StudentModal.css";
@@ -14,6 +14,8 @@ export default function StudentModal({
       ? "http://localhost:8000"
       : "https://career-services-server.onrender.com";
 
+  // Hook for the cohort
+  
   // Accessing the fields data from the FieldsContext
   const fieldsContext = useContext(FieldsContext);
   const fields = fieldsContext.fieldsData;
@@ -55,7 +57,7 @@ export default function StudentModal({
     newUpdatedStudent.student_id = student.student_id;
     newUpdatedStudent.student_first = student.student_first;
     newUpdatedStudent.student_last = student.student_last;
-    newUpdatedStudent.cohort = student.cohort;
+    newUpdatedStudent.cohort = 'MCSP-'+cohort;
     newUpdatedStudent.sec_clearance = clearanceInputRef.current.value;
     newUpdatedStudent.career_status = careerInputRef.current.value;
     newUpdatedStudent.course_status = courseInputRef.current.value;
@@ -68,7 +70,7 @@ export default function StudentModal({
     newUpdatedStudent.tscm_id = student.tscm_id;
     existingStudentObj = newUpdatedStudent;
     // existingStudentObj.milestones = milestones;
-
+   
     // Setting the first and last name of the manager for the student
     existingStudentObj.tscm_first =
       managers[newUpdatedStudent.tscm_id - 1].tscm_first;
@@ -124,7 +126,14 @@ export default function StudentModal({
     courseInputRef.current.value = student.course_status;
     clearanceInputRef.current.value = student.sec_clearance;
   }
-
+  const checkInput= (e)=>{
+    if (!isNaN(e.target.value) && e.target.value >0 && e.target.value < 100)
+    {
+      setCohort(e.target.value);
+    }
+   
+  }
+ const [cohort, setCohort]= useState((student.cohort==='Undetermined'?'':student.cohort.split('MCSP-')[1]));
   return (
     <>
       <div className="modal-overlay-container">
@@ -139,8 +148,13 @@ export default function StudentModal({
           <div className="student-tracker-modal-name">
             {student.student_first} {student.student_last}
           </div>
-          <div className="student-tracker-modal-mcsp">{student.cohort}</div>
-
+          <div className="student-tracker-modal-mcsp">{`MCSP-${cohort}`}</div>
+          <div className="student-tracker-modal-cover-status">
+            <label htmlFor="cover-status">MCSP- </label>
+            <input type="number" min="1" max="99" style={{backgroundColor:'transparent',color:'white'}} value={cohort} onChange={(e)=>checkInput(e)}>
+            
+            </input>
+          </div>
           <br />
           <div className="student-tracker-modal-milestones-div">Milestones</div>
           <div className="student-tracker-modal-cover-status">
