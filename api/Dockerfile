@@ -1,12 +1,13 @@
 FROM node:16-alpine
-
 WORKDIR /code
 
 COPY package*.json ./
 RUN npm ci
 
-COPY ./ ./api/src/
+COPY ./ /    
 
-CMD [ "npm", "run", "dev" ]
+EXPOSE 3000
+CMD ["npm", "start"]
+
 
 
