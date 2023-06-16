@@ -1,14 +1,15 @@
 FROM node:16-alpine
 
-WORKDIR /code
+WORKDIR /code/api
 
 COPY package*.json ./
 RUN npm ci
 
-COPY . /code/
+COPY ./ /code/api/
 
 EXPOSE 3000
 CMD ["npm", "start"]
+
 
 
 
