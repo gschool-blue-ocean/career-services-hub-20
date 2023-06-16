@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useState } from "react";
 import { FieldsContext } from "../../../context/fieldsContext";
 import { StudentsContext } from "../../../context/studentsContext";
 import "./StudentModal.css";
@@ -13,6 +13,8 @@ export default function StudentModal({
     process.env.NODE_ENV === "development"
       ? "http://localhost:8000"
       : "https://career-services-server.onrender.com";
+
+  // Hook for the cohort
 
   // Accessing the fields data from the FieldsContext
   const fieldsContext = useContext(FieldsContext);
@@ -50,37 +52,24 @@ export default function StudentModal({
     // Creating a new updated student object
     let newUpdatedStudent = {};
     let existingStudentObj = {};
-    let milestones = [];
-    existingStudentObj.milestones = [];
 
-    // Copying the existing milestones with their data
-    student.milestones.forEach((milestone) => {
-      let newMilestone = {};
-      newMilestone.mile_name = milestone.mile_name;
-      newMilestone.mile_id = milestone.mile_id;
-      newMilestone.student_id = milestone.student_id;
-      milestones.push(newMilestone);
-    });
-
-    // Updating the progress status for each milestone based on the selected values
-    milestones[0].progress_stat = coverLetterInputRef.current.value;
-    milestones[1].progress_stat = resumeInputRef.current.value;
-    milestones[2].progress_stat = linkedInInputRef.current.value;
-    milestones[3].progress_stat = narrativeInputRef.current.value;
-    milestones[4].progress_stat = huntrInputRef.current.value;
-
-    // Updating other fields in the updated student object
-    newUpdatedStudent.career_status = careerInputRef.current.value;
-    newUpdatedStudent.course_status = courseInputRef.current.value;
-    newUpdatedStudent.sec_clearance = clearanceInputRef.current.value;
-    newUpdatedStudent.college_degree = degreeInputRef.current.value;
-    newUpdatedStudent.tscm_id = student.tscm_id;
+    // Updating the fields in the updated student object
+    newUpdatedStudent.student_id = student.student_id;
     newUpdatedStudent.student_first = student.student_first;
     newUpdatedStudent.student_last = student.student_last;
-    newUpdatedStudent.cohort = student.cohort;
-    newUpdatedStudent.student_id = student.student_id;
+    newUpdatedStudent.cohort = "MCSP-" + cohort;
+    newUpdatedStudent.sec_clearance = clearanceInputRef.current.value;
+    newUpdatedStudent.career_status = careerInputRef.current.value;
+    newUpdatedStudent.course_status = courseInputRef.current.value;
+    newUpdatedStudent.college_degree = degreeInputRef.current.value;
+    newUpdatedStudent.cover_letter = coverLetterInputRef.current.value;
+    newUpdatedStudent.resume = resumeInputRef.current.value;
+    newUpdatedStudent.linkedin = linkedInInputRef.current.value;
+    newUpdatedStudent.personal_narrative = narrativeInputRef.current.value;
+    newUpdatedStudent.hunter_access = huntrInputRef.current.value;
+    newUpdatedStudent.tscm_id = student.tscm_id;
     existingStudentObj = newUpdatedStudent;
-    existingStudentObj.milestones = milestones;
+    // existingStudentObj.milestones = milestones;
 
     // Setting the first and last name of the manager for the student
     existingStudentObj.tscm_first =
@@ -97,27 +86,7 @@ export default function StudentModal({
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        //Adding Milestones to Student
-        milestones.forEach((milestone) => {
-          fetch(
-            `${url}/students/${data.student_id}/milestones/${milestone.mile_id}`,
-            {
-              method: "PATCH",
-              body: JSON.stringify(milestone),
-              headers: {
-                "Content-type": "application/json; charset=UTF-8",
-              },
-            }
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              // Update Context with response
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        });
+      .then(() => {
         setUpdate(!update);
       })
       .catch(function (error) {
@@ -128,16 +97,23 @@ export default function StudentModal({
   }
   // Function to reset the form input elements with student data
   function resetStudentModalForms() {
-    coverLetterInputRef.current.value = student.milestones[0].progress_stat;
-    resumeInputRef.current.value = student.milestones[1].progress_stat;
-    linkedInInputRef.current.value = student.milestones[2].progress_stat;
-    narrativeInputRef.current.value = student.milestones[3].progress_stat;
-    huntrInputRef.current.value = student.milestones[4].progress_stat;
+    coverLetterInputRef.current.value = student.cover_letter;
+    resumeInputRef.current.value = student.resume;
+    linkedInInputRef.current.value = student.linkedin;
+    narrativeInputRef.current.value = student.personal_narrative;
+    huntrInputRef.current.value = student.hunter_access;
     careerInputRef.current.value = student.career_status;
     courseInputRef.current.value = student.course_status;
     clearanceInputRef.current.value = student.sec_clearance;
   }
-
+  const checkInput = (e) => {
+    if (!isNaN(e.target.value) && e.target.value > 0 && e.target.value < 100) {
+      setCohort(e.target.value);
+    }
+  };
+  const [cohort, setCohort] = useState(
+    student.cohort === "Undetermined" ? "" : student.cohort.split("MCSP-")[1]
+  );
   return (
     <>
       <div className="modal-overlay-container">
@@ -152,18 +128,28 @@ export default function StudentModal({
           <div className="student-tracker-modal-name">
             {student.student_first} {student.student_last}
           </div>
-          <div className="student-tracker-modal-mcsp">{student.cohort}</div>
-
+          <div className="student-tracker-modal-mcsp">{`MCSP-${cohort}`}</div>
+          <div className="student-tracker-modal-cover-status">
+            <label htmlFor="cover-status">MCSP- </label>
+            <input
+              type="number"
+              min="1"
+              max="99"
+              style={{ backgroundColor: "transparent", color: "white" }}
+              value={cohort}
+              onChange={(e) => checkInput(e)}
+            ></input>
+          </div>
           <br />
           <div className="student-tracker-modal-milestones-div">Milestones</div>
           <div className="student-tracker-modal-cover-status">
             <label htmlFor="cover-status">Cover Letter: </label>
             <select name="Cover Letter Status" ref={coverLetterInputRef}>
-              <option value={student.milestones[0].progress_stat}>
-                {student.milestones[0].progress_stat}
+              <option value={student.cover_letter}>
+                {student.cover_letter}
               </option>
               {milestoneProgressOptions.map((option) => {
-                if (option != student.milestones[0].progress_stat) {
+                if (option != student.cover_letter) {
                   return (
                     <option key={option} value={option}>
                       {option}
@@ -176,11 +162,9 @@ export default function StudentModal({
           <div className="student-tracker-modal-resume-status">
             <label htmlFor="resume-status">Resume: </label>
             <select name="Resume Status" ref={resumeInputRef}>
-              <option value={student.milestones[1].progress_stat}>
-                {student.milestones[1].progress_stat}
-              </option>
+              <option value={student.resume}>{student.resume}</option>
               {milestoneProgressOptions.map((option) => {
-                if (option != student.milestones[1].progress_stat) {
+                if (option != student.resume) {
                   return (
                     <option key={option} value={option}>
                       {option}
@@ -193,11 +177,9 @@ export default function StudentModal({
           <div className="student-tracker-modal-linked-status">
             <label htmlFor="linked-status">Linked In Profile: </label>
             <select name="Linked In Status" ref={linkedInInputRef}>
-              <option value={student.milestones[2].progress_stat}>
-                {student.milestones[2].progress_stat}
-              </option>
+              <option value={student.linkedin}>{student.linkedin}</option>
               {milestoneProgressOptions.map((option) => {
-                if (option != student.milestones[2].progress_stat) {
+                if (option != student.linkedin) {
                   return (
                     <option key={option} value={option}>
                       {option}
@@ -210,11 +192,11 @@ export default function StudentModal({
           <div className="student-tracker-modal-narrative-status">
             <label htmlFor="narrative-status">Personal Narrative: </label>
             <select name="Narrative Status" ref={narrativeInputRef}>
-              <option value={student.milestones[3].progress_stat}>
-                {student.milestones[3].progress_stat}
+              <option value={student.personal_narrative}>
+                {student.personal_narrative}
               </option>
               {milestoneProgressOptions.map((option) => {
-                if (option != student.milestones[3].progress_stat) {
+                if (option != student.personal_narrative) {
                   return (
                     <option key={option} value={option}>
                       {option}
@@ -227,11 +209,11 @@ export default function StudentModal({
           <div className="student-tracker-modal-huntr-status">
             <label htmlFor="huntr-status">Huntr Access: </label>
             <select name="Huntr Status" ref={huntrInputRef}>
-              <option value={student.milestones[4].progress_stat}>
-                {student.milestones[4].progress_stat}
+              <option value={student.hunter_access}>
+                {student.hunter_access}
               </option>
               {milestoneProgressOptions.map((option) => {
-                if (option != student.milestones[4].progress_stat) {
+                if (option != student.hunter_access) {
                   return (
                     <option key={option} value={option}>
                       {option}

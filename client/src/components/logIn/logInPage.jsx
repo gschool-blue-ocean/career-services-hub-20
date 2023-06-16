@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./loginPage.css";
 import galvanizeLogo from "./galvanizeLogo.webp";
+import RegisterForm from "./RegisterForm";
 
 const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
   const [opacity, setOpacity] = useState(0);
+  const [register, setRegister] = useState(false);
 
   useEffect(() => {
     //if (isStudent)  document.body.classList = 'student-background'
@@ -23,12 +25,14 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
       const found = cookies.find((element) =>
         element.trim().startsWith("jwt=")
       ); //looks into cookies if it is a jwt token
-      const response = await fetch(`${url}/managers/login`, {
+      const path = isStudent
+        ? `${url}/students/login`
+        : `${url}/managers/login`;
+      const response = await fetch(path, {
         method: "POST",
 
         headers: {
           "Content-Type": "application/json",
-          Authorization: found ? found.split("jwt=")[1] : null,
         },
         body: JSON.stringify({ email, password }),
       });
@@ -45,6 +49,7 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
           Date.now() + timeExpire
         ).toUTCString()}; path=/; SameSite=Strict;`;
         handleLogin(true); // Call the handleLogin function passed as a prop
+        console.log("workin");
       } else {
         setErrorRelay("Something has gone horribly wrong 😢");
       }
@@ -55,13 +60,17 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
 
   // Upon submit email and password is passed into the Log in user function
   const toggle = () => {
-    console.error(isStudent);
     if (isStudent) {
       setIsStudent(false);
-      document.body.classList.remove("student-background");
     } else {
       setIsStudent(true);
-      document.body.classList.add("student-background");
+    }
+  };
+  const toggleRegister = () => {
+    if (register) setRegister(false);
+    else {
+      setIsStudent(true);
+      setRegister(true);
     }
   };
   const handleUserLogin = (e) => {
@@ -78,36 +87,50 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
 
   return (
     <div style={{ opacity: opacity, transition: "opacity 2s" }}>
-      <div className="login-background">
-        <button className="login-student" onClick={() => toggle()}>
-          {isStudent ? "login as Admin" : "Login as Student"}
-        </button>
-        <form className="login-Container" onSubmit={handleUserLogin}>
-          <img src={galvanizeLogo}></img>
-          <input
-            className="login-value"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            placeholder="YourEmail@galvanize.com"
-            id="email"
-          ></input>
-          <input
-            className="login-value"
-            value={pass}
-            onChange={(e) => setPass(e.target.value)}
-            type="password"
-            placeholder="*******"
-            id="password"
-          ></input>
-          <button className="login-button">Log In</button>
-          {errorRelay ? (
-            <p className="error-message">{errorRelay}</p>
-          ) : (
-            <p className="easter-egg">🌮</p>
+      <div className="login-nav-background">
+        <nav className="login-nav">
+          <button className="register-student" onClick={() => toggleRegister()}>
+            {register ? "Login" : "Register"}
+          </button>
+          {register ? null : (
+            <button className="login-student" onClick={() => toggle()}>
+              {isStudent ? "Login as Admin" : "Login as Student"}
+            </button>
           )}
-        </form>
+        </nav>
       </div>
+
+      {register ? (
+        <RegisterForm />
+      ) : (
+        <div className="login-background">
+          <form className="login-Container" onSubmit={handleUserLogin}>
+            <img src={galvanizeLogo}></img>
+            <input
+              className="login-value"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              placeholder="YourEmail@galvanize.com"
+              id="email"
+            ></input>
+            <input
+              className="login-value"
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+              type="password"
+              placeholder="*******"
+              id="password"
+            ></input>
+            <button className="login-button">Log In</button>
+            {errorRelay ? (
+              <p className="error-message">{errorRelay}</p>
+            ) : (
+              <p className="easter-egg">🌮</p>
+            )}
+          </form>
+        </div>
+      )}
     </div>
   );
 };

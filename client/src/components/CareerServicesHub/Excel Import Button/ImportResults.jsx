@@ -24,15 +24,15 @@ export default function ImportResults({
   const managers = managersContext.managersData; // Grab all managers from managersContext which is the result of pinging the API
 
   let headerArray = Object.keys(newStudents[0]); // Extract only the keys from the object, we will use it to contain the headers of the table
-  let milestoneArray = []; // Create blank Array to hold all the required milestones
+  // let milestoneArray = []; // Create blank Array to hold all the required milestones
 
-  // If students is not null, then create an add the milestones names to the Milestone Array from a student that currently exists
-  // this helps avoid hardcoding what the milestones are in the event they change
-  if (students) {
-    students[0].milestones.forEach((milestone) => {
-      milestoneArray.push(milestone.mile_name);
-    });
-  }
+  // // If students is not null, then create an add the milestones names to the Milestone Array from a student that currently exists
+  // // this helps avoid hardcoding what the milestones are in the event they change
+  // if (students) {
+  //   students[0].milestones.forEach((milestone) => {
+  //     milestoneArray.push(milestone.mile_name);
+  //   });
+  // }
 
   // Once the "Upload Students" button is clicked, this will take in all the bulk import and call a POST request for each student/milestones
   function handleUploadClick() {
@@ -43,6 +43,11 @@ export default function ImportResults({
       student.tscm_id = importManager; // Adding MCSP/Cohort to Student
       student.cohort = `MCSP-${importMCSP}`; // Adding Identified Career Manager to Student
       student.college_degeree = `Unknown`; // Adding Identified Career Manager to Student
+      student.cover_letter = "Un-Satisfactory";
+      student.resume = "Un-Satisfactory";
+      student.linkedin = "Un-Satisfactory";
+      student.personal_letter = "Un-Satisfactory";
+      student.hunter_access = "Un-Satisfactory";
 
       // Need Managers First/Last Name to display card correctly using the managersContext
       const managerFirst = managers[student.tscm_id - 1].tscm_first;
@@ -60,29 +65,6 @@ export default function ImportResults({
       })
         .then((response) => response.json())
         .then((data) => {
-          student.milestones = [];
-          //Adding the needed Milestones to Student
-          milestoneArray.forEach((milestone_name) => {
-            let newMilestone = {
-              mile_name: milestone_name,
-              progress_stat: "In-Progress", // Give default progress_stat to "In-Progress" for all new students milestones
-            };
-
-            student.milestones.push(newMilestone); // Add to students state so that it is accessible to other components
-            // POST request for adding milestone to student that was just created
-            fetch(`${url}/students/${data.student_id}/milestones`, {
-              method: "POST",
-              body: JSON.stringify(newMilestone),
-              headers: {
-                "Content-type": "application/json; charset=UTF-8",
-              },
-            })
-              .then((response) => response.json())
-              .then((data) => {})
-              .catch(function (error) {
-                console.log(error);
-              });
-          });
           handleUpdateNewStudent(student); // Pass the student to the handle function in Students Cards to re-render page without refreshing
 
           // Close the Student Add Card

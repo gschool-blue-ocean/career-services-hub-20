@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 
 export const ManagersContext = createContext();
 
-export function ManagersContextProvider({ children }) {
+export function ManagersContextProvider({ children, loggedInfo }) {
   //Create managersData state and give it a single fake manager at the start
   const [managersData, setManagersData] = useState([
     {
@@ -25,11 +25,13 @@ export function ManagersContextProvider({ children }) {
   // Run once, until page is refreshed
   useEffect(() => {
     // Get latest managers data from SQL database
-    fetch(`${url}/managers`)
-      .then((response) => response.json())
-      .then((data) => setManagersData(data))
-      .catch((error) => console.log(error));
-  }, []);
+    if (loggedInfo) {
+      fetch(`${url}/managers`)
+        .then((response) => response.json())
+        .then((data) => setManagersData(data))
+        .catch((error) => console.log(error));
+    }
+  }, [loggedInfo]);
 
   return (
     <ManagersContext.Provider value={{ managersData }}>

@@ -59,11 +59,15 @@ app.get("/students", async (req, res, next) => {
 });
 
 app.get("/students/:id", async (req, res, next) => {
-  const id = req.params.id;
+  let id = req.params.id;
+  const user = isAuthorized(req, res);
 
+  if (user) {
+    if (user.id) id = user.id;
+  }
   const result = await db
     .query(
-      `SELECT student.*, service_manager.tscm_first, service_manager.tscm_last 
+      `SELECT student.*, service_manager.tscm_first, service_manager.tscm_last, service_manager.tscm_email 
                                   FROM student 
                                   JOIN service_manager ON service_manager.tscm_id = student.tscm_id 
                                   WHERE student.student_id = ${id}`
@@ -78,30 +82,42 @@ app.get("/students/:id", async (req, res, next) => {
 });
 
 app.post("/students", async (req, res, next) => {
-  const firstName = req.body.student_first;
-  const lastName = req.body.student_last;
-  const email = req.body.student_email;
-  const password = req.body.student_password;
-  const cohort = req.body.cohort;
-  const sercurityClearance = req.body.sec_clearance;
-  const careerStatus = req.body.career_status;
-  const courseStatus = req.body.course_status;
-  const collegeDegree = req.body.college_degree;
-  const tscm_id = req.body.tscm_id;
+  console.log(req.body.first);
+  const firstName = req.body.first;
+  const lastName = req.body.last;
+  const email = req.body.email;
+  const password = req.body.pass;
+  const cohort = "Undetermined";
+  const sercurityClearance = "Undetermined";
+  const careerStatus = "Not Currently Searching";
+  const courseStatus = "Student";
+  const collegeDegree = "Undetermined";
+  const coverLetter = "Un-Satisfactory";
+  const resume = "Un-Satisfactory";
+  const linkedin = "Un-Satisfactory";
+  const personalNarrative = "Un-Satisfactory";
+  const hunterAcess = "Un-Satisfactory";
+  const tscm_id = 1;
 
+  const hashedPassword = bcrypt.hashSync(password, 10);
   const result = await db
     .query(
-      "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
+      "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree,cover_letter,resume,linkedin,personal_narrative,hunter_access, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12,$13,$14,$15) RETURNING *",
       [
         firstName,
         lastName,
         email,
-        password,
+        hashedPassword,
         cohort,
         sercurityClearance,
         careerStatus,
         courseStatus,
         collegeDegree,
+        coverLetter,
+        resume,
+        linkedin,
+        personalNarrative,
+        hunterAcess,
         tscm_id,
       ]
     )
@@ -110,7 +126,6 @@ app.post("/students", async (req, res, next) => {
 });
 
 app.patch("/students/:id", async (req, res, next) => {
-  console.log(req.body);
   const id = req.params.id;
   const firstName = req.body.student_first;
   const lastName = req.body.student_last;
@@ -119,11 +134,18 @@ app.patch("/students/:id", async (req, res, next) => {
   const careerStatus = req.body.career_status;
   const courseStatus = req.body.course_status;
   const collegeDegree = req.body.college_degree;
+  const cover_letter = req.body.cover_letter;
+  const resume = req.body.resume;
+  const linkedin = req.body.linkedin;
+  const personal_narrative = req.body.personal_narrative;
+  const hunter_access = req.body.hunter_access;
   const tscm_id = req.body.tscm_id;
 
   const result = await db
     .query(
-      "UPDATE student SET student_first = $1, student_last = $2, cohort = $3, sec_clearance = $4, career_status = $5, course_status = $6, college_degree=$7, tscm_id = $8 WHERE student_id = $9 RETURNING *",
+      `UPDATE student SET student_first = $1, student_last = $2, cohort = $3, sec_clearance = $4, career_status = $5, 
+      course_status = $6, college_degree = $7, cover_letter = $8, resume = $9, linkedin = $10, personal_narrative = $11, 
+      hunter_access = $12, tscm_id = $13 WHERE student_id = $14 RETURNING *`,
       [
         firstName,
         lastName,
@@ -132,6 +154,11 @@ app.patch("/students/:id", async (req, res, next) => {
         careerStatus,
         courseStatus,
         collegeDegree,
+        cover_letter,
+        resume,
+        linkedin,
+        personal_narrative,
+        hunter_access,
         tscm_id,
         id,
       ]
@@ -142,97 +169,40 @@ app.patch("/students/:id", async (req, res, next) => {
 
 app.delete("/students/:id", async (req, res, next) => {
   const id = req.params.id;
-
-  await db.query("DELETE FROM milestone WHERE milestone.student_id = $1", [id]);
-
   await db
     .query("DELETE FROM student WHERE student.student_id = $1", [id])
     .catch(next);
   res.send({ message: "Sucessfully Deleted Student Record!" });
 });
+app.get("/students/login/isAuthorized", (req, res) => {
+  let user = isAuthorized(req, res);
 
+  console.log(user);
+  if (!user) return res.status(401).json({ message: "Unauthorized" });
+  else if (user.admin)
+    return res.status(204).json({ message: "This is an admin account!" });
+  //console.log(`Welcome back, Student ${user.user}`)
+  res.json({ message: user });
+});
 app.post("/students/login", async (req, res, next) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
-
-  try {
-    const results = await db.query(
-      "SELECT * FROM student WHERE student_email = $1",
-      [email]
-    );
-    const student = results.rows[0];
-
-    if (!student) {
-      return res
-        .status(404)
-        .json({ message: "Incorrect Password or Email 🤷" });
-    }
-
-    if (student.student_password === inputPassword) {
-      const user = { val_student: student.email };
-
-      const accessToken = jwt.sign(user, "super secret key", {
-        expiresIn: "10m",
-      });
-      res.json({ accessToken });
-    }
-  } catch (error) {
-    console.error(
-      "Something really went wrong, check if DB is running 🤷",
-      error
-    );
-    res.status(500).json({ message: "Service unavailable 🤷" });
-    console.log("bad");
+  const results = await db.query(
+    `SELECT * FROM student WHERE student_email = $1`,
+    [email]
+  );
+  const student = results.rows[0];
+  if (!student) {
+    return res.status(401).json({ message: "Invalid Email 🤷" });
+  } else if (bcrypt.compareSync(inputPassword, student.student_password)) {
+    const user = {
+      user: `${student.student_first} ${student.student_last}`,
+      id: student.student_id,
+    };
+    const token = jwt.sign(user, process.env.SECRET_KEY);
+    res.json({ token: token });
   }
 });
-
-// --------------------------------------------- MILESTONE ROUTES ----------------------------------------------------------------------------
-
-app.get("/students/:id/milestones", async (req, res, next) => {
-  const id = req.params.id;
-
-  const result = await db
-
-    .query(`SELECT * FROM milestone WHERE milestone.student_id = ${id}`)
-    .catch(next);
-  res.send(result.rows);
-});
-
-app.post("/students/:studentId/milestones", async (req, res, next) => {
-  const studentId = req.params.studentId;
-
-  const mileName = req.body.mile_name;
-  const progress = req.body.progress_stat;
-
-  const result = await db
-    .query(
-      `INSERT INTO milestone (mile_name, progress_stat, student_id ) VALUES( $1, $2, $3 ) RETURNING *`,
-      [mileName, progress, studentId]
-    )
-    .catch(next);
-  res.send(result.rows);
-});
-
-app.patch(
-  "/students/:studentId/milestones/:milestoneId",
-  async (req, res, next) => {
-    console.log(req.body);
-    const milestoneId = req.params.milestoneId;
-    const studentId = req.params.studentId;
-
-    const mileName = req.body.mile_name;
-    const progress = req.body.progress_stat;
-
-    const result = await db
-      .query(
-        `UPDATE milestone SET mile_name = $1, progress_stat = $2, student_id = $3 WHERE milestone.mile_id = $4 RETURNING *`,
-        [mileName, progress, studentId, milestoneId]
-      )
-      .catch(next);
-    console.log(result.rows);
-    res.send(result.rows);
-  }
-);
 
 // --------------------------------------------- MANAGERS ROUTES ----------------------------------------------------------------------------
 
@@ -288,21 +258,20 @@ app.patch("/managers/:id", async (req, res, next) => {
 app.post("/managers/login", async (req, res, next) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
-  console.log(email);
   const results = await db.query(
     `SELECT * FROM service_manager WHERE tscm_email = $1`,
     [email]
   );
   const manager = results.rows[0];
-  console.log(manager);
-  console.log("manager");
   if (!manager) {
     return res.status(401).json({ message: "Invalid Email 🤷" });
   } else if (bcrypt.compareSync(inputPassword, manager.tscm_password)) {
-    const user = { user: `${manager.tscm_first} ${manager.tscm_last}` };
+    const user = {
+      user: `${manager.tscm_first} ${manager.tscm_last}`,
+      isAdmin: true,
+    };
     const token = jwt.sign(user, process.env.SECRET_KEY);
-    console.log(token);
-    console.log(`Admin ${user.user}, welcome back!`);
+
     res.json({ token: token });
   } else return res.status(401).json({ message: "Invalid Password 🤷" });
 });
@@ -399,8 +368,8 @@ app.delete("/events/:id", async (req, res, next) => {
 
 app.get("/managers/login/isAuthorized", (req, res) => {
   let user = isAuthorized(req, res);
-  if (!user) return res.status(401).json({ message: "Unauthorized" });
-  console.log(`Welcome back, Admin ${user.user}`);
+  if (!user.isAdmin) return res.status(401).json({ message: "Unauthorized" });
+
   res.json({ message: user });
 });
 
@@ -408,6 +377,7 @@ app.get("/managers/login/isAuthorized", (req, res) => {
 
 function isAuthorized(req, res) {
   let auth = req.headers.authorization;
+  console.log(req.headers.authorization);
   if (!auth) {
     return false;
   }

@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { ManagersContext } from "../../../context/managersContext";
 import { FieldsContext } from "../../../context/fieldsContext";
 import SearchBar from "../SearchFunction/Search";
@@ -41,15 +41,16 @@ function Filter({
   const fieldsContext = useContext(FieldsContext);
   const fields = fieldsContext.fieldsData;
 
-  const cohorts = fields.cohort;
+  let cohorts = fields.cohort;
   const secClearance = fields.sec_clearance;
   const courseStatus = fields.course_status;
   const progress_stat = fields.milestoneProgress;
   const ed_status = fields.college_degree;
 
-  const handleSearch = (searchTerm) => {
-    setSearchTerm(searchTerm);
-  };
+  useEffect(() => {
+    cohorts = fieldsContext.fieldsData.cohort;
+  }, [fieldsContext.update]);
+  const handleSearch = (searchTerm) => {};
 
   const handleCheckedCover = (e) => {
     setCurrentCoverStatus(e.target.value);
@@ -236,9 +237,9 @@ function Filter({
           id="manager-select"
         >
           <option>Career Service Manager</option>
-          {managers.map((manager) => {
+          {managers.map((manager, index) => {
             return (
-              <option key={managers.tscm_id} value={manager.tscm_id}>
+              <option key={index} value={manager.tscm_id}>
                 {manager.tscm_first}, {manager.tscm_last}{" "}
               </option>
             );

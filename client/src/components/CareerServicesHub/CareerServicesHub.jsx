@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import StudentCardsList from "./StudentCards/StudentCardsList";
 import "./CareerServicesHub.css";
+import StudentViewCard from "./StudentCards/StudentViewCard";
 
 import Export from "./Export";
 import "./Filter/filter.css";
@@ -13,6 +14,8 @@ export default function CareerServicesHub({
   isTransitioning,
   setIsTransitioning,
   loggedInfo,
+  isStudent,
+  studentInfo,
 }) {
   // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,7 +40,9 @@ export default function CareerServicesHub({
 
   useEffect(() => {
     setOpacity(1);
-  }, []);
+    if (isStudent) console.log("is a student");
+    else console.log("not student");
+  }, [isStudent]);
 
   // Filter the list of students based on the current filter
   const filterStudents = (
@@ -73,6 +78,9 @@ export default function CareerServicesHub({
       filteredStudent = filteredStudent.filter(
         (student) => student.cohort === currentCohort
       );
+      if (filteredStudent.length === 0)
+        //if the selected cohort doesnt exist(once the user deleted)
+        filteredStudent = students;
     }
 
     if (currentClearance) {
@@ -100,88 +108,33 @@ export default function CareerServicesHub({
     }
 
     if (coverLetter && currentCoverStatus) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === coverLetter &&
-              milestone.progress_stat === currentCoverStatus
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.cover_letter === currentCoverStatus
+      );
     }
 
     if (studentResume && currentResumeStatus) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === studentResume &&
-              milestone.progress_stat === currentResumeStatus
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.resume === currentResumeStatus
+      );
     }
 
     if (linkedAccount && linkedAccountStatus) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === linkedAccount &&
-              milestone.progress_stat === linkedAccountStatus
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.linkedin === linkedAccountStatus
+      );
     }
 
     if (personalNarrative && narrativeStatus) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === personalNarrative &&
-              milestone.progress_stat === narrativeStatus
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.personal_narrative === narrativeStatus
+      );
     }
 
     if (hunterAccess && currentAccess) {
-      filteredStudent = filteredStudent.flatMap((student) => {
-        return student.milestones
-          .filter((milestone) => {
-            return (
-              milestone.mile_name === hunterAccess &&
-              milestone.progress_stat === currentAccess
-            );
-          })
-          .map((milestone) => ({
-            ...student,
-            mile_name: milestone.mile_name,
-            progress_stat: milestone.progress_stat,
-          }));
-      });
+      filteredStudent = filteredStudent.filter(
+        (student) => student.hunter_access === currentAccess
+      );
     }
 
     if (searchTerm) {
@@ -231,51 +184,88 @@ export default function CareerServicesHub({
     const newToggleFiltersBar = !toggleFiltersBar;
     setToggleFiltersBar(newToggleFiltersBar);
   }
+  if (isStudent) {
+    return (
+      <StudentViewCard studentInfo={studentInfo} handleLogOff={handleLogOff} />
+    );
+  } else {
+    return (
+      <div style={{ opacity: opacity, transition: "opacity 2s" }}>
+        <div className="body_container">
+          <div className="left_container">
+            <div
+              className={
+                toggleFiltersBar
+                  ? "left-container-filters"
+                  : "collapsed-filters-container"
+              }
+            >
+              <img className="logo" src={galvanizeLogo}></img>
 
-  return (
-    <div style={{ opacity: opacity, transition: "opacity 2s" }}>
-      <div className="body_container">
-        <div className="left_container">
-          <div
-            className={
-              toggleFiltersBar
-                ? "left-container-filters"
-                : "collapsed-filters-container"
-            }
-          >
-            <img className="logo" src={galvanizeLogo}></img>
-
-            <Filter
-              setSearchTerm={setSearchTerm}
-              searchTerm={searchTerm}
-              currentCohort={currentCohort}
-              setCurrentCohort={setCurrentCohort}
-              setCoverLetter={setCoverLetter}
-              setCurrentCoverStatus={setCurrentCoverStatus}
-              currentCoverStatus={currentCoverStatus}
-              setStudentResume={setStudentResume}
-              setCurrentResumeStatus={setCurrentResumeStatus}
-              currentResumeStatus={currentResumeStatus}
-              setLinkedAccount={setLinkedAccount}
-              linkedAccountStatus={linkedAccountStatus}
-              setLinkedAccountStatus={setLinkedAccountStatus}
-              setPersonalNarrative={setPersonalNarrative}
-              setNarrativeStatus={setNarrativeStatus}
-              narrativeStatus={narrativeStatus}
-              setHunterAccess={setHunterAccess}
-              currentAccess={currentAccess}
-              setCurrentAccess={setCurrentAccess}
-              currentStatus={currentStatus}
-              setCurrentStatus={setCurrentStatus}
-              currentClearance={currentClearance}
-              setCurrentClearance={setCurrentClearance}
-              educationStatus={educationStatus}
-              setEducationStatus={setEducationStatus}
-              selectedManager={selectedManager}
-              setSelectedManager={setSelectedManager}
-              handleClear={handleClear}
-            />
-            <Export
+              <Filter
+                setSearchTerm={setSearchTerm}
+                searchTerm={searchTerm}
+                currentCohort={currentCohort}
+                setCurrentCohort={setCurrentCohort}
+                setCoverLetter={setCoverLetter}
+                setCurrentCoverStatus={setCurrentCoverStatus}
+                currentCoverStatus={currentCoverStatus}
+                setStudentResume={setStudentResume}
+                setCurrentResumeStatus={setCurrentResumeStatus}
+                currentResumeStatus={currentResumeStatus}
+                setLinkedAccount={setLinkedAccount}
+                linkedAccountStatus={linkedAccountStatus}
+                setLinkedAccountStatus={setLinkedAccountStatus}
+                setPersonalNarrative={setPersonalNarrative}
+                setNarrativeStatus={setNarrativeStatus}
+                narrativeStatus={narrativeStatus}
+                setHunterAccess={setHunterAccess}
+                currentAccess={currentAccess}
+                setCurrentAccess={setCurrentAccess}
+                currentStatus={currentStatus}
+                setCurrentStatus={setCurrentStatus}
+                currentClearance={currentClearance}
+                setCurrentClearance={setCurrentClearance}
+                educationStatus={educationStatus}
+                setEducationStatus={setEducationStatus}
+                selectedManager={selectedManager}
+                setSelectedManager={setSelectedManager}
+                handleClear={handleClear}
+              />
+              <Export
+                filterStudents={filterStudents}
+                currentCohort={currentCohort}
+                coverLetter={coverLetter}
+                currentCoverStatus={currentCoverStatus}
+                studentResume={studentResume}
+                currentResumeStatus={currentResumeStatus}
+                linkedAccount={linkedAccount}
+                linkedAccountStatus={linkedAccountStatus}
+                personalNarrative={personalNarrative}
+                narrativeStatus={narrativeStatus}
+                hunterAccess={hunterAccess}
+                currentAccess={currentAccess}
+                currentStatus={currentStatus}
+                currentClearance={currentClearance}
+                educationStatus={educationStatus}
+                selectedManager={selectedManager}
+              />
+              <div className="profile-container">
+                <button className="header-buttons" onClick={handleLogOff}>
+                  Logout
+                </button>
+              </div>
+            </div>
+            <button
+              className="collapse-filter-button"
+              onClick={handleFilterToggle}
+            >
+              {" "}
+              &#8646;{" "}
+            </button>
+          </div>
+          <div className="right_container">
+            <StudentCardsList
               filterStudents={filterStudents}
               currentCohort={currentCohort}
               coverLetter={coverLetter}
@@ -292,43 +282,12 @@ export default function CareerServicesHub({
               currentClearance={currentClearance}
               educationStatus={educationStatus}
               selectedManager={selectedManager}
+              handleClear={handleClear}
+              isStudent={isStudent}
             />
-            <div className="profile-container">
-              <button className="header-buttons" onClick={handleLogOff}>
-                Logout
-              </button>
-            </div>
           </div>
-          <button
-            className="collapse-filter-button"
-            onClick={handleFilterToggle}
-          >
-            {" "}
-            &#8646;{" "}
-          </button>
-        </div>
-        <div className="right_container">
-          <StudentCardsList
-            filterStudents={filterStudents}
-            currentCohort={currentCohort}
-            coverLetter={coverLetter}
-            currentCoverStatus={currentCoverStatus}
-            studentResume={studentResume}
-            currentResumeStatus={currentResumeStatus}
-            linkedAccount={linkedAccount}
-            linkedAccountStatus={linkedAccountStatus}
-            personalNarrative={personalNarrative}
-            narrativeStatus={narrativeStatus}
-            hunterAccess={hunterAccess}
-            currentAccess={currentAccess}
-            currentStatus={currentStatus}
-            currentClearance={currentClearance}
-            educationStatus={educationStatus}
-            selectedManager={selectedManager}
-            handleClear={handleClear}
-          />
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

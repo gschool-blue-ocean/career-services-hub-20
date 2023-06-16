@@ -40,11 +40,11 @@ function AddStudentRevised({
   const addEducation = fields.college_degree;
 
   // Get the milestone names from the first student
-  const firstStudent = students[0];
-  const milestoneFields = firstStudent.milestones.map(
-    (milestone) => milestone.mile_name
-  );
-  const milestoneArray = milestoneFields.map((milestone) => milestone);
+  // const firstStudent = students[0];
+  // const milestoneFields = firstStudent.milestones.map(
+  //   (milestone) => milestone.mile_name
+  // );
+  // const milestoneArray = milestoneFields.map((milestone) => milestone);
 
   // Function to add a new student
   const addNewStudent = async () => {
@@ -57,6 +57,11 @@ function AddStudentRevised({
       student_last: studentLastInputRef.current.value,
       college_degree: educationInputRef.current.value,
       sec_clearance: clearanceInputRef.current.value,
+      cover_letter: "Un-Satisfactory",
+      resume: "Un-Satisfactory",
+      linkedin: "Un-Satisfactory",
+      personal_letter: "Un-Satisfactory",
+      hunter_access: "Un-Satisfactory",
     };
     // Retrieve manager's first and last name based on the selected manager ID
     const managerFirst = managers[newStudentObj.tscm_id - 1].tscm_first;
@@ -75,23 +80,23 @@ function AddStudentRevised({
       });
 
       const addedStudent = await response.json();
-      newStudentObj.milestones = [];
-      //Adding Milestones to Student
-      milestoneArray.forEach((milestone_name) => {
-        const newMilestone = {
-          mile_name: milestone_name,
-          progress_stat: "In-Progress",
-        };
-        newStudentObj.milestones.push(newMilestone);
-        // Send a POST request to add the milestone to the new student
-        fetch(`${url}/students/${addedStudent.student_id}/milestones`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newMilestone),
-        });
-      });
+      // newStudentObj.milestones = [];
+      // //Adding Milestones to Student
+      // milestoneArray.forEach((milestone_name) => {
+      //   const newMilestone = {
+      //     mile_name: milestone_name,
+      //     progress_stat: "In-Progress",
+      //   };
+      //   newStudentObj.milestones.push(newMilestone);
+      //   // Send a POST request to add the milestone to the new student
+      //   fetch(`${url}/students/${addedStudent.student_id}/milestones`, {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify(newMilestone),
+      //   });
+      // });
       setUpdate(!update);
       // Update the UI with the newly added student
       handleUpdateNewStudent(newStudentObj);

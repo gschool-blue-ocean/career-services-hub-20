@@ -9,6 +9,7 @@ const app = "http://api:80";
 let newStudentId;
 let newMileId;
 let newManagerId;
+let hashedPassword;
 
 describe("POST /managers", () => {
   it("creates a new manager", async () => {
@@ -45,16 +46,10 @@ describe("POST /managers", () => {
 describe("POST /students", () => {
   it("creates a new student", async () => {
     const newStudent = {
-      student_first: "👨",
-      student_last: "Doe",
-      student_email: "doe@gmail.com",
-      student_password: "password",
-      cohort: "MCSP-19",
-      sec_clearance: "Top Secret",
-      career_status: "Hired",
-      course_status: "Graduate",
-      college_degree: "Bachelor in CS/STEM",
-      tscm_id: newManagerId,
+      first: "John",
+      last: "Doe",
+      email: "doe@gmail.com",
+      pass: "password",
     };
 
     const response = await request(app)
@@ -63,22 +58,30 @@ describe("POST /students", () => {
       .expect("Content-Type", /json/)
       .expect(200); // replace with your actual status code
 
+      newStudentId = response.body.student_id;
+      hashedPassword = response.body.student_password;
+
     // Check that the student is returned in the response body
     expect(response.body).toEqual(
       expect.objectContaining({
-        student_first: "👨",
+        student_id: newStudentId,
+        student_first: "John",
         student_last: "Doe",
         student_email: "doe@gmail.com",
-        student_password: "password",
-        cohort: "MCSP-19",
-        sec_clearance: "Top Secret",
-        career_status: "Hired",
-        course_status: "Graduate",
-        college_degree: "Bachelor in CS/STEM",
-        tscm_id: newManagerId,
+        student_password: hashedPassword,
+        cohort: 'Undetermined',
+        sec_clearance: 'Undetermined',
+        career_status: 'Not Currently Searching',
+        course_status: 'Student',
+        college_degree: 'Undetermined',
+        cover_letter: 'Un-Satisfactory',
+        resume: 'Un-Satisfactory',
+        linkedin: 'Un-Satisfactory',
+        personal_narrative: 'Un-Satisfactory',
+        hunter_access: 'Un-Satisfactory',
+        tscm_id: 1
       })
-    );
-    newStudentId = response.body.student_id;
+    );    
   });
 });
 
@@ -102,17 +105,25 @@ describe("GET /students/:id", () => {
 
     // Check that the response body is an array (since you're sending result.rows)
     expect(response.body[0]).toEqual(
-      expect.objectContaining({
-        student_first: "👨",
-        student_last: "Doe",
-        cohort: "MCSP-19",
-        sec_clearance: "Top Secret",
-        career_status: "Hired",
-        course_status: "Graduate",
-        college_degree: "Bachelor in CS/STEM",
-        tscm_first: "Reptar",
-        tscm_id: newManagerId,
-        tscm_last: "Pickles",
+        expect.objectContaining({
+          student_id: newStudentId,
+          student_first: "John",
+          student_last: "Doe",
+          student_email: "doe@gmail.com",
+          student_password: hashedPassword,
+          cohort: 'Undetermined',
+          sec_clearance: 'Undetermined',
+          career_status: 'Not Currently Searching',
+          course_status: 'Student',
+          college_degree: 'Undetermined',
+          cover_letter: 'Un-Satisfactory',
+          resume: 'Un-Satisfactory',
+          linkedin: 'Un-Satisfactory',
+          personal_narrative: 'Un-Satisfactory',
+          hunter_access: 'Un-Satisfactory',
+          tscm_first: 'Elon',
+          tscm_last: 'Gates',
+          tscm_id: 1
       })
     );
   });
@@ -129,7 +140,12 @@ describe("PATCH /students/:id", () => {
       career_status: "Searching",
       course_status: "Student",
       college_degree: "Associate in CS/STEM",
-      tscm_id: newManagerId,
+      cover_letter: "Completed",
+      resume: "In-Progress",
+      linkedin: "Un-Satisfactory",
+      personal_narrative: "Completed",
+      hunter_access: "Completed",
+      tscm_id: 1
     };
 
     const response = await request(app)
@@ -143,87 +159,19 @@ describe("PATCH /students/:id", () => {
         student_id: newStudentId,
         student_first: "🦘",
         student_last: "Guy",
+        student_email: "doe@gmail.com",
+        student_password: hashedPassword,
         cohort: "MCSP-20",
         sec_clearance: "SECRET",
         career_status: "Searching",
         course_status: "Student",
         college_degree: "Associate in CS/STEM",
-        tscm_id: newManagerId,
-      })
-    );
-  });
-});
-
-describe("POST /students/:studentId/milestones", () => {
-  it("Adds to the milestone table using student id", async () => {
-    const newMilestone = {
-      student_id: newStudentId,
-      mile_name: "Cover Letter",
-      progress_stat: "Completed",
-    };
-
-    const response = await request(app)
-      .post(`/students/${newStudentId}/milestones`)
-      .send(newMilestone)
-      .expect("Content-Type", /json/)
-      .expect(200);
-
-    newMileId = response.body[0].mile_id;
-
-    // Check that the milestone equals what we sent
-    expect(response.body).toEqual(
-      expect.objectContaining([
-        {
-          mile_id: newMileId,
-          student_id: newStudentId,
-          mile_name: "Cover Letter",
-          progress_stat: "Completed",
-        },
-      ])
-    );
-  });
-});
-
-describe("PATCH /students/:studentId/milestones/:milestoneId", () => {
-  it("Adds to the milestone table using student id", async () => {
-    const newMilestone = {
-      student_id: newStudentId,
-      mile_name: "LinkedIn",
-      progress_stat: "Un-Satisfactory",
-    };
-
-    const response = await request(app)
-      .patch(`/students/${newStudentId}/milestones/${newMileId}`)
-      .send(newMilestone)
-      .expect("Content-Type", /json/)
-      .expect(200);
-
-    // Check that the milestone equals what we sent
-    expect(response.body[0]).toEqual(
-      expect.objectContaining({
-        mile_id: newMileId,
-        mile_name: "LinkedIn",
-        progress_stat: "Un-Satisfactory",
-        student_id: newStudentId,
-      })
-    );
-  });
-});
-
-describe("GET /students/:id/milestones", () => {
-  it("retrieves a milestone at a given studen id", async () => {
-    const response = await request(app)
-      .get(`/students/${newStudentId}/milestones`)
-      .expect("Content-Type", /json/)
-      .expect(200);
-
-    // Check that the response body is an array (since you're sending result.rows)
-    expect(response.body[0]).toEqual(
-      expect.objectContaining({
-        mile_id: newMileId,
-        mile_name: "LinkedIn",
-        progress_stat: "Un-Satisfactory",
-        student_id: newStudentId,
+        cover_letter: "Completed",
+        resume: "In-Progress",
+        linkedin: "Un-Satisfactory",
+        personal_narrative: "Completed",
+        hunter_access: "Completed",
+        tscm_id: 1
       })
     );
   });

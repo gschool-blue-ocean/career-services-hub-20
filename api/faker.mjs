@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import bcrypt from "bcrypt";
 dotenv.config();
-console.log(process.env.PASSWD);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -39,7 +38,7 @@ const cohorts = [
   "MCSP-21",
   "MCSP-22",
 ];
-const careerStatus = ["Searching", "Hired", "Not Started"];
+const careerStatus = ["Searching", "Hired", "Not Currently Searching"];
 const courseStatus = ["Student", "Graduate"];
 const secClearance = [
   "Undetermined",
@@ -75,7 +74,7 @@ const seedStudents = async () => {
   const studentList = []; // Initialize array that will temp hold all the fake students before SQL insertion
 
   // Generate multiple student objects and push it to studentList Array
-  for (let i = 0; i < SEED_STUDENT_ROWS; i++) {
+  for (let i = 0; i < SEED_STUDENT_ROWS - 1; i++) {
     let randomNumber = Math.floor(Math.random() * 3); // Generates a random number between 0-2
     let randomNumber2 = Math.floor(Math.random() * 2); // Generates a random number between 0-1
     let randomNumber3 = Math.floor(Math.random() * 5); // Generates a random number between 0-4
@@ -92,6 +91,11 @@ const seedStudents = async () => {
       career_status: careerStatus[randomNumber], // Randomly pick a element in the self-defined careerStatus array
       course_status: courseStatus[randomNumber2], // Randomly pick a element in the self-defined courseStatus array
       college_degree: collegeDegree[randomNumber4], // Randomly pick a element in the self-defined collegeDegree array
+      cover_letter: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      resume: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      linkedin: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      personal_narrative: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
+      hunter_access: progress_stat[Math.floor(Math.random() * 3)], // Randomly pick a element in the self-defined progress_stat array
       tscm__id: faker.datatype.number({ min: 1, max: SEED_CAREER_MANAGER }), // Use faker method to create random number between 1 and MAX # of managers
     });
   }
@@ -99,11 +103,12 @@ const seedStudents = async () => {
   try {
     await db.query("TRUNCATE TABLE student CASCADE"); // DROP TABLES already in the SQL database
     await db.query("ALTER SEQUENCE student_student_id_seq RESTART WITH 1"); // Reset students entity primary key to 1
-    const queryString = `INSERT INTO student (student_first, student_last,student_email,student_password, cohort, sec_clearance, career_status, course_status, college_degree, tscm_id) 
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`;
+    const queryString = `INSERT INTO student (student_first, student_last,student_email,student_password, cohort, sec_clearance, career_status, course_status, college_degree, cover_letter, resume, linkedin, personal_narrative, hunter_access ,tscm_id) 
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *`;
 
     // For each student, query SQL database with INSERT statement to add student
-    for (let i = 0; i < SEED_STUDENT_ROWS; i++) {
+
+    for (let i = 0; i < SEED_STUDENT_ROWS - 1; i++) {
       const {
         student_first,
         student_last,
@@ -114,8 +119,14 @@ const seedStudents = async () => {
         career_status,
         course_status,
         college_degree,
+        cover_letter,
+        resume,
+        linkedin,
+        personal_narrative,
+        hunter_access,
         tscm__id,
       } = studentList[i];
+
       await db.query(queryString, [
         student_first,
         student_last,
@@ -126,9 +137,31 @@ const seedStudents = async () => {
         career_status,
         course_status,
         college_degree,
+        cover_letter,
+        resume,
+        linkedin,
+        personal_narrative,
+        hunter_access,
         tscm__id,
       ]);
     }
+    await db.query(queryString, [
+      "Bill",
+      "Musk",
+      process.env.STUDENT_EMAIL,
+      process.env.STUDENT_PASSWD,
+      cohorts[Math.floor(Math.random() * 7)],
+      secClearance[Math.floor(Math.random() * 5)],
+      careerStatus[Math.floor(Math.random() * 3)],
+      courseStatus[Math.floor(Math.random() * 2)],
+      collegeDegree[Math.floor(Math.random() * 8)],
+      progress_stat[Math.floor(Math.random() * 3)],
+      progress_stat[Math.floor(Math.random() * 3)],
+      progress_stat[Math.floor(Math.random() * 3)],
+      progress_stat[Math.floor(Math.random() * 3)],
+      progress_stat[Math.floor(Math.random() * 3)],
+      faker.datatype.number({ min: 1, max: SEED_CAREER_MANAGER }),
+    ]);
     console.log("Students seeded successfully");
   } catch (err) {
     console.log("Error seeding students", err);
@@ -255,34 +288,4 @@ const seedCalendar = async () => {
   }
 };
 
-const seedMilestone = async () => {
-  let currentStudentNumber = 1;
-
-  try {
-    await db.query("TRUNCATE TABLE milestone CASCADE"); // DROP TABLES already in the SQL database
-    await db.query("ALTER SEQUENCE milestone_mile_id_seq RESTART WITH 1"); // Reset milestones entity primary key to 1
-    const queryString = `INSERT INTO milestone (mile_name, progress_stat, student_id) VALUES ($1, $2, $3) RETURNING *`;
-
-    // For every student inside database, have a nested for loop to create each milestone for each every student
-    for (let i = 0; i < SEED_STUDENT_ROWS; i++) {
-      for (let i = 0; i < studentMilestone.length; i++) {
-        let randomNumber = Math.floor(Math.random() * 3); // Randomly generate a number between 0-2
-        await db.query(queryString, [
-          studentMilestone[i],
-          progress_stat[randomNumber],
-          currentStudentNumber,
-        ]); // Insert milestone into SQL database
-      }
-      currentStudentNumber++; // Go to the next student
-    }
-    console.log("Milestone seeded successfully");
-  } catch (err) {
-    console.log("Error seeding Calendar", err);
-  }
-};
-
-// Seed the database in the order described below
-
-seedServiceManager().then(() =>
-  seedStudents().then(() => seedCalendar().then(() => seedMilestone()))
-);
+seedServiceManager().then(() => seedStudents());
