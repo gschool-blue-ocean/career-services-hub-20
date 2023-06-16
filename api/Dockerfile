@@ -5,8 +5,7 @@ WORKDIR /code
 COPY package*.json ./
 RUN npm ci
 
-WORKDIR /code
-COPY . .
+COPY ./ /code
 
 EXPOSE 3000
 CMD ["npm", "start"]
