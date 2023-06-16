@@ -55,6 +55,7 @@ export function StudentsContextProvider({ children, loggedInfo,isStudent, studen
                 
                 const students = await response.json();
                 setStudentsData(students); // Update state with all students and thier milestones
+                
             } catch (error) {
                 console.log(error);
             }
@@ -63,7 +64,6 @@ export function StudentsContextProvider({ children, loggedInfo,isStudent, studen
         if (loggedInfo )
           fetchData(); // Execute fetch above
     }, [loggedInfo, update]);
-
 
   return (
     <StudentsContext.Provider value={{ studentsData, setUpdate, update }}>

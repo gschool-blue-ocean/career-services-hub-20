@@ -29,13 +29,12 @@ export function FieldsContextProvider({ children }) {
     "Masters in CS/STEM",
     "Masters Not in CS/STEM",],
   });
-  const [update,setUpdate] = useState(false);
   const newFieldsData = fieldsData;
 
   // Need to utilize studentsContext for each possible option
   const studentContext = useContext(StudentsContext);
   const students = studentContext.studentsData;
-
+  const [update,setUpdate] =useState(true);
   // UseEffect will ensure this code runs each time students changes
   useEffect(() => {
     // First ensure that students array is greater than 1 meaning we have all our students from the API
@@ -55,13 +54,12 @@ export function FieldsContextProvider({ children }) {
         return numA- numB;
       });
       setFieldsData(newFieldsData);
-      setUpdate(!update);
-      console.log(fieldsData)
+      setUpdate(!update)
     }
-  }, [students,studentContext.update]);
+  }, [studentContext.studentsData]);
 
   return (
-    <FieldsContext.Provider value={{ fieldsData,setUpdate,update }}>
+    <FieldsContext.Provider value={{ fieldsData,update }}>
       {children}
     </FieldsContext.Provider>
   );

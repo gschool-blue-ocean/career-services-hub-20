@@ -79,6 +79,8 @@ export default function CareerServicesHub({
       filteredStudent = filteredStudent.filter(
         (student) => student.cohort === currentCohort
       );
+      if (filteredStudent.length ===0)  //if the selected cohort doesnt exist(once the user deleted)
+        filteredStudent =students;
     }
 
     if (currentClearance) {

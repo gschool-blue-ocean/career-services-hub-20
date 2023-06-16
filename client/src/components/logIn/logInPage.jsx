@@ -56,7 +56,6 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
 
   // Upon submit email and password is passed into the Log in user function
   const toggle = () => {
-    console.error(isStudent);
     if (isStudent) {
       setIsStudent(false);
     }

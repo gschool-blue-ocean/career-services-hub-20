@@ -70,7 +70,7 @@ export default function StudentCardslist({
 
     filteredStudents = updatedStudents; // Update the filtered students list
     setCurrentStudents(updatedStudents); // Update the state with the updated list
-    studentContext.setUpdate(!studentContext.update)  //updates the hook by the usecontext part. in which will trigger useeffect to refetch the data.
+    console.log(currentStudents)
   }
 
   return (

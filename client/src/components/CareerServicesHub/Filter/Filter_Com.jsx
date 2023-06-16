@@ -41,14 +41,14 @@ function Filter({
   const fieldsContext = useContext(FieldsContext);
   const fields = fieldsContext.fieldsData;
 
-  const cohorts = fields.cohort;
+  let cohorts = fields.cohort;
   const secClearance = fields.sec_clearance;
   const courseStatus = fields.course_status;
   const progress_stat = fields.milestoneProgress;
   const ed_status = fields.college_degree;
 
   useEffect(()=>{
-    console.log('data');
+    cohorts= fieldsContext.fieldsData.cohort;
   },[fieldsContext.update])
   const handleSearch = (searchTerm) => {
     
@@ -239,9 +239,9 @@ function Filter({
           id="manager-select"
         >
           <option>Career Service Manager</option>
-          {managers.map((manager) => {
+          {managers.map((manager,index) => {
             return (
-              <option key={managers.tscm_id} value={manager.tscm_id}>
+              <option key={index} value={manager.tscm_id}>
                 {manager.tscm_first}, {manager.tscm_last}{" "}
               </option>
             );
