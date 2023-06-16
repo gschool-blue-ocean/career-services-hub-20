@@ -1,19 +1,18 @@
 FROM node:14
+
 WORKDIR /code
 
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm ci
+# Copy package.json and package-lock.json
+COPY package.json .
+COPY package-lock.json .
 
-# Copy other necessary files
-COPY src/ ./src/
-COPY .prettierignore ./
-COPY Dockerfile ./
-COPY vite.config.js ./
+# Install dependencies
+RUN npm install
 
-# Copy test files explicitly
-COPY <path_to_test_files> ./   # Specify the path to your test files here
+# Copy the remaining files
+COPY wait-for.sh .
+COPY . .
 
-# Add additional configuration or commands if needed
+# Set the command to run the tests
+CMD ["./wait-for.sh", "api:8000", "npm", "test"]
 
-CMD echo "JUST HERE FOR DEVELOPMENT!"
