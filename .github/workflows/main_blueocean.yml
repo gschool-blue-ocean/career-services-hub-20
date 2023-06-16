@@ -27,8 +27,8 @@ jobs:
 
       - name: Build and push container image to registry
         run: |
-          docker-compose -f docker-compose.yml build
-          docker-compose -f docker-compose.yml push
+          docker-compose -f docker-compose.yaml build
+          docker-compose -f docker-compose.yaml push
 
   deploy:
     runs-on: ubuntu-latest
