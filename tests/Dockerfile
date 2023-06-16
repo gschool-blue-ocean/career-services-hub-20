@@ -14,5 +14,5 @@ COPY wait-for.sh .
 COPY . .
 
 # Set the command to run the tests
-CMD ["./wait-for.sh", "api:8000", "npm", "test"]
+CMD ["api:8000", "npm", "test"]
 
