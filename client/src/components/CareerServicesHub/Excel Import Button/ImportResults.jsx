@@ -65,7 +65,6 @@ export default function ImportResults({
       })
         .then((response) => response.json())
         .then((data) => {
-
           handleUpdateNewStudent(student); // Pass the student to the handle function in Students Cards to re-render page without refreshing
 
           // Close the Student Add Card

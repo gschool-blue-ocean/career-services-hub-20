@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 
 export const EventsContext = createContext();
 
-export function EventsContextProvider({ children,loggedInfo }) {
+export function EventsContextProvider({ children, loggedInfo }) {
   //Create eventData state and give it a single fake event at the start
   const [eventsData, setEventsData] = useState([
     {
@@ -29,10 +29,10 @@ export function EventsContextProvider({ children,loggedInfo }) {
   useEffect(() => {
     // Get latest events data from SQL database
     if (loggedInfo) {
-       fetch(`${url}/events`)
-      .then((response) => response.json())
-      .then((data) => setEventsData(data))
-      .catch((error) => console.log(error));
+      fetch(`${url}/events`)
+        .then((response) => response.json())
+        .then((data) => setEventsData(data))
+        .catch((error) => console.log(error));
     }
   }, [loggedInfo]);
 

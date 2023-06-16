@@ -15,7 +15,7 @@ export default function CareerServicesHub({
   setIsTransitioning,
   loggedInfo,
   isStudent,
-  studentInfo 
+  studentInfo,
 }) {
   // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,12 +37,11 @@ export default function CareerServicesHub({
 
   const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
   const [opacity, setOpacity] = useState(0);
- 
 
   useEffect(() => {
     setOpacity(1);
-    if(isStudent)console.log('is a student')
-    else console.log('not student')
+    if (isStudent) console.log("is a student");
+    else console.log("not student");
   }, [isStudent]);
 
   // Filter the list of students based on the current filter
@@ -79,8 +78,9 @@ export default function CareerServicesHub({
       filteredStudent = filteredStudent.filter(
         (student) => student.cohort === currentCohort
       );
-      if (filteredStudent.length ===0)  //if the selected cohort doesnt exist(once the user deleted)
-        filteredStudent =students;
+      if (filteredStudent.length === 0)
+        //if the selected cohort doesnt exist(once the user deleted)
+        filteredStudent = students;
     }
 
     if (currentClearance) {
@@ -184,12 +184,11 @@ export default function CareerServicesHub({
     const newToggleFiltersBar = !toggleFiltersBar;
     setToggleFiltersBar(newToggleFiltersBar);
   }
-  if(isStudent){
+  if (isStudent) {
     return (
-      <StudentViewCard studentInfo={studentInfo} handleLogOff={handleLogOff}/>
-    )
-  }else{
-
+      <StudentViewCard studentInfo={studentInfo} handleLogOff={handleLogOff} />
+    );
+  } else {
     return (
       <div style={{ opacity: opacity, transition: "opacity 2s" }}>
         <div className="body_container">
@@ -202,7 +201,7 @@ export default function CareerServicesHub({
               }
             >
               <img className="logo" src={galvanizeLogo}></img>
-  
+
               <Filter
                 setSearchTerm={setSearchTerm}
                 searchTerm={searchTerm}
@@ -289,11 +288,6 @@ export default function CareerServicesHub({
           </div>
         </div>
       </div>
-     
     );
   }
-  }
-  
-  
-  
-  
+}
