@@ -10,11 +10,15 @@ This repo contains an example of a full-stack application with an ExpressJS API 
 
 ## Current Features
 
-Login with the following Email and password or get list of users with localhost/8000/managers once running in Docker. 
+For Admin Login : Login with the following Email and password or get list of users with localhost/8000/managers once running in Docker. 
 Email: admin@admin.com 
 Password: admin
 
-Currently, the project has a login page and a main hub page that is available once logged in. In the main-hub, you can see that there is a side bar and a main card container that comprises of all the student cards in the postgresSQL database. 
+For Student Login : Login with the following Email and password or get list of users with localhost/8000/students once running in Docker. 
+Email: student@student.com 
+Password: student
+
+Currently, the project has a login page for admin view and  student view. In the main-hub, once logged in as an admin, you can see that there is a side bar and a main card container that comprises of all the student cards in the postgresSQL database. Once logged in as a student you will find a read only view of a students information. In addition, there is an option to register as a new student which then logs you in as the student once registered.
 
 You will also notice that the each student card has a certain color (Red, Yellow or Green). This is determined by the overall status of the career asset "milestones". 
     If any of the milestones are "Unsatisfactory", then the card is red
@@ -22,6 +26,8 @@ You will also notice that the each student card has a certain color (Red, Yellow
     Else the card is green because all milestones must be "Completed" 
 
 Additionally, if you click a student card then a modal will pop up allowing the user to update anyhting they want about the student using the provided drop down menus. Once the Update Student Button is clicked, the site must be refreshed to see any of the changes.
+
+For authorization and authentication, we are utilizing jasonwebtoken. When a user registers, their password is stored in the database after being encrypted using bcrypt. When a user logs in, if the email and password match the information in the databse, they will be given a JWT that is stored in their cookies. This is what allows a user to continue to navigate the web page. When the user logs out or the token expires they will be rerouted to the login page and blocked from accessing the page with out re-authentication.
 
 Finally, in the student cards container you will also a card with a plus-sign, this can be used to add more students to the app. Once clicked, this will open the add-student modal. There are 2 ways to add students, Single-Add (one at a time using the modal) or Bulk-Import (using a imported csv). You can choose between which option using the colored buttons at the top of the student modal (note the button will be highlighted showing which option you are currently in). 
 
@@ -55,7 +61,7 @@ The app can be started with a few steps:
 4. `cd api` - Enter server-side folder
 5. `npm install` - Install all dependencies
 6. `cd ..` - Back up a folder
-7. `docker-compose up` - Run Project.
+7. `RESET_DB=true docker-compose up --build` - Run Project.
 
 > **NOTE**: After running docker-compose up, you should see 5 containers (only 4 running: API, database, APP, and PG-Admin). The  front-end app should be running on Localhost:3000/. Upon docker containers running, the database will be emptied and re-seeded everytime a docker container is brought down and back up again.
 
@@ -67,7 +73,6 @@ Should you choose Render for your deployment of this application then it should 
 
 ## Possible Future Improvements to Consider
 
-- When updating a student, you have to refresh the page to see the latest changes. Make it so you dont...
 - Have an ability to sort the students on the app in a variety of ways (alphabetically, by Milestone Status, by Cohort, etc.)
 - Once logged in, the app should have a filter automatically set to only display the students tied to that career service manager
 
@@ -107,3 +112,4 @@ Should you choose Render for your deployment of this application then it should 
 - [`docker`](https://www.docker.com/) - Containerization framework for dev and deployment.
 - [`jest`](https://jestjs.io/) - testing suite
 - [`JSONwebToken`](https://jwt.io/) - Used for authentication
+- [`bcrypt`](https://www.npmjs.com/package/bcrypt) - Used for password encryption
