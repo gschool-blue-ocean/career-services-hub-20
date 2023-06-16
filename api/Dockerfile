@@ -5,7 +5,7 @@ WORKDIR /code
 COPY package*.json ./
 RUN npm install
 
-COPY . .
+COPY . ./api/src
 
 CMD [ "npm", "run", "dev" ]
 
