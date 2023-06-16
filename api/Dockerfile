@@ -8,8 +8,10 @@ RUN npm ci
 WORKDIR /code/api/src
 COPY . .
 
+WORKDIR /code
 EXPOSE 3000
 CMD ["npm", "start"]
+
 
 
 
