@@ -10,7 +10,6 @@ COPY package-lock.json .
 RUN npm install
 
 # Copy the remaining files
-COPY wait-for.sh .
 COPY . .
 
 # Set the command to run the tests
