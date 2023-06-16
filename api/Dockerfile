@@ -4,8 +4,9 @@ WORKDIR /code
 
 COPY package*.json ./
 RUN npm ci
-COPY . ./api/src/
 
+COPY ./ ./api/src/
 
 CMD [ "npm", "run", "dev" ]
+
 
