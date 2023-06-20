@@ -2,22 +2,54 @@ import React, { useState, useEffect } from "react";
 import "./loginPage.css";
 import galvanizeLogo from "./galvanizeLogo.webp";
 import RegisterForm from "./RegisterForm";
+import { useNavigate } from "react-router";
 
-const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
+const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
   const [opacity, setOpacity] = useState(0);
   const [register,setRegister] = useState(false);
 
+  const nav = useNavigate();
+
   useEffect(() => {
     //if (isStudent)  document.body.classList = 'student-background'
     const timer = setTimeout(() => setOpacity(1), 100); // delay to let the DOM update
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
-
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
   const url = "http://localhost:8000";
+
+  const handleLogin = async (data) => {
+    console.log('handle login reached')
+    const cookies = document.cookie.split(";");
+    const found = cookies.find(element=> element.trim().startsWith('jwt='))
+    try {
+      if(isStudent){
+        const response = await fetch(`${url}/students/login/isAuthorized`, {
+          method: "GET",
+        
+          headers: {
+            "Content-Type": "application/json", 
+            Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
+            
+          },//student_email student_password\
+         
+        });
+        const result = await response.json()
+        setStudentInfo(result)
+        console.log(result)
+        console.log(studentInfo)
+      }
+        setLoggedInfo(data);
+      console.log(data)
+    } catch (e) {
+      setLoggedInfo(false);
+      setStudentInfo({})
+    } //fetches data, if no error set loggedInfo, else empty it.
+
+  };
 
   async function loginUser(email, password) {
     try {
@@ -45,6 +77,7 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
           Date.now() + timeExpire
         ).toUTCString()}; path=/; SameSite=Strict;`;
         handleLogin(true); // Call the handleLogin function passed as a prop
+        nav('/')
         console.log('workin')
       } else {
         setErrorRelay("Something has gone horribly wrong 😢");
@@ -87,22 +120,18 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
 
   return (
     <div style={{ opacity: opacity, transition: "opacity 2s" }}>
-       <div className='login-nav-background'>
+      <div className='login-nav-background'>
 <nav className='login-nav'>
-          <button className='register-student' onClick={()=>toggleRegister()} >
-          {register ? 'Login' : 'Register'}
-        </button>
+      <button className='register-student' onClick={()=>nav('/register')}>Register</button>
         {
           register?null:<button className="login-student" onClick={() => toggle()}>
           {isStudent ? "Login as Admin" : "Login as Student"}
         </button>
         }
-        
         </nav>
-        
-        </div>
+      </div>
       
-      {register?<RegisterForm/>:(<div className="login-background">
+      <div className="login-background">
        
         
         <form className="login-Container" onSubmit={handleUserLogin}>
@@ -130,7 +159,7 @@ const LogInPage = ({ handleLogin, setIsStudent, isStudent }) => {
             <p className="easter-egg">🌮</p>
           )}
         </form>
-      </div>)}
+      </div>
     </div>
   );
 };
