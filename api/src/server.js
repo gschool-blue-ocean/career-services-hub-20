@@ -60,10 +60,10 @@ app.get("/students", async (req, res, next) => {
 
 app.get("/students/:id", async (req, res, next) => {
   let id = req.params.id;
-  const user = isAuthorized(req,res);
-  
-  if (user){
-    if (user.id)  id = user.id;
+  const user = isAuthorized(req, res);
+
+  if (user) {
+    if (user.id) id = user.id;
   }
   const result = await db
     .query(
@@ -82,24 +82,24 @@ app.get("/students/:id", async (req, res, next) => {
 });
 
 app.post("/students", async (req, res, next) => {
-  console.log(req.body.first)
+  console.log(req.body.first);
   const firstName = req.body.first;
   const lastName = req.body.last;
   const email = req.body.email;
   const password = req.body.pass;
-  const cohort = 'Undetermined';
-  const sercurityClearance = 'Undetermined';
-  const careerStatus = 'Not Currently Searching';
-  const courseStatus = 'Student';
-  const collegeDegree = 'Undetermined';
-  const coverLetter = 'Un-Satisfactory';
-  const resume = 'Un-Satisfactory';
-  const linkedin = 'Un-Satisfactory';
-  const personalNarrative = 'Un-Satisfactory';
-  const hunterAcess = 'Un-Satisfactory';
+  const cohort = "Undetermined";
+  const sercurityClearance = "Undetermined";
+  const careerStatus = "Not Currently Searching";
+  const courseStatus = "Student";
+  const collegeDegree = "Undetermined";
+  const coverLetter = "Un-Satisfactory";
+  const resume = "Un-Satisfactory";
+  const linkedin = "Un-Satisfactory";
+  const personalNarrative = "Un-Satisfactory";
+  const hunterAcess = "Un-Satisfactory";
   const tscm_id = 1;
-  
-  const hashedPassword= bcrypt.hashSync(password,10);
+
+  const hashedPassword = bcrypt.hashSync(password, 10);
   const result = await db
     .query(
       "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree,cover_letter,resume,linkedin,personal_narrative,hunter_access, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12,$13,$14,$15) RETURNING *",
@@ -138,7 +138,7 @@ app.patch("/students/:id", async (req, res, next) => {
   const resume = req.body.resume;
   const linkedin = req.body.linkedin;
   const personal_narrative = req.body.personal_narrative;
-  const hunter_access =req.body.hunter_access
+  const hunter_access = req.body.hunter_access;
   const tscm_id = req.body.tscm_id;
 
   const result = await db
@@ -174,28 +174,33 @@ app.delete("/students/:id", async (req, res, next) => {
     .catch(next);
   res.send({ message: "Sucessfully Deleted Student Record!" });
 });
-app.get('/students/login/isAuthorized',(req,res)=>{
-  let user = isAuthorized(req,res);
+app.get("/students/login/isAuthorized", (req, res) => {
+  let user = isAuthorized(req, res);
 
-  console.log(user)
-  if (!user)  return res.status(401).json({message: 'Unauthorized'})
+  console.log(user);
+  if (!user) return res.status(401).json({ message: "Unauthorized" });
   else if (user.admin)
-  return res.status(204).json({message: 'This is an admin account!'})
+    return res.status(204).json({ message: "This is an admin account!" });
   //console.log(`Welcome back, Student ${user.user}`)
-  res.json({message: user})
-})
-app.post('/students/login', async (req, res, next) => {
+  res.json({ message: user });
+});
+app.post("/students/login", async (req, res, next) => {
   const email = req.body.email;
   const inputPassword = req.body.password;
-  const results = await db.query(`SELECT * FROM student WHERE student_email = $1`,[email]);
-  const student = results.rows[0]
-  if(!student) {
-    return res.status(401).json({message: 'Invalid Email 🤷'})
-  }
-  else if(bcrypt.compareSync(inputPassword,student.student_password)) {
-    const user = {user: `${student.student_first} ${student.student_last}`, id: student.student_id};
-    const token =jwt.sign(user, process.env.SECRET_KEY);
-    res.json({token: token})
+  const results = await db.query(
+    `SELECT * FROM student WHERE student_email = $1`,
+    [email]
+  );
+  const student = results.rows[0];
+  if (!student) {
+    return res.status(401).json({ message: "Invalid Email 🤷" });
+  } else if (bcrypt.compareSync(inputPassword, student.student_password)) {
+    const user = {
+      user: `${student.student_first} ${student.student_last}`,
+      id: student.student_id,
+    };
+    const token = jwt.sign(user, process.env.SECRET_KEY);
+    res.json({ token: token });
   }
 });
 
@@ -250,29 +255,26 @@ app.patch("/managers/:id", async (req, res, next) => {
   res.send(result.rows[0]);
 });
 
+app.post("/managers/login", async (req, res, next) => {
+  const email = req.body.email;
+  const inputPassword = req.body.password;
+  const results = await db.query(
+    `SELECT * FROM service_manager WHERE tscm_email = $1`,
+    [email]
+  );
+  const manager = results.rows[0];
+  if (!manager) {
+    return res.status(401).json({ message: "Invalid Email 🤷" });
+  } else if (bcrypt.compareSync(inputPassword, manager.tscm_password)) {
+    const user = {
+      user: `${manager.tscm_first} ${manager.tscm_last}`,
+      isAdmin: true,
+    };
+    const token = jwt.sign(user, process.env.SECRET_KEY);
 
-app.post('/managers/login', async (req, res, next) => {
-    const email = req.body.email;
-    const inputPassword = req.body.password;
-    const results = await db.query(`SELECT * FROM service_manager WHERE tscm_email = $1`,[email]);
-    const manager = results.rows[0]
-    if(!manager) {
-      return res.status(401).json({message: 'Invalid Email 🤷'})
-    }
-    else if(bcrypt.compareSync(inputPassword,manager.tscm_password)) {
-      const user = {user: `${manager.tscm_first} ${manager.tscm_last}`, isAdmin: true};
-      const token =jwt.sign(user, process.env.SECRET_KEY);
-
-      res.json({token: token})
-    }
-    else
-      return res.status(401).json({ message:'Invalid Password 🤷'})
-   
- })
- 
-  
-    
- 
+    res.json({ token: token });
+  } else return res.status(401).json({ message: "Invalid Password 🤷" });
+});
 
 // Need to think about this more, because we need to update student records and calendar records BEFORE we delete any manager records otherwise we are violating foreign keys
 
@@ -364,18 +366,18 @@ app.delete("/events/:id", async (req, res, next) => {
   res.send("Sucessfully Deleted Event Record!");
 });
 
-app.get('/managers/login/isAuthorized',(req,res)=>{
-  let user = isAuthorized(req,res);
-  if (!user.isAdmin)  return res.status(401).json({message: 'Unauthorized'})
+app.get("/managers/login/isAuthorized", (req, res) => {
+  let user = isAuthorized(req, res);
+  if (!user.isAdmin) return res.status(401).json({ message: "Unauthorized" });
 
-  res.json({message: user})
-})
+  res.json({ message: user });
+});
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
 function isAuthorized(req, res) {
   let auth = req.headers.authorization;
-  console.log(req.headers.authorization)
+  console.log(req.headers.authorization);
   if (!auth) {
     return false;
   }

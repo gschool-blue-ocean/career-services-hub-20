@@ -131,8 +131,9 @@ export default function CareerServicesHub({
       filteredStudent = filteredStudent.filter(
         (student) => student.cohort === currentCohort
       );
-      if (filteredStudent.length ===0)  //if the selected cohort doesnt exist(once the user deleted)
-        filteredStudent =students;
+      if (filteredStudent.length === 0)
+        //if the selected cohort doesnt exist(once the user deleted)
+        filteredStudent = students;
     }
 
     if (currentClearance) {
@@ -280,7 +281,7 @@ else
               }
             >
               <img className="logo" src={galvanizeLogo}></img>
-  
+
               <Filter
                 setSearchTerm={setSearchTerm}
                 searchTerm={searchTerm}
@@ -367,7 +368,6 @@ else
           </div>
         </div>
       </div>
-     
     );
   }
 }

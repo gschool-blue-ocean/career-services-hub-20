@@ -11,9 +11,11 @@ import LogInPage from "../logIn/logInPage";
 
 const App = () => {
   const [loggedInfo, setLoggedInfo] = useState(false);
-  const [isStudent,setIsStudent] = useState(false);
+  const [isStudent, setIsStudent] = useState(false);
 
   const [studentInfo, setStudentInfo] = useState({});
+
+  const url = "http://localhost:8000";
   
   const url = 'http://localhost:8000'
 
@@ -25,7 +27,11 @@ const App = () => {
   return (
     
     <EventsContextProvider loggedInfo={loggedInfo}>
-      <StudentsContextProvider loggedInfo={loggedInfo} isStudent={isStudent} studentInfo={studentInfo} >
+      <StudentsContextProvider
+        loggedInfo={loggedInfo}
+        isStudent={isStudent}
+        studentInfo={studentInfo}
+      >
         <ManagersContextProvider loggedInfo={loggedInfo}>
           <FieldsContextProvider>
             <BrowserRouter>

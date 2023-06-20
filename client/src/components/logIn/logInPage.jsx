@@ -9,7 +9,7 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
   const [opacity, setOpacity] = useState(0);
-  const [register,setRegister] = useState(false);
+  const [register, setRegister] = useState(false);
 
   const nav = useNavigate();
 
@@ -54,8 +54,12 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
   async function loginUser(email, password) {
     try {
       const cookies = document.cookie.split(";");
-      const found = cookies.find(element=> element.trim().startsWith('jwt=')) //looks into cookies if it is a jwt token
-      const path = isStudent? `${url}/students/login` : `${url}/managers/login`;
+      const found = cookies.find((element) =>
+        element.trim().startsWith("jwt=")
+      ); //looks into cookies if it is a jwt token
+      const path = isStudent
+        ? `${url}/students/login`
+        : `${url}/managers/login`;
       const response = await fetch(path, {
         method: "POST",
 
@@ -91,21 +95,17 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
   const toggle = () => {
     if (isStudent) {
       setIsStudent(false);
-    }
-    else
-    {
+    } else {
       setIsStudent(true);
     }
   };
-  const toggleRegister = ()=>{
+  const toggleRegister = () => {
     if (register) setRegister(false);
-    else
-    {
+    else {
       setIsStudent(true);
       setRegister(true);
-    } 
-    
-  }
+    }
+  };
   const handleUserLogin = (e) => {
     e.preventDefault();
 
