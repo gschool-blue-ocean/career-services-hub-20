@@ -24,7 +24,6 @@ function RegisterForm({setIsStudent}){
     
     
     const register = ()=>{
-        console.log('reached')
         const fetchData = async() =>{
             const response = await fetch(`${url}/students`,{
                 method:'POST',
@@ -36,17 +35,17 @@ function RegisterForm({setIsStudent}){
                     pass
                 })
             });
-            
+            const result = await response.json();
 
-
-      if (!response.ok) throw new Error("registry falled");
-      else {
-        const result = await response.json();
-        console.log(result);
-      }
+            if (!response.ok) setErrorRelay(result.message);
+            else {
+                setErrorRelay("You have successfully registered")
+                console.log(result);
+            }
+        };
+        fetchData();
     };
-    fetchData();
-  };
+    
     const handleUserRegister = (e) => {
         e.preventDefault();
         // Check if both email and password fields are not empty
@@ -62,7 +61,7 @@ function RegisterForm({setIsStudent}){
         } 
         else {
           register();
-          setErrorRelay("Registered");
+          setErrorRelay("Registering...");
         }
       };
     return (
