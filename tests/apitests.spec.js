@@ -7,9 +7,10 @@ const app = "http://api:80";
 
 // Global variables intentional. This is for use in multiple routes.
 let newStudentId;
-let newMileId;
 let newManagerId;
 let hashedPassword;
+const student_email = `doe${Math.random()*10}@gmail.com`
+const student_password = "password"
 
 describe("POST /managers", () => {
   it("creates a new manager", async () => {
@@ -48,8 +49,8 @@ describe("POST /students", () => {
     const newStudent = {
       first: "John",
       last: "Doe",
-      email: "doe@gmail.com",
-      pass: "password",
+      email: student_email,
+      pass: student_password,
     };
 
     const response = await request(app)
@@ -67,7 +68,7 @@ describe("POST /students", () => {
         student_id: newStudentId,
         student_first: "John",
         student_last: "Doe",
-        student_email: "doe@gmail.com",
+        student_email: student_email,
         student_password: hashedPassword,
         cohort: 'Undetermined',
         sec_clearance: 'Undetermined',
@@ -82,6 +83,54 @@ describe("POST /students", () => {
         tscm_id: 1
       })
     );    
+  });
+});
+
+describe("POST /students", () => {
+  it("attempts to create duplicate student", async () => {
+    const newStudent = {
+      first: "John",
+      last: "Doe",
+      email: student_email,
+      pass: student_password,
+    };
+
+    const response = await request(app)
+      .post("/students")
+      .send(newStudent)
+      .expect("Content-Type", /json/)
+      .expect(403); // replace with your actual status code
+
+    // Check that the student is returned in the response body
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        message: "This email is in use!"
+      })
+    );    
+  });
+});
+
+describe("POST /students/login", () => {
+  it("logs in as created test student", async () => {
+    const loginInfo = {
+      email: student_email,
+      password: student_password,
+    };
+
+    const response = await request(app)
+      .post("/students/login")
+      .send(loginInfo)
+      .expect("Content-Type", /json/)
+      .expect(200);
+
+      const token = (response.body.token)
+
+    // Check that the student is returned in the response body
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        token: token
+      })
+    );
   });
 });
 
@@ -109,7 +158,7 @@ describe("GET /students/:id", () => {
           student_id: newStudentId,
           student_first: "John",
           student_last: "Doe",
-          student_email: "doe@gmail.com",
+          student_email: student_email,
           student_password: hashedPassword,
           cohort: 'Undetermined',
           sec_clearance: 'Undetermined',
@@ -159,7 +208,7 @@ describe("PATCH /students/:id", () => {
         student_id: newStudentId,
         student_first: "🦘",
         student_last: "Guy",
-        student_email: "doe@gmail.com",
+        student_email: student_email,
         student_password: hashedPassword,
         cohort: "MCSP-20",
         sec_clearance: "SECRET",

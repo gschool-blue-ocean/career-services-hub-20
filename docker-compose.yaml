@@ -69,7 +69,7 @@ services:
       - database
     ports:
       - "${TEST_PORT}:8040"
-    command: /bin/sh -c "sleep 20 && npm test"
+    command: /bin/sh -c "sleep 10 && npm test"
 
 volumes:
   pg-data:
