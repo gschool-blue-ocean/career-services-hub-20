@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "render start",
+    "start": "docker compose up",
     "lint:api": "prettier --check api/**/*.js",
     "lint:client": "prettier --check client/**/*.js",
     "lint": "npm run lint:api && npm run lint:client",
