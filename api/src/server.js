@@ -98,31 +98,48 @@ app.post("/students", async (req, res, next) => {
   const personalNarrative = 'Un-Satisfactory';
   const hunterAcess = 'Un-Satisfactory';
   const tscm_id = 1;
+  try {
+    const results =
+      await db.query(`SELECT student_email FROM student WHERE student_email = $1`,
+      [email]);
+
+      console.log(results.rows[0])
+
+      if (results.rows[0] && results.rows[0].student_email === email){
+        console.log('email in use')
+        res.status(204).send({message:'This email is in use!'})
+      } else {
+        console.log('email not in use')
+        const hashedPassword= bcrypt.hashSync(password,10);
+        const result = await db
+          .query(
+            "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree,cover_letter,resume,linkedin,personal_narrative,hunter_access, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12,$13,$14,$15) RETURNING *",
+            [
+              firstName,
+              lastName,
+              email,
+              hashedPassword,
+              cohort,
+              sercurityClearance,
+              careerStatus,
+              courseStatus,
+              collegeDegree,
+              coverLetter,
+              resume,
+              linkedin,
+              personalNarrative,
+              hunterAcess,
+              tscm_id,
+            ]
+          )
+          .catch(next);
+        res.send(result.rows[0]);
+      }
+
+  } catch (error) {
+    next(error);
+  }
   
-  const hashedPassword= bcrypt.hashSync(password,10);
-  const result = await db
-    .query(
-      "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree,cover_letter,resume,linkedin,personal_narrative,hunter_access, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12,$13,$14,$15) RETURNING *",
-      [
-        firstName,
-        lastName,
-        email,
-        hashedPassword,
-        cohort,
-        sercurityClearance,
-        careerStatus,
-        courseStatus,
-        collegeDegree,
-        coverLetter,
-        resume,
-        linkedin,
-        personalNarrative,
-        hunterAcess,
-        tscm_id,
-      ]
-    )
-    .catch(next);
-  res.send(result.rows[0]);
 });
 
 app.patch("/students/:id", async (req, res, next) => {
