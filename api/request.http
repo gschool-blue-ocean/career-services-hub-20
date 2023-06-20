@@ -15,7 +15,9 @@ POST http://localhost:8000/students/
 Content-Type: application/json
 
 {
+    "first": "Coty",
+    "last": "Auger",
     "email": "Coty_Auger18@yahoo.com",
-    "password": "student"
+    "pass": "student"
 
 }

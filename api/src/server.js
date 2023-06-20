@@ -82,7 +82,6 @@ app.get("/students/:id", async (req, res, next) => {
 });
 
 app.post("/students", async (req, res, next) => {
-  console.log(req.body.first);
   const firstName = req.body.first;
   const lastName = req.body.last;
   const email = req.body.email;
