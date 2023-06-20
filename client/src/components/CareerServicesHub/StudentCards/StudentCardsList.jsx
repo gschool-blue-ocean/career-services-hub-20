@@ -23,7 +23,7 @@ export default function StudentCardslist({
   currentClearance,
   educationStatus,
   selectedManager,
-  isStudent
+  isStudent,
 }) {
   const studentContext = useContext(StudentsContext);
   let students = studentContext.studentsData;
@@ -60,7 +60,7 @@ export default function StudentCardslist({
 
   // Function to handle updating an existing student object in the list
   function handleUpdateExistingStudent(existingStudentObj) {
-    console.log(existingStudentObj)
+    console.log(existingStudentObj);
     const updatedStudents = filteredStudents.map((student) => {
       if (student.student_id === existingStudentObj.student_id) {
         return existingStudentObj; // Replace the existing student with the updated student object
@@ -70,7 +70,7 @@ export default function StudentCardslist({
 
     filteredStudents = updatedStudents; // Update the filtered students list
     setCurrentStudents(updatedStudents); // Update the state with the updated list
-    studentContext.setUpdate(!studentContext.update)  //updates the hook by the usecontext part. in which will trigger useeffect to refetch the data.
+    console.log(currentStudents);
   }
 
   return (

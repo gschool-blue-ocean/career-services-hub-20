@@ -14,14 +14,23 @@
   display: flex;
   margin: 0px;
   padding: 0px;
+  width:100%;
 }
 
 .left_container {
+  flex: 0 0 auto;
   padding-right: 0px;
   display: flex;
-  height: 100vh;
   font-family: "KelsonSans-Bold";
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+.login-popup{
+  position:absolute;
+  background-color: palegreen;
+  color:green;
+  width:100%;
+  padding:30px;
 }
 
 .logo {
@@ -45,8 +54,9 @@
 }
 
 .right_container {
+  flex: 1 1 auto;
+  overflow-y: auto;
   width: 100vw;
-  height: 100vh;
   margin: 0px;
   padding: 0px;
   background-color: rgba(0, 0, 0, 0.3);
@@ -58,7 +68,6 @@
   width: fit-content;
   padding: 0px 2px;
   color: white;
-  height: 100vh;
   font-weight: bold;
   font-size: large;
 }
@@ -78,7 +87,7 @@
   display: inline-block;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .export-button {

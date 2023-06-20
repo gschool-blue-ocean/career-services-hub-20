@@ -12,7 +12,13 @@ export default function StudentCard({
   const [modalToggle, setModalToggle] = useState(false); // State for modal toggle
   let count = 0;
   let unSatisfactoryFlag = false;
-  const milestones = [student.cover_letter, student.resume, student.linkedin, student.personal_narrative, student.hunter_access]
+  const milestones = [
+    student.cover_letter,
+    student.resume,
+    student.linkedin,
+    student.personal_narrative,
+    student.hunter_access,
+  ];
 
   useEffect(() => {
     // Calculate the milestone progress and update the state

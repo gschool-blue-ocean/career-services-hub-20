@@ -1,5 +1,6 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import galvanizeLogo from "./galvanizeLogo.webp";
+import { useNavigate } from "react-router-dom";
 
 function RegisterForm(){
     

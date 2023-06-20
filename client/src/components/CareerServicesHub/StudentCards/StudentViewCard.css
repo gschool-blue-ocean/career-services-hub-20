@@ -2,22 +2,12 @@
     background-color: rgb(38, 35, 35);
     height: 100vh;
 }
-
-.logoff{
-    position: absolute;
-    right: 0;
-   color: white;
-   background-color: rgb(67, 61, 61);
-   border: 1px solid rgb(67, 61, 61);
-   border-radius: 4px;
-   padding: 0 15px;
-   cursor: pointer;
-   height: 32px;
-   font-size: 14px;
-   transition: all 0.2s ease-in-out;
+.student-profile-data > * {
+    margin-bottom: 30px;
 }
 .logoff:hover {
-  box-shadow: 1px 1px rgb(97, 88, 88), 2px 2px rgb(97, 88, 88), 3px 3px rgb(97, 88, 88);
+  box-shadow: 1px 1px rgb(97, 88, 88), 2px 2px rgb(97, 88, 88),
+    3px 3px rgb(97, 88, 88);
   transform: translateX(-3px);
 }
 
@@ -30,14 +20,15 @@ border-image: linear-gradient(to right, #4b23ff, #ff4b4b);
 border-image-slice: 4;
 border-image-repeat: repeat;
 height: 75vh;
-width: 50%;
 margin: auto;
+margin-top: 10%;
 display: grid;
 grid-template-columns: 1fr 1fr; /* Two columns with equal width */
 grid-template-rows: 1fr 1fr 1fr; 
 grid-gap: 1px;
 padding-top: 10px;
 padding-left: 10px;
+overflow: hidden;
 /* border-radius: 40px; */
 justify-items: left;
 align-items: left;
@@ -54,12 +45,12 @@ align-items: left;
     display: flex;
     flex-direction: column;
     gap: 55px;
-    color: white;
+    color: var(--student-text-color);
 }
 
 .contact{
     background-color: rgb(67, 61, 61);
-    color: white;
+    color: var(--student-text-color);
     border-width: 5px;
     border-style: solid;
     border-image: linear-gradient(to right, #4b23ff, #ff4b4b);

@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import galvanizeLogo from '../../logIn/galvanizeLogo.webp';
-import './StudentViewCard.css';
+import React, { useState, useEffect } from "react";
+import galvanizeLogo from "../../logIn/galvanizeLogo.webp";
+import "./StudentViewCard.css";
 
-const StudentViewCard = (studentInfo, handleLogOff) => {
-  console.log(studentInfo.studentInfo);
+const StudentViewCard = (studentInfo) => {
+  console.log(studentInfo.popUpLogOff);
 
   const [currentStudent, setCurrentStudent] = useState({});
-  const url = 'http://localhost:8000';
+  const url = "http://localhost:8000";
   useEffect(() => {
-    async function getUser(){
-        if(studentInfo.studentInfo.message){
+    async function getUser() {
+      if (studentInfo.studentInfo.message) {
         await fetch(`${url}/students/${studentInfo.studentInfo.message.id}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
         })
           .then((response) => response.json())
           .then((data) => {
@@ -20,14 +20,14 @@ const StudentViewCard = (studentInfo, handleLogOff) => {
             console.log(data); // Log the fetched data here
           })
           .catch((error) => {
-            console.error('Error:', error);
+            console.error("Error:", error);
           });
-        }
-        }
-        getUser()
-    }, [studentInfo]);
+      }
+    }
+    getUser();
+  }, [studentInfo]);
 
-  console.log(currentStudent)
+  console.log(currentStudent);
   return (
     <>
     <div className='container'>
@@ -47,6 +47,8 @@ const StudentViewCard = (studentInfo, handleLogOff) => {
             </div> 
         
       </div>
+      </div>
+     
       </div>
     </>
   );
