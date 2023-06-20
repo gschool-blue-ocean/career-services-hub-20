@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:15-alpine
+    env_file: .env
+    ports:
+      - 5432:5432
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - ./api/src/db/migration.sql:/docker-entrypoint-initdb.d/migration.sql
+
+  pg-admin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+      - PGADMIN_LISTEN_PORT=80
+      - PGADMIN_SKIP_NATIVE_AUTH=true
+
+  api:
+    build: ./api
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database/${POSTGRES_DB}
+      NODE_ENV: development
+      PORT: 80
+    depends_on:
+      - database
+    ports:
+      - ${API_PORT}:80
+    volumes:
+      - ./api/src:/code/src
+    command: /bin/sh -c 'if [ "$RESET_DB" = "true" ]; then sleep 2 && npm run seed && npm run dev; else npm run dev; fi'
+
+  app:
+    build: ./client
+    env_file: .env
+    environment:
+      API_URL: http://api
+      PORT: ${CLIENT_PORT}
+    depends_on:
+      - api
+    ports:
+      - ${CLIENT_PORT}:${CLIENT_PORT}
+    volumes:
+      - ./client/src:/code/src
+    command: npm run dev
+
+  tests:
+    build: ./tests
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database/${POSTGRES_DB}
+      NODE_ENV: development
+    depends_on:
+      - database
+    ports:
+      - "${TEST_PORT}:8040"
+    command: /bin/sh -c "sleep 20 && npm test"
+
+volumes:
+  pg-data:
