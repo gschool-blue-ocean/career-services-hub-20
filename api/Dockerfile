@@ -6,9 +6,9 @@ COPY package.json .
 COPY package-lock.json .
 RUN npm ci
 
-COPY src/ /code/app/src/
-COPY faker.mjs /code/app/
-COPY vite.config.js /code/app/
+COPY src/ ./src/
+COPY faker.mjs ./
+COPY vite.config.js ./
 
 EXPOSE 3000
 CMD ["npm", "start"]
