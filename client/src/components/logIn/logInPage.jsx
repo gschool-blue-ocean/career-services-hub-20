@@ -4,7 +4,13 @@ import galvanizeLogo from "./galvanizeLogo.webp";
 import RegisterForm from "./RegisterForm";
 import { useNavigate } from "react-router";
 
-const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) => {
+const LogInPage = ({
+  setIsStudent,
+  isStudent,
+  setStudentInfo,
+  setManagerInfo,
+  setLoggedInfo,
+}) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
@@ -22,33 +28,30 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
   const url = "http://localhost:8000";
 
   const handleLogin = async (data) => {
-    console.log('handle login reached')
+    console.log("handle login reached");
     const cookies = document.cookie.split(";");
-    const found = cookies.find(element=> element.trim().startsWith('jwt='))
+    const found = cookies.find((element) => element.trim().startsWith("jwt="));
     try {
-      if(isStudent){
+      if (isStudent) {
         const response = await fetch(`${url}/students/login/isAuthorized`, {
           method: "GET",
-        
+
           headers: {
-            "Content-Type": "application/json", 
-            Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
-            
-          },//student_email student_password\
-         
+            "Content-Type": "application/json",
+            Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
+          }, //student_email student_password\
         });
-        const result = await response.json()
-        setStudentInfo(result)
-        console.log(result)
-        console.log(studentInfo)
+        const result = await response.json();
+        setStudentInfo(result);
+        console.log(result);
+        console.log(studentInfo);
       }
-        setLoggedInfo(data);
-      console.log(data)
+      setLoggedInfo(data);
+      console.log(data);
     } catch (e) {
       setLoggedInfo(false);
-      setStudentInfo({})
+      setStudentInfo({});
     } //fetches data, if no error set loggedInfo, else empty it.
-
   };
 
   async function loginUser(email, password) {
@@ -70,6 +73,9 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
       });
       console.log(response);
       const responseData = await response.json();
+      if (!isStudent) {
+        setManagerInfo(responseData.user);
+      }
 
       if (!response.ok) {
         throw new Error("Invalid email or password");
@@ -81,8 +87,8 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
           Date.now() + timeExpire
         ).toUTCString()}; path=/; SameSite=Strict;`;
         handleLogin(true); // Call the handleLogin function passed as a prop
-        nav('/')
-        console.log('workin')
+        nav("/");
+        console.log("workin");
       } else {
         setErrorRelay("Something has gone horribly wrong 😢");
       }
@@ -120,20 +126,20 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
 
   return (
     <div style={{ opacity: opacity, transition: "opacity 2s" }}>
-      <div className='login-nav-background'>
-<nav className='login-nav'>
-      <button className='register-student' onClick={()=>nav('/register')}>Register</button>
-        {
-          register?null:<button className="login-student" onClick={() => toggle()}>
-          {isStudent ? "Login as Admin" : "Login as Student"}
-        </button>
-        }
+      <div className="login-nav-background">
+        <nav className="login-nav">
+          <button className="register-student" onClick={() => nav("/register")}>
+            Register
+          </button>
+          {register ? null : (
+            <button className="login-student" onClick={() => toggle()}>
+              {isStudent ? "Login as Admin" : "Login as Student"}
+            </button>
+          )}
         </nav>
       </div>
-      
+
       <div className="login-background">
-       
-        
         <form className="login-Container" onSubmit={handleUserLogin}>
           <img src={galvanizeLogo}></img>
           <input

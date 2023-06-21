@@ -13,6 +13,7 @@ export function ManagersContextProvider({ children, loggedInfo }) {
       tscm_id: 1,
       tscm_last: "Waelchi",
       tscm_password: "oypEp16",
+      tscm_code: "ABcd1234",
     },
   ]);
 
