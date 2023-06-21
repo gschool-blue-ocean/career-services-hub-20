@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {useNavigate} from 'react-router-dom';
 
-import StudentCardsList from "./StudentCards/StudentCardsList";
 import "./CareerServicesHub.css";
 import StudentViewCard from "./StudentCards/StudentViewCard";
-
-import Export from "./Export";
-import "./Filter/filter.css";
-import Filter from "./Filter/Filter_Com";
 import galvanizeLogo from "../logIn/galvanizeLogo.webp";
+
+import AdminViewCards from "./AdminViewCards";
+
 
 export default function CareerServicesHub({
   isTransitioning,
@@ -18,7 +16,8 @@ export default function CareerServicesHub({
   studentInfo,
   setLoggedInfo,
   setStudentInfo,
-  setIsStudent
+  setIsStudent,
+  url
 }) {
   // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,15 +41,13 @@ export default function CareerServicesHub({
   const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
   const [opacity, setOpacity] = useState(0);
   const nav = useNavigate();
-
-  const url = "http://localhost:8000";
   
   useEffect(() => {
     const fetchData = async()=>{
       const cookies = document.cookie.split(";");
       const found = cookies.find(element=> element.trim().startsWith('jwt='))
       let response;
-        
+      
         //check if its manager token
         response = await fetch(`${url}/managers/login/isAuthorized`, {
           method: "GET",
@@ -261,7 +258,61 @@ export default function CareerServicesHub({
     setToggleFiltersBar(newToggleFiltersBar);
   }
   
-console.log(popUpLogOff)
+  const propData = {
+    handleFilterToggle,
+    opacity,
+    popUpLogOff,
+    toggleFiltersBar,
+    galvanizeLogo,
+    setSearchTerm,
+    searchTerm,
+    currentCohort,
+    setCurrentCohort,
+    setCoverLetter,
+    setCurrentCoverStatus,
+    currentCoverStatus,
+    setStudentResume,
+    setCurrentResumeStatus,
+    currentResumeStatus,
+    setLinkedAccount,
+    linkedAccountStatus,
+    setLinkedAccountStatus,
+    setPersonalNarrative,
+    setNarrativeStatus,
+    narrativeStatus,
+    setHunterAccess,
+    currentAccess,
+    setCurrentAccess,
+    currentStatus,
+    setCurrentStatus,
+    currentClearance,
+    setCurrentClearance,
+    educationStatus,
+    setEducationStatus,
+    selectedManager,
+    setSelectedManager,
+    handleClear,
+    currentCohort,
+    coverLetter,
+    currentCoverStatus,
+    studentResume,
+    currentResumeStatus,
+    linkedAccount,
+    linkedAccountStatus,
+    personalNarrative,
+    narrativeStatus,
+    hunterAccess,
+    currentAccess,
+    currentStatus,
+    currentClearance,
+    educationStatus,
+    selectedManager,
+    handleClear,
+    handleLogOff,
+    isStudent,
+    filterStudents,
+    studentInfo
+  }
 if(isStudent)
 {
  return <StudentViewCard popUpLogOff={popUpLogOff} studentInfo={studentInfo} handleLogOff={()=>handleLogOff()}/>
@@ -269,105 +320,7 @@ if(isStudent)
 else
 {
     return (
-      <div style={{ opacity: opacity, transition: "opacity 2s" }}>
-        {popUpLogOff >0 ?<div className='login-popup'>Successfully logged off. Navigating in {popUpLogOff}s...</div>:null}
-        <div className="body_container">
-          <div className="left_container">
-            <div
-              className={
-                toggleFiltersBar
-                  ? "left-container-filters"
-                  : "collapsed-filters-container"
-              }
-            >
-              <img className="logo" src={galvanizeLogo}></img>
-
-              <Filter
-                setSearchTerm={setSearchTerm}
-                searchTerm={searchTerm}
-                currentCohort={currentCohort}
-                setCurrentCohort={setCurrentCohort}
-                setCoverLetter={setCoverLetter}
-                setCurrentCoverStatus={setCurrentCoverStatus}
-                currentCoverStatus={currentCoverStatus}
-                setStudentResume={setStudentResume}
-                setCurrentResumeStatus={setCurrentResumeStatus}
-                currentResumeStatus={currentResumeStatus}
-                setLinkedAccount={setLinkedAccount}
-                linkedAccountStatus={linkedAccountStatus}
-                setLinkedAccountStatus={setLinkedAccountStatus}
-                setPersonalNarrative={setPersonalNarrative}
-                setNarrativeStatus={setNarrativeStatus}
-                narrativeStatus={narrativeStatus}
-                setHunterAccess={setHunterAccess}
-                currentAccess={currentAccess}
-                setCurrentAccess={setCurrentAccess}
-                currentStatus={currentStatus}
-                setCurrentStatus={setCurrentStatus}
-                currentClearance={currentClearance}
-                setCurrentClearance={setCurrentClearance}
-                educationStatus={educationStatus}
-                setEducationStatus={setEducationStatus}
-                selectedManager={selectedManager}
-                setSelectedManager={setSelectedManager}
-                handleClear={handleClear}
-              />
-              <Export
-                filterStudents={filterStudents}
-                currentCohort={currentCohort}
-                coverLetter={coverLetter}
-                currentCoverStatus={currentCoverStatus}
-                studentResume={studentResume}
-                currentResumeStatus={currentResumeStatus}
-                linkedAccount={linkedAccount}
-                linkedAccountStatus={linkedAccountStatus}
-                personalNarrative={personalNarrative}
-                narrativeStatus={narrativeStatus}
-                hunterAccess={hunterAccess}
-                currentAccess={currentAccess}
-                currentStatus={currentStatus}
-                currentClearance={currentClearance}
-                educationStatus={educationStatus}
-                selectedManager={selectedManager}
-              />
-              <div className="profile-container">
-                <button className="header-buttons" onClick={()=>handleLogOff()}>
-                  Logout
-                </button>
-              </div>
-            </div>
-            <button
-              className="collapse-filter-button"
-              onClick={handleFilterToggle}
-            >
-              {" "}
-              &#8646;{" "}
-            </button>
-          </div>
-          <div className="right_container">
-            <StudentCardsList
-              filterStudents={filterStudents}
-              currentCohort={currentCohort}
-              coverLetter={coverLetter}
-              currentCoverStatus={currentCoverStatus}
-              studentResume={studentResume}
-              currentResumeStatus={currentResumeStatus}
-              linkedAccount={linkedAccount}
-              linkedAccountStatus={linkedAccountStatus}
-              personalNarrative={personalNarrative}
-              narrativeStatus={narrativeStatus}
-              hunterAccess={hunterAccess}
-              currentAccess={currentAccess}
-              currentStatus={currentStatus}
-              currentClearance={currentClearance}
-              educationStatus={educationStatus}
-              selectedManager={selectedManager}
-              handleClear={handleClear}
-              isStudent={isStudent}
-            />
-          </div>
-        </div>
-      </div>
+      <AdminViewCards {...propData}/>
     );
   }
 }

@@ -4,7 +4,7 @@ import galvanizeLogo from "./galvanizeLogo.webp";
 import RegisterForm from "./RegisterForm";
 import { useNavigate } from "react-router";
 
-const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) => {
+const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo, url }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
@@ -19,7 +19,7 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
-  const url = "http://localhost:8000";
+  
 
   const handleLogin = async (data) => {
     console.log('handle login reached')
@@ -39,10 +39,14 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
         });
         const result = await response.json()
         setStudentInfo(result)
-        console.log(result)
-        console.log(studentInfo)
-      }
         setLoggedInfo(data);
+        console.log(result)
+      }
+      else
+      {
+        setStudentInfo({id:data.id});
+      }
+      setLoggedInfo(true);
       console.log(data)
     } catch (e) {
       setLoggedInfo(false);
@@ -80,7 +84,7 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
         document.cookie = `jwt=${responseData.token}; expires=${new Date(
           Date.now() + timeExpire
         ).toUTCString()}; path=/; SameSite=Strict;`;
-        handleLogin(true); // Call the handleLogin function passed as a prop
+        handleLogin(responseData); // Call the handleLogin function passed as a prop
         nav('/')
         console.log('workin')
       } else {
@@ -99,13 +103,7 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo }) =
       setIsStudent(true);
     }
   };
-  const toggleRegister = () => {
-    if (register) setRegister(false);
-    else {
-      setIsStudent(true);
-      setRegister(true);
-    }
-  };
+
   const handleUserLogin = (e) => {
     e.preventDefault();
 

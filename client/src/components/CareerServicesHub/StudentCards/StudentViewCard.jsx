@@ -1,15 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
+import { io } from "socket.io-client";
 import galvanizeLogo from "../../logIn/galvanizeLogo.webp";
 import "./StudentViewCard.css";
 
 const StudentViewCard = (studentInfo) => {
-  console.log(studentInfo.popUpLogOff);
+  const socketRef = useRef(null);
 
   const [currentStudent, setCurrentStudent] = useState({});
   const url = "http://localhost:8000";
+   
+  useEffect(()=>{
+    if (studentInfo.studentInfo.message) {
+      socketRef.current = io(url,{
+      transports: ['websocket'],
+      reconnection: true,            // Enable reconnection attempts
+      reconnectionAttempts: 5,       // Limit the number of reconnection attempts
+      reconnectionDelay: 1000,       // Initial delay between reconnection attempts (in milliseconds)
+      reconnectionDelayMax: 5000,    // Maximum delay between reconnection attempts (in milliseconds)
+    });
+      socketRef.current.emit('connects',{id: studentInfo.studentInfo.message.id})
+      return ()=>{
+        socketRef.current.disconnect();
+      }
+    }
+  },[]) //triggers when page loads.
   useEffect(() => {
     async function getUser() {
       if (studentInfo.studentInfo.message) {
+
         await fetch(`${url}/students/${studentInfo.studentInfo.message.id}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -26,8 +44,17 @@ const StudentViewCard = (studentInfo) => {
     }
     getUser();
   }, [studentInfo]);
+  const handleSend=()=>{ 
+    if (socketRef.current) {
+      const students = studentInfo.studentInfo.message;
+      console.log(students);
+      console.log(students.tscm_id)
+    socketRef.current.emit('data',{studentId: students.id,tscm_id : students.tscm_id})
 
-  console.log(currentStudent);
+    }
+    
+  }
+  
   return (
     <>
     <div className='container'>
@@ -43,7 +70,7 @@ const StudentViewCard = (studentInfo) => {
             <hr />
             <p>My Profile</p>
             <p>Change My Profile</p>
-            <p>Notification</p>
+            <p onClick={()=>handleSend()}>Notification</p>
             <p onClick={studentInfo.handleLogOff}>Log Out</p>
           </div>
           <div>

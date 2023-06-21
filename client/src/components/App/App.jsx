@@ -60,16 +60,23 @@ const App = () => {
           return result;
         }
       }
+      else{
+        const result = await response.json();
+        console.log(result.message);
+        setStudentInfo(result.message);
+      }
     };
     fetchData()
-      .then((auth) => setLoggedInfo(true))
+      .then((auth) => {setLoggedInfo(true);})
       .catch((e) => {
         setLoggedInfo(false);
         setStudentInfo({});
         console.log(e);
       }); //fetches data, if no error set loggedInfo, else empty it.
   }, []);
-
+  useEffect(()=>{
+    console.log(loggedInfo)
+  },[loggedInfo])
   const handleLogin = async (data) => {
     console.log("handle login reached");
     const cookies = document.cookie.split(";");
@@ -115,12 +122,12 @@ const App = () => {
             <BrowserRouter>
             
             <Routes>
-              <Route path='/login' element={<LogInPage setIsStudent={setIsStudent} isStudent={isStudent} setStudentInfo={setStudentInfo} setLoggedInfo={setLoggedInfo}/>}></Route>
+              <Route path='/login' element={<LogInPage url={url} setIsStudent={setIsStudent} isStudent={isStudent} setStudentInfo={setStudentInfo} setLoggedInfo={setLoggedInfo}/>}></Route>
               <Route path="/" element={<Suspense fallback={<div>Loading...</div>}>
-                <CareerServicesHub setIsStudent={setIsStudent} loggedInfo={loggedInfo} isStudent={isStudent} studentInfo={studentInfo} setLoggedInfo={setLoggedInfo} setStudentInfo={setStudentInfo}/>
+                <CareerServicesHub url={url} setIsStudent={setIsStudent} loggedInfo={loggedInfo} isStudent={isStudent} studentInfo={studentInfo} setLoggedInfo={setLoggedInfo} setStudentInfo={setStudentInfo}/>
                 </Suspense>}>
               </Route>
-              <Route path='/register' element={<RegisterForm setIsStudent={setIsStudent}/>} />
+              <Route path='/register' element={<RegisterForm url={url} setIsStudent={setIsStudent}/>} />
             </Routes>
             {/* {loggedInfo ? (
                 <CareerServicesHub handleLogOff={handleLogOff} loggedInfo={loggedInfo} isStudent={isStudent} studentInfo={studentInfo}/>
