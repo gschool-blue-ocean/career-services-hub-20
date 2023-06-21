@@ -97,10 +97,23 @@ app.post("/students", async (req, res, next) => {
   const linkedin = "Un-Satisfactory";
   const personalNarrative = "Un-Satisfactory";
   const hunterAcess = "Un-Satisfactory";
-  const tscm_id = 1;
+  let tscm_id;
 
   try {
-    if (verification !== "abc123") {
+    const result = await db.query(
+      "SELECT tscm_id, tscm_code FROM service_manager"
+    );
+    let verified = false;
+    for (let i = 0; i < result.rows.length; i++) {
+      let code = result.rows[i].tscm_code;
+      console.log(code);
+      if (verification === code) {
+        verified = true;
+        tscm_id = result.rows[i].tscm_id;
+        break;
+      }
+    }
+    if (!verified) {
       res
         .status(403)
         .send({ message: "You did not enter a valid verification code." });
@@ -244,8 +257,9 @@ app.get("/managers/:id", async (req, res, next) => {
 });
 
 function generateRandomCode(length) {
-  const alphanumericChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let code = '';
+  const alphanumericChars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let code = "";
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * alphanumericChars.length);
     code += alphanumericChars.charAt(randomIndex);

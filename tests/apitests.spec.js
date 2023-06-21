@@ -30,7 +30,7 @@ describe("POST /managers", () => {
       .expect("Content-Type", /json/)
       .expect(200);
 
-      authCode = response.body.tscm_code
+    authCode = response.body.tscm_code;
 
     // Check that the student is returned in the response body
     expect(response.body).toEqual(
@@ -55,7 +55,7 @@ describe("POST /students", () => {
       last: "Doe",
       email: student_email,
       pass: student_password,
-      verifyCode: "abc123",
+      verifyCode: authCode,
     };
 
     const response = await request(app)
@@ -85,7 +85,7 @@ describe("POST /students", () => {
         linkedin: "Un-Satisfactory",
         personal_narrative: "Un-Satisfactory",
         hunter_access: "Un-Satisfactory",
-        tscm_id: 1,
+        tscm_id: newManagerId,
       })
     );
   });
@@ -98,7 +98,7 @@ describe("POST /students", () => {
       last: "Doe",
       email: student_email,
       pass: student_password,
-      verifyCode: "abc123",
+      verifyCode: authCode,
     };
 
     const response = await request(app)
@@ -176,9 +176,10 @@ describe("GET /students/:id", () => {
         linkedin: "Un-Satisfactory",
         personal_narrative: "Un-Satisfactory",
         hunter_access: "Un-Satisfactory",
-        tscm_first: "Elon",
-        tscm_last: "Gates",
-        tscm_id: 1,
+        tscm_first: "Reptar",
+        tscm_last: "Pickles",
+        tscm_email: "Reptar@reptar.com",
+        tscm_id: newManagerId,
       })
     );
   });

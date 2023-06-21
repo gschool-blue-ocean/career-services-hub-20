@@ -173,12 +173,14 @@ const seedServiceManager = async () => {
 
   //Generate multiple manager objects and push it to careerManager Array
   for (let i = 0; i < SEED_CAREER_MANAGER; i++) {
+    const first = faker.name.firstName();
+    const last = faker.name.lastName();
     careerManager.push({
-      tscm_first: faker.name.firstName(), // Use faker method to generate fake manager first name
-      tscm_last: faker.name.lastName(), // Use faker method to generate fake manager last name
+      tscm_first: first, // Use faker method to generate fake manager first name
+      tscm_last: last, // Use faker method to generate fake manager last name
       login_id: faker.internet.userName(), // Use faker method to generate fake manager username
       tscm_password: await generateBcrypt(faker.internet.password(10)), // Use faker method to generate fake manager password for login
-      tscm_email: faker.internet.email(), // Use faker method to generate fake manager email for login
+      tscm_email: `${first}.${last}@galvanize.com`, // Use faker method to generate fake manager email for login
       tscm_avatar: faker.internet.avatar(), // Use faker method to generate URL for fake manager profile pic
       tscm_code: faker.random.alphaNumeric(8), // Use faker method to generate URL for fake manager profile pic
     });
