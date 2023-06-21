@@ -243,6 +243,16 @@ app.get("/managers/:id", async (req, res, next) => {
   res.send(results.rows);
 });
 
+function generateRandomCode(length) {
+  const alphanumericChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let code = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * alphanumericChars.length);
+    code += alphanumericChars.charAt(randomIndex);
+  }
+  return code;
+}
+
 app.post("/managers", async (req, res, next) => {
   const firstName = req.body.tscm_first;
   const lastName = req.body.tscm_last;
@@ -250,7 +260,7 @@ app.post("/managers", async (req, res, next) => {
   const password = req.body.tscm_password;
   const email = req.body.tscm_email;
   const avatar = req.body.tscm_avatar;
-  const code = req.body.tscm_code;
+  const code = generateRandomCode(8);
 
   const result = await db
     .query(

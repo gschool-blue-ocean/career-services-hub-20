@@ -9,6 +9,7 @@ const app = "http://api:80";
 let newStudentId;
 let newManagerId;
 let hashedPassword;
+let authCode;
 const student_email = `doe${Math.random() * 10}@gmail.com`;
 const student_password = "password";
 
@@ -21,7 +22,6 @@ describe("POST /managers", () => {
       tscm_password: "Reptar123",
       tscm_email: "Reptar@reptar.com",
       tscm_avatar: "🦖",
-      tscm_code: "abcd1234",
     };
 
     const response = await request(app)
@@ -29,6 +29,8 @@ describe("POST /managers", () => {
       .send(newManager)
       .expect("Content-Type", /json/)
       .expect(200);
+
+      authCode = response.body.tscm_code
 
     // Check that the student is returned in the response body
     expect(response.body).toEqual(
@@ -39,7 +41,7 @@ describe("POST /managers", () => {
         tscm_password: "Reptar123",
         tscm_email: "Reptar@reptar.com",
         tscm_avatar: "🦖",
-        tscm_code: "abcd1234",
+        tscm_code: authCode,
       })
     );
     newManagerId = response.body.tscm_id;
