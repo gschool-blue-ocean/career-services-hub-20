@@ -86,6 +86,7 @@ app.post("/students", async (req, res, next) => {
   const lastName = req.body.last;
   const email = req.body.email;
   const password = req.body.pass;
+  const verification = req.body.verifyCode;
   const cohort = "Undetermined";
   const sercurityClearance = "Undetermined";
   const careerStatus = "Not Currently Searching";
@@ -99,16 +100,26 @@ app.post("/students", async (req, res, next) => {
   const tscm_id = 1;
 
   try {
-    //Check to see if student email already exists
-    const results = await db.query(`SELECT student_email FROM student WHERE student_email = $1`, [email]);
+    if (verification !== "abc123") {
+      res
+        .status(403)
+        .send({ message: "You did not enter a valid verification code." });
+      return;
+    }
 
-    if (results.rows[0] && results.rows[0].student_email === email){
+    //Check to see if student email already exists
+    const results = await db.query(
+      `SELECT student_email FROM student WHERE student_email = $1`,
+      [email]
+    );
+
+    if (results.rows[0] && results.rows[0].student_email === email) {
       //Student email exists - respond with email in use message
-      res.status(403).send({ message: 'This email is in use!'})
+      res.status(403).send({ message: "This email is in use!" });
       return;
     } else {
       //Student email does not exists - insert student data into database
-      const hashedPassword= bcrypt.hashSync(password,10);
+      const hashedPassword = bcrypt.hashSync(password, 10);
       const result = await db
         .query(
           "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree,cover_letter,resume,linkedin,personal_narrative,hunter_access, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12,$13,$14,$15) RETURNING *",
@@ -135,7 +146,7 @@ app.post("/students", async (req, res, next) => {
     }
   } catch (error) {
     next(error);
-  }  
+  }
 });
 
 app.patch("/students/:id", async (req, res, next) => {
