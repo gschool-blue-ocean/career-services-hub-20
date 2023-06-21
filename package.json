@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "start": "RESET_DB=true docker-compose up --build",
     "lint:api": "prettier --check api/**/*.js",
     "lint:client": "prettier --check client/**/*.js",
     "lint": "npm run lint:api && npm run lint:client",

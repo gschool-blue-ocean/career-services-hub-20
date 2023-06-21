@@ -1,6 +1,17 @@
 FROM node:14
+
 WORKDIR /code
-COPY package*.json .
+
+# Copy package.json and package-lock.json
+COPY package.json .
+COPY package-lock.json .
+
+# Install dependencies
 RUN npm install
+
+# Copy the remaining files
 COPY . .
-CMD ["./wait-for.sh", "api:8000", "npm", "test"]
+
+# Set the command to run the tests
+CMD ["api:8000", "npm", "test"]
+
