@@ -58,7 +58,7 @@ jobs:
 
   deploy:
     permissions:
-      contents: none
+      contents: 
     runs-on: ubuntu-latest
     needs: build
     steps:
