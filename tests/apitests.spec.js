@@ -21,6 +21,7 @@ describe("POST /managers", () => {
       tscm_password: "Reptar123",
       tscm_email: "Reptar@reptar.com",
       tscm_avatar: "🦖",
+      tscm_code: "abcd1234",
     };
 
     const response = await request(app)
@@ -38,6 +39,7 @@ describe("POST /managers", () => {
         tscm_password: "Reptar123",
         tscm_email: "Reptar@reptar.com",
         tscm_avatar: "🦖",
+        tscm_code: "abcd1234",
       })
     );
     newManagerId = response.body.tscm_id;

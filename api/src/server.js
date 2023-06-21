@@ -250,11 +250,12 @@ app.post("/managers", async (req, res, next) => {
   const password = req.body.tscm_password;
   const email = req.body.tscm_email;
   const avatar = req.body.tscm_avatar;
+  const code = req.body.tscm_code;
 
   const result = await db
     .query(
-      "INSERT INTO service_manager(tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [firstName, lastName, login_id, password, email, avatar]
+      "INSERT INTO service_manager(tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar, tscm_code) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      [firstName, lastName, login_id, password, email, avatar, code]
     )
     .catch(next);
   res.send(result.rows[0]);
@@ -293,10 +294,11 @@ app.post("/managers/login", async (req, res, next) => {
     const user = {
       user: `${manager.tscm_first} ${manager.tscm_last}`,
       isAdmin: true,
+      authCode: manager.tscm_code,
     };
     const token = jwt.sign(user, process.env.SECRET_KEY);
 
-    res.json({ token: token });
+    res.json({ token: token, user: user });
   } else return res.status(401).json({ message: "Invalid Password 🤷" });
 });
 

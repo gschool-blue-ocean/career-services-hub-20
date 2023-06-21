@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 import StudentCardsList from "./StudentCards/StudentCardsList";
 import "./CareerServicesHub.css";
@@ -16,10 +16,12 @@ export default function CareerServicesHub({
   loggedInfo,
   isStudent,
   studentInfo,
+  managerInfo,
   setLoggedInfo,
   setStudentInfo,
-  setIsStudent
+  setIsStudent,
 }) {
+  console.log(managerInfo.authCode);
   // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState("");
   const [currentCohort, setCurrentCohort] = useState("");
@@ -37,62 +39,61 @@ export default function CareerServicesHub({
   const [currentClearance, setCurrentClearance] = useState("");
   const [educationStatus, setEducationStatus] = useState("");
   const [selectedManager, setSelectedManager] = useState("");
-  const [popUpLogOff,setPopUpLogOff] = useState(0);
+  const [popUpLogOff, setPopUpLogOff] = useState(0);
 
   const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
   const [opacity, setOpacity] = useState(0);
   const nav = useNavigate();
 
   const url = "http://localhost:8000";
-  
+
   useEffect(() => {
-    const fetchData = async()=>{
+    const fetchData = async () => {
       const cookies = document.cookie.split(";");
-      const found = cookies.find(element=> element.trim().startsWith('jwt='))
+      const found = cookies.find((element) =>
+        element.trim().startsWith("jwt=")
+      );
       let response;
-        
-        //check if its manager token
-        response = await fetch(`${url}/managers/login/isAuthorized`, {
+
+      //check if its manager token
+      response = await fetch(`${url}/managers/login/isAuthorized`, {
+        method: "GET",
+
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
+        },
+      });
+      //if not check if its student token
+      if (!response.ok) {
+        response = await fetch(`${url}/students/login/isAuthorized`, {
           method: "GET",
-        
+
           headers: {
-            "Content-Type": "application/json", 
-            Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
-          },
+            "Content-Type": "application/json",
+            Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
+          }, //student_email student_password\
         });
-        //if not check if its student token
-        if (!response.ok){
-          response = await fetch(`${url}/students/login/isAuthorized`, {
-            method: "GET",
-          
-            headers: {
-              "Content-Type": "application/json", 
-              Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
-
-              
-            },//student_email student_password\
-           
-          });
-          //if its still not ok, then throw an error.
-          if (!response.ok)  {
-              throw new Error('Not Authorized')
-            } else {
-              setIsStudent(true);
-              const result = await response.json(); console.log(result)
-              setStudentInfo(result)
-              return result;
-
-            }
-          }
+        //if its still not ok, then throw an error.
+        if (!response.ok) {
+          throw new Error("Not Authorized");
+        } else {
+          setIsStudent(true);
+          const result = await response.json();
+          console.log(result);
+          setStudentInfo(result);
+          return result;
         }
-      fetchData().then(auth=>setLoggedInfo(true)).catch(e=>{
-        setLoggedInfo(false)
-        setStudentInfo({})
-        if(!loggedInfo) 
-        nav('/login');
-      }) //fetches data, if no error set loggedInfo, else empty it.
-      
-  },[])
+      }
+    };
+    fetchData()
+      .then((auth) => setLoggedInfo(true))
+      .catch((e) => {
+        setLoggedInfo(false);
+        setStudentInfo({});
+        if (!loggedInfo) nav("/login");
+      }); //fetches data, if no error set loggedInfo, else empty it.
+  }, []);
   useEffect(() => {
     setOpacity(1);
   }, [isStudent]);
@@ -208,27 +209,31 @@ export default function CareerServicesHub({
     If the input bar's className is changed in the Search.jsx file, it needs to be changed to update the variable searchBar.
     If the Service Career Manager's select's id is changed on the Filter_com.jsx file, it must be changed to update the variable selectElement
   */
-  const handleLogOff = async() => {
+  const handleLogOff = async () => {
     const LOGOFF_TIMER = 6;
     const promiseList = [];
     let count = 0;
-    for (let i = LOGOFF_TIMER; i> 0; i--) //from 6 to 1
-    {
+    for (
+      let i = LOGOFF_TIMER;
+      i > 0;
+      i-- //from 6 to 1
+    ) {
       promiseList.push(
-         new Promise((resolve) => {
+        new Promise((resolve) => {
           setTimeout(() => {
-            setPopUpLogOff(i-1);  //starting with 0
-            
+            setPopUpLogOff(i - 1); //starting with 0
+
             resolve();
           }, (LOGOFF_TIMER - i) * 1000); //starting with 5
         })
       );
       count++;
     }
-    await Promise.all(promiseList).then(()=>{
+    await Promise.all(promiseList).then(() => {
       document.cookie = `jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-      setLoggedInfo("");nav('/login');
-    });//expires immediately. The day is the very beginning of the timeDate for first computer
+      setLoggedInfo("");
+      nav("/login");
+    }); //expires immediately. The day is the very beginning of the timeDate for first computer
   };
 
   const handleClear = () => {
@@ -260,17 +265,24 @@ export default function CareerServicesHub({
     const newToggleFiltersBar = !toggleFiltersBar;
     setToggleFiltersBar(newToggleFiltersBar);
   }
-  
-console.log(popUpLogOff)
-if(isStudent)
-{
- return <StudentViewCard popUpLogOff={popUpLogOff} studentInfo={studentInfo} handleLogOff={()=>handleLogOff()}/>
-}
-else
-{
+
+  console.log(popUpLogOff);
+  if (isStudent) {
+    return (
+      <StudentViewCard
+        popUpLogOff={popUpLogOff}
+        studentInfo={studentInfo}
+        handleLogOff={() => handleLogOff()}
+      />
+    );
+  } else {
     return (
       <div style={{ opacity: opacity, transition: "opacity 2s" }}>
-        {popUpLogOff >0 ?<div className='login-popup'>Successfully logged off. Navigating in {popUpLogOff}s...</div>:null}
+        {popUpLogOff > 0 ? (
+          <div className="login-popup">
+            Successfully logged off. Navigating in {popUpLogOff}s...
+          </div>
+        ) : null}
         <div className="body_container">
           <div className="left_container">
             <div
@@ -312,6 +324,10 @@ else
                 setSelectedManager={setSelectedManager}
                 handleClear={handleClear}
               />
+              <div className="auth-container">
+                <p className="auth-title">Authorization Code</p>
+                <p className="auth-code">{managerInfo.authCode}</p>
+              </div>
               <Export
                 filterStudents={filterStudents}
                 currentCohort={currentCohort}
@@ -331,7 +347,10 @@ else
                 selectedManager={selectedManager}
               />
               <div className="profile-container">
-                <button className="header-buttons" onClick={()=>handleLogOff()}>
+                <button
+                  className="header-buttons"
+                  onClick={() => handleLogOff()}
+                >
                   Logout
                 </button>
               </div>

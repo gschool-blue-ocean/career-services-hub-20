@@ -180,13 +180,14 @@ const seedServiceManager = async () => {
       tscm_password: await generateBcrypt(faker.internet.password(10)), // Use faker method to generate fake manager password for login
       tscm_email: faker.internet.email(), // Use faker method to generate fake manager email for login
       tscm_avatar: faker.internet.avatar(), // Use faker method to generate URL for fake manager profile pic
+      tscm_code: faker.random.alphaNumeric(8), // Use faker method to generate URL for fake manager profile pic
     });
   }
   try {
     await db.query("TRUNCATE TABLE service_manager CASCADE"); // DROP TABLES already in the SQL database
     await db.query("ALTER SEQUENCE service_manager_tscm_id_seq RESTART WITH 1"); // Reset managers entity primary key to 1
-    const queryString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) 
-                    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+    const queryString = `INSERT INTO service_manager (tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar, tscm_code) 
+                    VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
 
     await db.query(queryString, [
       "Elon",
@@ -195,6 +196,7 @@ const seedServiceManager = async () => {
       process.env.PASSWD,
       process.env.ADMIN_EMAIL,
       faker.internet.avatar(),
+      faker.random.alphaNumeric(8),
     ]);
     //For each manager, query SQL database with INSERT statement to add manager
     for (let i = 0; i < SEED_CAREER_MANAGER; i++) {
@@ -205,6 +207,7 @@ const seedServiceManager = async () => {
         tscm_password,
         tscm_email,
         tscm_avatar,
+        tscm_code,
       } = careerManager[i];
       await db.query(queryString, [
         tscm_first,
@@ -213,6 +216,7 @@ const seedServiceManager = async () => {
         tscm_password,
         tscm_email,
         tscm_avatar,
+        tscm_code,
       ]);
     }
     console.log("TSCM seeded successfully");
