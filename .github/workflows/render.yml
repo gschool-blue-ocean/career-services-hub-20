@@ -41,15 +41,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build and push container image to registry
-        uses: docker/build-push-action@v4.1.1
+      - name: Log in to GitHub container registry
+        uses: docker/login-action@v1.10.0
         with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
+      - name: Lowercase the repo name and username
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+
+      - name: Build and push container image to registry
+        run: |
+          docker-compose build
+          docker-compose push
 
   deploy:
     permissions:
@@ -69,4 +74,5 @@ jobs:
         with:
           service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
           api-key: ${{ secrets.MY_RENDER_API_KEY }}
+
 
