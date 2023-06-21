@@ -18,6 +18,6 @@ Content-Type: application/json
     "first": "Coty",
     "last": "Auger",
     "email": "Coty_Auger18@yahoo.com",
-    "pass": "student"
-
+    "pass": "student",
+    "verifyCode": "abc123"
 }
