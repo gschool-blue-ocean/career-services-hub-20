@@ -25,7 +25,10 @@ const LogInPage = ({
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
-  const url = "http://localhost:8000";
+  const url =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:8000"
+      : "https://career-services-lmbc.onrender.com/";
 
   const handleLogin = async (data) => {
     console.log("handle login reached");
