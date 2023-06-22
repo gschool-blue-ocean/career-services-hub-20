@@ -58,8 +58,8 @@ describe("POST /students", () => {
       .expect("Content-Type", /json/)
       .expect(200); // replace with your actual status code
 
-      newStudentId = response.body.student_id;
-      hashedPassword = response.body.student_password;
+    newStudentId = response.body.student_id;
+    hashedPassword = response.body.student_password;
 
     // Check that the student is returned in the response body
     expect(response.body).toEqual(
@@ -69,19 +69,19 @@ describe("POST /students", () => {
         student_last: "Doe",
         student_email: "doe@gmail.com",
         student_password: hashedPassword,
-        cohort: 'Undetermined',
-        sec_clearance: 'Undetermined',
-        career_status: 'Not Currently Searching',
-        course_status: 'Student',
-        college_degree: 'Undetermined',
-        cover_letter: 'Un-Satisfactory',
-        resume: 'Un-Satisfactory',
-        linkedin: 'Un-Satisfactory',
-        personal_narrative: 'Un-Satisfactory',
-        hunter_access: 'Un-Satisfactory',
-        tscm_id: 1
+        cohort: "Undetermined",
+        sec_clearance: "Undetermined",
+        career_status: "Not Currently Searching",
+        course_status: "Student",
+        college_degree: "Undetermined",
+        cover_letter: "Un-Satisfactory",
+        resume: "Un-Satisfactory",
+        linkedin: "Un-Satisfactory",
+        personal_narrative: "Un-Satisfactory",
+        hunter_access: "Un-Satisfactory",
+        tscm_id: 1,
       })
-    );    
+    );
   });
 });
 
@@ -105,25 +105,25 @@ describe("GET /students/:id", () => {
 
     // Check that the response body is an array (since you're sending result.rows)
     expect(response.body[0]).toEqual(
-        expect.objectContaining({
-          student_id: newStudentId,
-          student_first: "John",
-          student_last: "Doe",
-          student_email: "doe@gmail.com",
-          student_password: hashedPassword,
-          cohort: 'Undetermined',
-          sec_clearance: 'Undetermined',
-          career_status: 'Not Currently Searching',
-          course_status: 'Student',
-          college_degree: 'Undetermined',
-          cover_letter: 'Un-Satisfactory',
-          resume: 'Un-Satisfactory',
-          linkedin: 'Un-Satisfactory',
-          personal_narrative: 'Un-Satisfactory',
-          hunter_access: 'Un-Satisfactory',
-          tscm_first: 'Elon',
-          tscm_last: 'Gates',
-          tscm_id: 1
+      expect.objectContaining({
+        student_id: newStudentId,
+        student_first: "John",
+        student_last: "Doe",
+        student_email: "doe@gmail.com",
+        student_password: hashedPassword,
+        cohort: "Undetermined",
+        sec_clearance: "Undetermined",
+        career_status: "Not Currently Searching",
+        course_status: "Student",
+        college_degree: "Undetermined",
+        cover_letter: "Un-Satisfactory",
+        resume: "Un-Satisfactory",
+        linkedin: "Un-Satisfactory",
+        personal_narrative: "Un-Satisfactory",
+        hunter_access: "Un-Satisfactory",
+        tscm_first: "Elon",
+        tscm_last: "Gates",
+        tscm_id: 1,
       })
     );
   });
@@ -145,7 +145,7 @@ describe("PATCH /students/:id", () => {
       linkedin: "Un-Satisfactory",
       personal_narrative: "Completed",
       hunter_access: "Completed",
-      tscm_id: 1
+      tscm_id: 1,
     };
 
     const response = await request(app)
@@ -171,7 +171,7 @@ describe("PATCH /students/:id", () => {
         linkedin: "Un-Satisfactory",
         personal_narrative: "Completed",
         hunter_access: "Completed",
-        tscm_id: 1
+        tscm_id: 1,
       })
     );
   });

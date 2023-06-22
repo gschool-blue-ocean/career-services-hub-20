@@ -39,10 +39,10 @@ services:
       # Sleep time added for seeding database with Admin user.
       # To reset database with Admin seeded, run "RESET_DB=true docker-compose up" in terminal.
     command: /bin/sh -c 'if [ "$RESET_DB" = "true" ]; then
-              sleep 2 && npm run seed && npm run dev;
-            else
-              npm run dev;
-            fi'
+      sleep 2 && npm run seed && npm run dev;
+      else
+      npm run dev;
+      fi'
 
   app:
     build: ./client
