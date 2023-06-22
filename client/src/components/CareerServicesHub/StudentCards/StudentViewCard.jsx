@@ -10,7 +10,6 @@ const StudentViewCard = (studentInfo) => {
   const url = "http://localhost:8000";
    
   useEffect(()=>{
-    if (studentInfo.studentInfo.message) {
       socketRef.current = io(url,{
       transports: ['websocket'],
       reconnection: true,            // Enable reconnection attempts
@@ -22,7 +21,6 @@ const StudentViewCard = (studentInfo) => {
       return ()=>{
         socketRef.current.disconnect();
       }
-    }
   },[]) //triggers when page loads.
   useEffect(() => {
     async function getUser() {

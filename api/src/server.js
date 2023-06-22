@@ -406,7 +406,7 @@ function addSocketId(data,id)
   if (!data.id)  return null;
   const findId = socketList.find(socket=> data.id === socket.id)
   if (!findId){
-    socketList.push({id: data.id, socketId: id})
+    socketList.push({id: data.id, socketId: id,isAdmin: false})
     console.log('Student ' + data.id + ' joined')
   }
 }
@@ -415,9 +415,26 @@ function addAdminSocketId(data,id)
   if (!data.id)  return null;
   const findId = adminSocketList.find(socket=> data.id === socket.id)
   if (!findId){
-    adminSocketList.push({id: data.id, socketId: id})
+    adminSocketList.push({id: data.id, socketId: id, isAdmin:true})
     console.log('Admin ' + data.id + ' joined')
   }
+}
+function removeAdminSocketId(findIndex) {
+  if (findIndex === adminSocketList.length-1)  //if at end of list
+    adminSocketList.pop();
+  else if (findIndex === 0)
+    adminSocketList.shift();
+  else
+    adminSocketList = adminSocketList.slice(0,findIndex).join(adminSocketList.slice(findIndex+1));
+}
+function removeSocketId(findIndex) {
+  console.log(findIndex)
+  if (findIndex === socketList.length-1)  //if at end of list
+  socketList.pop();
+  else if (findIndex === 0)
+  socketList.shift();
+  else
+  socketList = socketList.slice(0,findIndex).join(socketList.slice(findIndex+1));
 }
 io.on('connection',(socket)=>{
   socket.on('adminConnects',(data)=>{
@@ -427,18 +444,30 @@ io.on('connection',(socket)=>{
     addSocketId(data,socket.id);
   })
   socket.on('data',(studentData)=>{
-    console.log(studentData)
     const findObject = adminSocketList.find(socket=> studentData.tscm_id === socket.id)
-    console.log(findObject.socketId);
     if (findObject)
     {
       io.to(findObject.socketId).emit('changed',{message: 'modified'});
-      console.log('reached')
     }
     
   })
   socket.on('disconnect', function () {
-    console.log('A user disconnected');
+    
+    let findIndex = adminSocketList.findIndex(element=>element.socketId === socket.id)
+    if (findIndex===-1) 
+    {
+      findIndex = socketList.findIndex(element=>element.socketId === socket.id)
+      if (findIndex !==-1) {
+        
+        console.log(`Student ${socketList[findIndex].id} disconnected`);
+        removeSocketId(findIndex);
+      }
+    }
+    else{
+      console.log(`Admin ${adminSocketList[findIndex].id} disconnected`);
+      removeAdminSocketId(findIndex);
+    }
+    
  });
 })
 
