@@ -1,11 +1,14 @@
 import React, { useState, useEffect, Suspense } from "react";
-import {BrowserRouter,Routes,Route,useNavigate} from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 
 import { EventsContextProvider } from "../../context/eventsContext";
 import { StudentsContextProvider } from "../../context/studentsContext";
 import { ManagersContextProvider } from "../../context/managersContext";
 import { FieldsContextProvider } from "../../context/fieldsContext";
-const CareerServicesHub = React.lazy(() => import("../CareerServicesHub/CareerServicesHub"));
+const CareerServicesHub = React.lazy(() =>
+  import("../CareerServicesHub/CareerServicesHub")
+);
+
 import RegisterForm from "../logIn/RegisterForm";
 import LogInPage from "../logIn/logInPage";
 
@@ -14,6 +17,7 @@ const App = () => {
   const [isStudent, setIsStudent] = useState(false);
 
   const [studentInfo, setStudentInfo] = useState({});
+  const [managerInfo, setManagerInfo] = useState({});
 
   const url = "http://localhost:8000";
 
@@ -59,6 +63,9 @@ const App = () => {
           setStudentInfo(result);
           return result;
         }
+      } else {
+        const result = await response.json();
+        setManagerInfo(result.message);
       }
       else{
         const result = await response.json();
@@ -120,16 +127,44 @@ const App = () => {
         <ManagersContextProvider loggedInfo={loggedInfo}>
           <FieldsContextProvider>
             <BrowserRouter>
-            
-            <Routes>
-              <Route path='/login' element={<LogInPage url={url} setIsStudent={setIsStudent} isStudent={isStudent} setStudentInfo={setStudentInfo} setLoggedInfo={setLoggedInfo}/>}></Route>
-              <Route path="/" element={<Suspense fallback={<div>Loading...</div>}>
-                <CareerServicesHub url={url} setIsStudent={setIsStudent} loggedInfo={loggedInfo} isStudent={isStudent} studentInfo={studentInfo} setLoggedInfo={setLoggedInfo} setStudentInfo={setStudentInfo}/>
-                </Suspense>}>
-              </Route>
-              <Route path='/register' element={<RegisterForm url={url} setIsStudent={setIsStudent}/>} />
-            </Routes>
-            {/* {loggedInfo ? (
+              <Routes>
+                <Route
+                  path="/login"
+                  element={
+                    <LogInPage
+                      url={url}
+                      setIsStudent={setIsStudent}
+                      isStudent={isStudent}
+                      setStudentInfo={setStudentInfo}
+                      setManagerInfo={setManagerInfo}
+                      setLoggedInfo={setLoggedInfo}
+                    />
+                  }
+                ></Route>
+                <Route
+                  path="/"
+                  element={
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <CareerServicesHub
+                        url={url}
+                        setIsStudent={setIsStudent}
+                        loggedInfo={loggedInfo}
+                        isStudent={isStudent}
+                        studentInfo={studentInfo}
+                        managerInfo={managerInfo}
+                        setLoggedInfo={setLoggedInfo}
+                        setStudentInfo={setStudentInfo}
+                        setManagerInfo={setManagerInfo}
+                      />
+                    </Suspense>
+                  }
+                ></Route>
+                <Route
+                  path="/register"
+                  element={<RegisterForm setIsStudent={setIsStudent} url={url}/>}
+                />
+              </Routes>
+              {/* {loggedInfo ? (
                 <CareerServicesHub handleLogOff={handleLogOff} loggedInfo={loggedInfo} isStudent={isStudent} studentInfo={studentInfo}/>
             ) : <LogInPage handleLogin={handleLogin} setIsStudent={setIsStudent} isStudent={isStudent} /> } */}
             </BrowserRouter>

@@ -165,7 +165,7 @@ const StudentViewCard = (studentInfo) => {
               </div>
             </div>
           </div>
-        {/* <div className="studentCard">
+        {/* <div className="studentCard">wm
             <div className='card-item'>{currentStudent.student_first} {currentStudent.student_last} </div>
             <div className='card-item'>• Education Level: {currentStudent.college_degree} <p>• Personal Narrative: {currentStudent.personal_narrative} </p></div>
             <div className='card-item'>• Cohort: {currentStudent.cohort}<p>• CSM: {currentStudent.tscm_first} {currentStudent.tscm_last}</p></div>
@@ -176,11 +176,8 @@ const StudentViewCard = (studentInfo) => {
             <div>Contact your TSCM: {currentStudent.tscm_email}</div>
           </div> 
         </div> */}
-           
-        
-      </div>
-      </div>
-     
+          </div>
+        </div>
       </div>
     </>
   );

@@ -4,7 +4,14 @@ import galvanizeLogo from "./galvanizeLogo.webp";
 import RegisterForm from "./RegisterForm";
 import { useNavigate } from "react-router";
 
-const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo, url }) => {
+const LogInPage = ({
+  setIsStudent,
+  isStudent,
+  setStudentInfo,
+  setManagerInfo,
+  setLoggedInfo,
+  url
+}) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
@@ -55,6 +62,33 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo, url
 
   };
 
+  const handleLogin = async (data) => {
+    console.log("handle login reached");
+    const cookies = document.cookie.split(";");
+    const found = cookies.find((element) => element.trim().startsWith("jwt="));
+    try {
+      if (isStudent) {
+        const response = await fetch(`${url}/students/login/isAuthorized`, {
+          method: "GET",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
+          }, //student_email student_password\
+        });
+        const result = await response.json();
+        setStudentInfo(result);
+        console.log(result);
+        console.log(studentInfo);
+      }
+      setLoggedInfo(data);
+      console.log(data);
+    } catch (e) {
+      setLoggedInfo(false);
+      setStudentInfo({});
+    } //fetches data, if no error set loggedInfo, else empty it.
+  };
+
   async function loginUser(email, password) {
     try {
       const cookies = document.cookie.split(";");
@@ -74,6 +108,9 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo, url
       });
       console.log(response);
       const responseData = await response.json();
+      if (!isStudent) {
+        setManagerInfo(responseData.user);
+      }
 
       if (!response.ok) {
         throw new Error("Invalid email or password");
@@ -118,20 +155,20 @@ const LogInPage = ({ setIsStudent, isStudent, setStudentInfo, setLoggedInfo, url
 
   return (
     <div style={{ opacity: opacity, transition: "opacity 2s" }}>
-      <div className='login-nav-background'>
-<nav className='login-nav'>
-      <button className='register-student' onClick={()=>nav('/register')}>Register</button>
-        {
-          register?null:<button className="login-student" onClick={() => toggle()}>
-          {isStudent ? "Login as Admin" : "Login as Student"}
-        </button>
-        }
+      <div className="login-nav-background">
+        <nav className="login-nav">
+          <button className="register-student" onClick={() => nav("/register")}>
+            Register
+          </button>
+          {register ? null : (
+            <button className="login-student" onClick={() => toggle()}>
+              {isStudent ? "Login as Admin" : "Login as Student"}
+            </button>
+          )}
         </nav>
       </div>
-      
+
       <div className="login-background">
-       
-        
         <form className="login-Container" onSubmit={handleUserLogin}>
           <img src={galvanizeLogo}></img>
           <input

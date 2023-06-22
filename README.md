@@ -6,30 +6,30 @@ The purpose of this project is to present a student/graduate tracker for the Gal
 
 ## Current Architecture
 
-This repo contains an example of a full-stack application with an ExpressJS API backend, a React frontend, and a PostgresSQL database. 
+This repo contains an example of a full-stack application with an ExpressJS API backend, a React frontend, and a PostgresSQL database.
 
 ## Current Features
 
-For Admin Login : Login with the following Email and password or get list of users with localhost/8000/managers once running in Docker. 
-Email: admin@admin.com 
+For Admin Login : Login with the following Email and password or get list of users with localhost/8000/managers once running in Docker.
+Email: admin@admin.com
 Password: admin
 
-For Student Login : Login with the following Email and password or get list of users with localhost/8000/students once running in Docker. 
-Email: student@student.com 
+For Student Login : Login with the following Email and password or get list of users with localhost/8000/students once running in Docker.
+Email: student@student.com
 Password: student
 
-Currently, the project has a login page for admin view and  student view. In the main-hub, once logged in as an admin, you can see that there is a side bar and a main card container that comprises of all the student cards in the postgresSQL database. Once logged in as a student you will find a read only view of a students information. In addition, there is an option to register as a new student which then logs you in as the student once registered.
+Currently, the project has a login page for admin view and student view. In the main-hub, once logged in as an admin, you can see that there is a side bar and a main card container that comprises of all the student cards in the postgresSQL database. Once logged in as a student you will find a read only view of a students information. In addition, there is an option to register as a new student which then logs you in as the student once registered.
 
-You will also notice that the each student card has a certain color (Red, Yellow or Green). This is determined by the overall status of the career asset "milestones". 
-    If any of the milestones are "Unsatisfactory", then the card is red
-    If none of the milestones are "Unsatisfactory" but atleast one is "In-Progress", then the card is yellow
-    Else the card is green because all milestones must be "Completed" 
+You will also notice that the each student card has a certain color (Red, Yellow or Green). This is determined by the overall status of the career asset "milestones".
+If any of the milestones are "Unsatisfactory", then the card is red
+If none of the milestones are "Unsatisfactory" but atleast one is "In-Progress", then the card is yellow
+Else the card is green because all milestones must be "Completed"
 
 Additionally, if you click a student card then a modal will pop up allowing the user to update anyhting they want about the student using the provided drop down menus. Once the Update Student Button is clicked, the site must be refreshed to see any of the changes.
 
 For authorization and authentication, we are utilizing jasonwebtoken. When a user registers, their password is stored in the database after being encrypted using bcrypt. When a user logs in, if the email and password match the information in the databse, they will be given a JWT that is stored in their cookies. This is what allows a user to continue to navigate the web page. When the user logs out or the token expires they will be rerouted to the login page and blocked from accessing the page with out re-authentication.
 
-Finally, in the student cards container you will also a card with a plus-sign, this can be used to add more students to the app. Once clicked, this will open the add-student modal. There are 2 ways to add students, Single-Add (one at a time using the modal) or Bulk-Import (using a imported csv). You can choose between which option using the colored buttons at the top of the student modal (note the button will be highlighted showing which option you are currently in). 
+Finally, in the student cards container you will also a card with a plus-sign, this can be used to add more students to the app. Once clicked, this will open the add-student modal. There are 2 ways to add students, Single-Add (one at a time using the modal) or Bulk-Import (using a imported csv). You can choose between which option using the colored buttons at the top of the student modal (note the button will be highlighted showing which option you are currently in).
 
 For the Bulk-Import, the structure of the import csv is ABSOLUTELY KEY, there must be only 3 columns (Student First, Student Last, Sec Clearance) and in that order. In the Bulk-Import modal there is an example csv template button that once clicked will download an example csv template the user can use and follow to import more students. Once the user fills out the MSCP and Career Service Manager field and clicks submit, a table will pop up in the modal to show what students are about to be added into the database (this allows the user to cancel if anything doesnt look right). If everything looks good, there is a final upload button at the bottom of the table to upload the students to the app. This should happen immediately and all students will be added to the bottom of the card container.
 
@@ -43,6 +43,7 @@ Testing can be done locally or deployed, however there may or may not be additio
 
 Front-End testing was initially wrote using WebdriverIO, but was switched over to a Babel-Jest transform testing.
 To start Front-End testing follow the below steps
+
 1. `cd frontend_testing` - Enter frontend-testing folder.
 2. `npm install` - Install all dependencies.
 3. `run test` - This will run all tests inside the frontend-testing folder
@@ -50,11 +51,12 @@ To start Front-End testing follow the below steps
 
 ### Back-End
 
-Simple Express server, nothing too complicated or intense on this end. A Docker compose will build the server and have it listen. 
+Simple Express server, nothing too complicated or intense on this end. A Docker compose will build the server and have it listen.
 
 ## Setting Up App Locally (with Docker)
 
 The app can be started with a few steps:
+
 1. `cd client` - Enter client-side folder.
 2. `npm install` - Install all dependencies.
 3. `cd ..` - Back up a Folder
@@ -63,13 +65,13 @@ The app can be started with a few steps:
 6. `cd ..` - Back up a folder
 7. `RESET_DB=true docker-compose up --build` - Run Project.
 
-> **NOTE**: After running docker-compose up, you should see 5 containers (only 4 running: API, database, APP, and PG-Admin). The  front-end app should be running on Localhost:3000/. Upon docker containers running, the database will be emptied and re-seeded everytime a docker container is brought down and back up again.
+> **NOTE**: After running docker-compose up, you should see 5 containers (only 4 running: API, database, APP, and PG-Admin). The front-end app should be running on Localhost:3000/. Upon docker containers running, the database will be emptied and re-seeded everytime a docker container is brought down and back up again.
 
 Additionally, please note that you need to wait for the API server to be up and running (localhost:8000/) before running the front-end (localhost:3000/). Otherwise the students cards will not load on the page. If this occurs you can refresh the page and the students cards should load in.
 
 ## Deploying App (on Render)
 
-Should you choose Render for your deployment of this application then it should be fairly easy. The client side can be launched as a static site with ease, The database can be made and the connection link can be copied for later use, the API server can either be used as a node enviornment or can utilize the docker file to build in a container. You would just need to take the connection link and add it to the API settings in Render. 
+Should you choose Render for your deployment of this application then it should be fairly easy. The client side can be launched as a static site with ease, The database can be made and the connection link can be copied for later use, the API server can either be used as a node enviornment or can utilize the docker file to build in a container. You would just need to take the connection link and add it to the API settings in Render.
 
 ## Possible Future Improvements to Consider
 
@@ -99,6 +101,7 @@ Should you choose Render for your deployment of this application then it should 
 - `test` - Runs tests.
 
 **`/frontend_testing`**
+
 - `test` - Runs frontend tests
 
 ## Tech used

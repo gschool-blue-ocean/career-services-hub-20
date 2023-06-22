@@ -11,7 +11,8 @@
     "test": "echo 'add tests'",
     "seed": "cross-env NODE_ENV=development node faker.mjs",
     "seedDep": "node faker.mjs",
-    "migrate": "node src/db/migration.js"
+    "migrate": "node src/db/migration.js",
+    "docker": "docker build -t api-image . && docker run -d -p 4000:4000 --name api-container api-image"
   },
   "author": "",
   "license": "ISC",
