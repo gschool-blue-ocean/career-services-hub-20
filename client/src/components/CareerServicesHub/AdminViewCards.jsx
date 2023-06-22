@@ -47,7 +47,9 @@ function AdminViewCards({opacity,
     hunterAccess,
     handleLogOff,
     studentInfo,
-    isStudent}) 
+    isStudent,
+    managerInfo
+  }) 
     {
         const url = "http://localhost:8000";
         const socketRef = useRef(null);
@@ -126,6 +128,10 @@ function AdminViewCards({opacity,
                 setSelectedManager={setSelectedManager}
                 handleClear={handleClear}
               />
+              <div className="auth-container">
+                <p className="auth-title">Authorization Code</p>
+                <p className="auth-code">{managerInfo.authCode}</p>
+              </div>
               <Export
                 filterStudents={filterStudents}
                 currentCohort={currentCohort}

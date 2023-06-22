@@ -66,12 +66,13 @@ const App = () => {
       } else {
         const result = await response.json();
         setManagerInfo(result.message);
-      }
-      else{
-        const result = await response.json();
-        console.log(result.message);
         setStudentInfo(result.message);
       }
+      // else{
+      //   const result = await response.json();
+      //   console.log(result.message);
+      //   setStudentInfo(result.message);
+      // }
     };
     fetchData()
       .then((auth) => {setLoggedInfo(true);})
@@ -84,37 +85,6 @@ const App = () => {
   useEffect(()=>{
     console.log(loggedInfo)
   },[loggedInfo])
-  const handleLogin = async (data) => {
-    console.log("handle login reached");
-    const cookies = document.cookie.split(";");
-    const found = cookies.find((element) => element.trim().startsWith("jwt="));
-    // try {
-    if (isStudent) {
-      const response = await fetch(`${url}/students/login/isAuthorized`, {
-        method: "GET",
-
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
-        }, //student_email student_password\
-      });
-      const result = await response.json();
-      setStudentInfo(result);
-      console.log(result);
-      console.log(studentInfo);
-    }
-    setLoggedInfo(data);
-    console.log(data);
-    // } catch (e) {
-    //   setLoggedInfo(false);
-    //   setStudentInfo({})
-    // } //fetches data, if no error set loggedInfo, else empty it.
-  };
-  const handleLogOff = () => {
-    document.cookie = `jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`; //expires immediately. The day is the very beginning of the timeDate for first computer
-
-    setLoggedInfo("");
-  };
 
   return (
     

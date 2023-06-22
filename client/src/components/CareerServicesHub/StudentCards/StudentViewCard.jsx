@@ -5,7 +5,6 @@ import "./StudentViewCard.css";
 
 const StudentViewCard = (studentInfo) => {
   const socketRef = useRef(null);
-
   const [currentStudent, setCurrentStudent] = useState({});
   const url = "http://localhost:8000";
    
