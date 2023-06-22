@@ -9,7 +9,7 @@ const LogInPage = ({
   setStudentInfo,
   setManagerInfo,
   setLoggedInfo,
-  url
+  url,
 }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -86,8 +86,8 @@ const LogInPage = ({
           Date.now() + timeExpire
         ).toUTCString()}; path=/; SameSite=Strict;`;
         handleLogin(responseData); // Call the handleLogin function passed as a prop
-        nav('/')
-        console.log('workin')
+        nav("/");
+        console.log("workin");
       } else {
         setErrorRelay("Something has gone horribly wrong 😢");
       }

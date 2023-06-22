@@ -1,12 +1,13 @@
-import React, { useState, useEffect,Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./CareerServicesHub.css";
 
 import galvanizeLogo from "../logIn/galvanizeLogo.webp";
-const StudentViewCard= React.lazy((()=> import("./StudentCards/StudentViewCard")));
-const AdminViewCards= React.lazy((() => import("./AdminViewCards")));
-
+const StudentViewCard = React.lazy(() =>
+  import("./StudentCards/StudentViewCard")
+);
+const AdminViewCards = React.lazy(() => import("./AdminViewCards"));
 
 export default function CareerServicesHub({
   loggedInfo,
@@ -17,7 +18,7 @@ export default function CareerServicesHub({
   setManagerInfo,
   setStudentInfo,
   setIsStudent,
-  url
+  url,
 }) {
   // console.log(managerInfo);
   // Create local states that will be passed down to children components
@@ -44,58 +45,57 @@ export default function CareerServicesHub({
   const nav = useNavigate();
 
   useEffect(() => {
-    const fetchData = async()=>{
+    const fetchData = async () => {
       const cookies = document.cookie.split(";");
-      const found = cookies.find(element=> element.trim().startsWith('jwt='))
+      const found = cookies.find((element) =>
+        element.trim().startsWith("jwt=")
+      );
       let response;
-      
-        //check if its manager token
-        response = await fetch(`${url}/managers/login/isAuthorized`, {
+
+      //check if its manager token
+      response = await fetch(`${url}/managers/login/isAuthorized`, {
+        method: "GET",
+
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
+        },
+      });
+      //if not check if its student token
+      if (!response.ok) {
+        response = await fetch(`${url}/students/login/isAuthorized`, {
           method: "GET",
-        
+
           headers: {
-            "Content-Type": "application/json", 
-            Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
-          },
+            "Content-Type": "application/json",
+            Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
+          }, //student_email student_password\
         });
-        //if not check if its student token
-        if (!response.ok){
-          response = await fetch(`${url}/students/login/isAuthorized`, {
-            method: "GET",
-          
-            headers: {
-              "Content-Type": "application/json", 
-              Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
+        //if its still not ok, then throw an error.
+        if (!response.ok) {
+          throw new Error("Not Authorized");
+        } else {
+          setIsStudent(true);
+          const result = await response.json();
+          console.log(result);
+          setStudentInfo(result);
 
-              
-            },//student_email student_password\
-           
-          });
-          //if its still not ok, then throw an error.
-          if (!response.ok)  {
-              throw new Error('Not Authorized')
-            } else {
-              setIsStudent(true);
-              const result = await response.json(); console.log(result)
-              setStudentInfo(result)
-              
-              return result;
-
-            }
-          }else {
-            const result = await response.json();
-            setManagerInfo(result.message);
-            setStudentInfo(result.message);
-          }
+          return result;
         }
-      fetchData().then(auth=>setLoggedInfo(true)).catch(e=>{
-        setLoggedInfo(false)
-        setStudentInfo({})
-        if(!loggedInfo) 
-        nav('/login');
-      }) //fetches data, if no error set loggedInfo, else empty it.
-      
-  },[])
+      } else {
+        const result = await response.json();
+        setManagerInfo(result.message);
+        setStudentInfo(result.message);
+      }
+    };
+    fetchData()
+      .then((auth) => setLoggedInfo(true))
+      .catch((e) => {
+        setLoggedInfo(false);
+        setStudentInfo({});
+        if (!loggedInfo) nav("/login");
+      }); //fetches data, if no error set loggedInfo, else empty it.
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -369,27 +369,25 @@ export default function CareerServicesHub({
     filterStudents,
     studentInfo,
     managerInfo,
-    url
-  }
-if(isStudent)
-{
- return (
-  <Suspense fallback={<div>Loading</div>}>
-        {
-          <StudentViewCard popUpLogOff={popUpLogOff} studentInfo={studentInfo} handleLogOff={()=>handleLogOff()} url={url}/>
-        }
-        
-      </Suspense>
- );
-}
-else
-{
+    url,
+  };
+  if (isStudent) {
     return (
       <Suspense fallback={<div>Loading</div>}>
         {
-          <AdminViewCards {...propData}/>
+          <StudentViewCard
+            popUpLogOff={popUpLogOff}
+            studentInfo={studentInfo}
+            handleLogOff={() => handleLogOff()}
+            url={url}
+          />
         }
-        
+      </Suspense>
+    );
+  } else {
+    return (
+      <Suspense fallback={<div>Loading</div>}>
+        {<AdminViewCards {...propData} />}
       </Suspense>
     );
   }
