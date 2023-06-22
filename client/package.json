@@ -6,7 +6,8 @@
     "lint": "prettier --check .",
     "dev": "vite serve --host",
     "build": "vite build",
-    "test": "vitest"
+    "test": "vitest",
+    "docker": "docker build -t api-image . && docker run -d -p 4000:4000 --name api-container api-image"
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
