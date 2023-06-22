@@ -5,6 +5,8 @@ import pg from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
+import { Server } from "socket.io";
+import http from "http";
 
 const { Pool } = pg;
 
@@ -18,6 +20,8 @@ const db = new Pool({
 
 const PORT = process.env.PORT;
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -28,19 +32,19 @@ app.use(
     origin: "*",
   })
 );
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Origin", req.headers.origin);
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET,PUT,POST,DELETE,UPDATE,OPTIONS"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
-  );
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Credentials", true);
+//   res.header("Access-Control-Allow-Origin", req.headers.origin);
+//   res.header(
+//     "Access-Control-Allow-Methods",
+//     "GET,PUT,POST,DELETE,UPDATE,OPTIONS"
+//   );
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
+//   );
+//   next();
+// });
 // --------------------------------------------- STUDENT ROUTES ----------------------------------------------------------------------------
 app.get("/students", async (req, res, next) => {
   // Check if the data is cached.
@@ -67,8 +71,10 @@ app.get("/students/:id", async (req, res, next) => {
   }
   const result = await db
     .query(
-      `SELECT student.*, service_manager.tscm_first, service_manager.tscm_last, service_manager.tscm_email 
-                                  FROM student 
+      `SELECT student.student_id,student.student_first,student.student_last, student.student_email,student.cohort
+      ,student.sec_clearance,student.career_status, student.course_status, student.college_degree, student.cover_letter
+      ,student.resume,student.linkedin,student.personal_narrative, student.hunter_access,student.tscm_id,service_manager.tscm_first, service_manager.tscm_last, service_manager.tscm_email 
+                                  FROM student
                                   JOIN service_manager ON service_manager.tscm_id = student.tscm_id 
                                   WHERE student.student_id = ${id}`
     )
@@ -214,7 +220,7 @@ app.delete("/students/:id", async (req, res, next) => {
 app.get("/students/login/isAuthorized", (req, res) => {
   let user = isAuthorized(req, res);
 
-  console.log(user);
+  // console.log(user);
   if (!user) return res.status(401).json({ message: "Unauthorized" });
   else if (user.admin)
     return res.status(204).json({ message: "This is an admin account!" });
@@ -235,6 +241,7 @@ app.post("/students/login", async (req, res, next) => {
     const user = {
       user: `${student.student_first} ${student.student_last}`,
       id: student.student_id,
+      tscm_id: student.tscm_id,
     };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     res.json({ token: token });
@@ -318,6 +325,7 @@ app.post("/managers/login", async (req, res, next) => {
     const user = {
       user: `${manager.tscm_first} ${manager.tscm_last}`,
       isAdmin: true,
+      id: manager.tscm_id,
       authCode: manager.tscm_code,
     };
     const token = jwt.sign(user, process.env.SECRET_KEY);
@@ -427,7 +435,7 @@ app.get("/managers/login/isAuthorized", (req, res) => {
 
 function isAuthorized(req, res) {
   let auth = req.headers.authorization;
-  console.log(req.headers.authorization);
+  // console.log(req.headers.authorization);
   if (!auth) {
     return false;
   }
@@ -438,11 +446,98 @@ function isAuthorized(req, res) {
     return false;
   }
 }
+/////////////////////////////////////////////////////////////////
+/* WebSocket for individual push notification */
+
+let socketList = [];
+let adminSocketList = [];
+function addSocketId(data, id) {
+  if (!data.id) return null;
+  const findId = socketList.find((socket) => data.id === socket.id);
+  if (!findId) {
+    socketList.push({ id: data.id, socketId: id, isAdmin: false });
+    console.log("Student " + data.id + " joined");
+  }
+}
+function addAdminSocketId(data, id) {
+  if (!data.id) return null;
+  const findId = adminSocketList.find((socket) => data.id === socket.id);
+  if (!findId) {
+    adminSocketList.push({ id: data.id, socketId: id, isAdmin: true });
+    console.log("Admin " + data.id + " joined");
+  }
+}
+function removeAdminSocketId(findIndex) {
+  if (findIndex === adminSocketList.length - 1)
+    //if at end of list
+    adminSocketList.pop();
+  else if (findIndex === 0) adminSocketList.shift();
+  else
+    adminSocketList = adminSocketList
+      .slice(0, findIndex)
+      .join(adminSocketList.slice(findIndex + 1));
+}
+function removeSocketId(findIndex) {
+  console.log(findIndex);
+  if (findIndex === socketList.length - 1)
+    //if at end of list
+    socketList.pop();
+  else if (findIndex === 0) socketList.shift();
+  else
+    socketList = socketList
+      .slice(0, findIndex)
+      .join(socketList.slice(findIndex + 1));
+}
+io.on("connection", (socket) => {
+  socket.on("adminConnects", (data) => {
+    addAdminSocketId(data, socket.id);
+  });
+  socket.on("connects", (data) => {
+    addSocketId(data, socket.id);
+  });
+  socket.on("data", (studentData) => {
+    db.query(
+      `INSERT INTO notification_message (message,read,student_id,admin_id) VALUES($1,$2,$3,$4) RETURNING *`,
+      [
+        `student ${studentData.id} modified profile`,
+        false,
+        studentData.id,
+        studentData.tscm_id,
+      ]
+    ).then((res) => {
+      const findObject = adminSocketList.find(
+        (socket) => studentData.tscm_id === socket.id
+      );
+      if (findObject) {
+        io.to(findObject.socketId).emit("changed", { message: res.rows[0] });
+      }
+    });
+  });
+  socket.on("disconnect", function () {
+    let findIndex = adminSocketList.findIndex(
+      (element) => element.socketId === socket.id
+    );
+    if (findIndex === -1) {
+      findIndex = socketList.findIndex(
+        (element) => element.socketId === socket.id
+      );
+      if (findIndex !== -1) {
+        console.log(`Student ${socketList[findIndex].id} disconnected`);
+        removeSocketId(findIndex);
+      }
+    } else {
+      console.log(`Admin ${adminSocketList[findIndex].id} disconnected`);
+      removeAdminSocketId(findIndex);
+    }
+  });
+});
+
+//////////////////////////////////////////////////////////////////
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Internal Server Error");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Listening on port ${PORT}00!`);
 });

@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 
 export const ManagersContext = createContext();
 
-export function ManagersContextProvider({ children, loggedInfo }) {
+export function ManagersContextProvider({ children, loggedInfo, url }) {
   //Create managersData state and give it a single fake manager at the start
   const [managersData, setManagersData] = useState([
     {
@@ -18,10 +18,6 @@ export function ManagersContextProvider({ children, loggedInfo }) {
   ]);
 
   // This allows the app to run in both development (locally) and deployed (on render)
-  const url =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:8000"
-      : "https://career-services-server.onrender.com";
 
   // Run once, until page is refreshed
   useEffect(() => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 
 export const EventsContext = createContext();
 
-export function EventsContextProvider({ children, loggedInfo }) {
+export function EventsContextProvider({ children, loggedInfo, url }) {
   //Create eventData state and give it a single fake event at the start
   const [eventsData, setEventsData] = useState([
     {
@@ -20,10 +20,6 @@ export function EventsContextProvider({ children, loggedInfo }) {
   ]);
 
   // This allows the app to run in both development (locally) and deployed (on render)
-  const url =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:8000"
-      : "https://career-services-server.onrender.com";
 
   // Run once, until page is refreshed
   useEffect(() => {

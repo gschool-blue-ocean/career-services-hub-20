@@ -7,6 +7,7 @@ export function StudentsContextProvider({
   loggedInfo,
   isStudent,
   studentInfo,
+  url,
 }) {
   //Update hook is used in the use effect for later so that when a component does a task the student state gets updated along with DB
   const [update, setUpdate] = useState(true);
@@ -32,10 +33,6 @@ export function StudentsContextProvider({
   ]);
 
   // This allows the app to run in both development (locally) and deployed (on render)
-  const url =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:8000"
-      : "https://career-services-server.onrender.com";
 
   // Run once, until page is refreshed
   useEffect(() => {

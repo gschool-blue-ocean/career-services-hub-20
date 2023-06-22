@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./loginPage.css";
 import galvanizeLogo from "./galvanizeLogo.webp";
-import RegisterForm from "./RegisterForm";
 import { useNavigate } from "react-router";
 
 const LogInPage = ({
@@ -10,6 +9,7 @@ const LogInPage = ({
   setStudentInfo,
   setManagerInfo,
   setLoggedInfo,
+  url,
 }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -25,10 +25,6 @@ const LogInPage = ({
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
-  const url =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:8000"
-      : "https://career-services-lmbc.onrender.com";
 
   const handleLogin = async (data) => {
     console.log("handle login reached");
@@ -47,7 +43,6 @@ const LogInPage = ({
         const result = await response.json();
         setStudentInfo(result);
         console.log(result);
-        console.log(studentInfo);
       }
       setLoggedInfo(data);
       console.log(data);
@@ -77,6 +72,7 @@ const LogInPage = ({
       console.log(response);
       const responseData = await response.json();
       if (!isStudent) {
+        console.log(responseData);
         setManagerInfo(responseData.user);
       }
 
@@ -89,7 +85,7 @@ const LogInPage = ({
         document.cookie = `jwt=${responseData.token}; expires=${new Date(
           Date.now() + timeExpire
         ).toUTCString()}; path=/; SameSite=Strict;`;
-        handleLogin(true); // Call the handleLogin function passed as a prop
+        handleLogin(responseData); // Call the handleLogin function passed as a prop
         nav("/");
         console.log("workin");
       } else {
@@ -108,13 +104,7 @@ const LogInPage = ({
       setIsStudent(true);
     }
   };
-  const toggleRegister = () => {
-    if (register) setRegister(false);
-    else {
-      setIsStudent(true);
-      setRegister(true);
-    }
-  };
+
   const handleUserLogin = (e) => {
     e.preventDefault();
 
