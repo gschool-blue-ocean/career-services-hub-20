@@ -8,6 +8,7 @@ import { FieldsContextProvider } from "../../context/fieldsContext";
 const CareerServicesHub = React.lazy(() =>
   import("../CareerServicesHub/CareerServicesHub")
 );
+
 import RegisterForm from "../logIn/RegisterForm";
 import LogInPage from "../logIn/logInPage";
 
@@ -66,16 +67,23 @@ const App = () => {
         const result = await response.json();
         setManagerInfo(result.message);
       }
+      else{
+        const result = await response.json();
+        console.log(result.message);
+        setStudentInfo(result.message);
+      }
     };
     fetchData()
-      .then((auth) => setLoggedInfo(true))
+      .then((auth) => {setLoggedInfo(true);})
       .catch((e) => {
         setLoggedInfo(false);
         setStudentInfo({});
         console.log(e);
       }); //fetches data, if no error set loggedInfo, else empty it.
   }, []);
-
+  useEffect(()=>{
+    console.log(loggedInfo)
+  },[loggedInfo])
   const handleLogin = async (data) => {
     console.log("handle login reached");
     const cookies = document.cookie.split(";");
@@ -109,6 +117,7 @@ const App = () => {
   };
 
   return (
+    
     <EventsContextProvider loggedInfo={loggedInfo}>
       <StudentsContextProvider
         loggedInfo={loggedInfo}
@@ -123,6 +132,7 @@ const App = () => {
                   path="/login"
                   element={
                     <LogInPage
+                      url={url}
                       setIsStudent={setIsStudent}
                       isStudent={isStudent}
                       setStudentInfo={setStudentInfo}
@@ -136,6 +146,7 @@ const App = () => {
                   element={
                     <Suspense fallback={<div>Loading...</div>}>
                       <CareerServicesHub
+                        url={url}
                         setIsStudent={setIsStudent}
                         loggedInfo={loggedInfo}
                         isStudent={isStudent}
@@ -150,7 +161,7 @@ const App = () => {
                 ></Route>
                 <Route
                   path="/register"
-                  element={<RegisterForm setIsStudent={setIsStudent} />}
+                  element={<RegisterForm setIsStudent={setIsStudent} url={url}/>}
                 />
               </Routes>
               {/* {loggedInfo ? (
@@ -161,6 +172,7 @@ const App = () => {
         </ManagersContextProvider>
       </StudentsContextProvider>
     </EventsContextProvider>
+  
   );
 };
 

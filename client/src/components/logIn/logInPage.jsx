@@ -10,6 +10,7 @@ const LogInPage = ({
   setStudentInfo,
   setManagerInfo,
   setLoggedInfo,
+  url
 }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -25,7 +26,41 @@ const LogInPage = ({
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
-  const url = "http://localhost:8000";
+  
+
+  const handleLogin = async (data) => {
+    console.log('handle login reached')
+    const cookies = document.cookie.split(";");
+    const found = cookies.find(element=> element.trim().startsWith('jwt='))
+    try {
+      if(isStudent){
+        const response = await fetch(`${url}/students/login/isAuthorized`, {
+          method: "GET",
+        
+          headers: {
+            "Content-Type": "application/json", 
+            Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
+            
+          },//student_email student_password\
+         
+        });
+        const result = await response.json()
+        setStudentInfo(result)
+        setLoggedInfo(data);
+        console.log(result)
+      }
+      else
+      {
+        setStudentInfo({id:data.id});
+      }
+      setLoggedInfo(true);
+      console.log(data)
+    } catch (e) {
+      setLoggedInfo(false);
+      setStudentInfo({})
+    } //fetches data, if no error set loggedInfo, else empty it.
+
+  };
 
   const handleLogin = async (data) => {
     console.log("handle login reached");
@@ -86,9 +121,9 @@ const LogInPage = ({
         document.cookie = `jwt=${responseData.token}; expires=${new Date(
           Date.now() + timeExpire
         ).toUTCString()}; path=/; SameSite=Strict;`;
-        handleLogin(true); // Call the handleLogin function passed as a prop
-        nav("/");
-        console.log("workin");
+        handleLogin(responseData); // Call the handleLogin function passed as a prop
+        nav('/')
+        console.log('workin')
       } else {
         setErrorRelay("Something has gone horribly wrong 😢");
       }
@@ -105,13 +140,7 @@ const LogInPage = ({
       setIsStudent(true);
     }
   };
-  const toggleRegister = () => {
-    if (register) setRegister(false);
-    else {
-      setIsStudent(true);
-      setRegister(true);
-    }
-  };
+
   const handleUserLogin = (e) => {
     e.preventDefault();
 
