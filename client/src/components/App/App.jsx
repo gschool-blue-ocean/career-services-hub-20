@@ -21,7 +21,7 @@ const App = () => {
   const url =
     process.env.NODE_ENV === "development"
       ? "http://localhost:8000"
-      : "https://career-services-lmbc.onrender.com/";
+      : "https://career-services-lmbc.onrender.com";
 
   useEffect(() => {
     if (!isStudent) document.body.classList.remove("student-background");

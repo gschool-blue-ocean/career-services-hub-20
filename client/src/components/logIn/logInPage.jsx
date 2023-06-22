@@ -28,7 +28,7 @@ const LogInPage = ({
   const url =
     process.env.NODE_ENV === "development"
       ? "http://localhost:8000"
-      : "https://career-services-lmbc.onrender.com/";
+      : "https://career-services-lmbc.onrender.com";
 
   const handleLogin = async (data) => {
     console.log("handle login reached");
