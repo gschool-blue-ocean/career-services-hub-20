@@ -82,11 +82,11 @@ app.get("/students/:id", async (req, res, next) => {
 });
 
 app.post("/students", async (req, res, next) => {
-  console.log(req.body.first);
   const firstName = req.body.first;
   const lastName = req.body.last;
   const email = req.body.email;
   const password = req.body.pass;
+  const verification = req.body.verifyCode;
   const cohort = "Undetermined";
   const sercurityClearance = "Undetermined";
   const careerStatus = "Not Currently Searching";
@@ -97,32 +97,69 @@ app.post("/students", async (req, res, next) => {
   const linkedin = "Un-Satisfactory";
   const personalNarrative = "Un-Satisfactory";
   const hunterAcess = "Un-Satisfactory";
-  const tscm_id = 1;
+  let tscm_id;
 
-  const hashedPassword = bcrypt.hashSync(password, 10);
-  const result = await db
-    .query(
-      "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree,cover_letter,resume,linkedin,personal_narrative,hunter_access, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12,$13,$14,$15) RETURNING *",
-      [
-        firstName,
-        lastName,
-        email,
-        hashedPassword,
-        cohort,
-        sercurityClearance,
-        careerStatus,
-        courseStatus,
-        collegeDegree,
-        coverLetter,
-        resume,
-        linkedin,
-        personalNarrative,
-        hunterAcess,
-        tscm_id,
-      ]
-    )
-    .catch(next);
-  res.send(result.rows[0]);
+  try {
+    const result = await db.query(
+      "SELECT tscm_id, tscm_code FROM service_manager"
+    );
+    let verified = false;
+    for (let i = 0; i < result.rows.length; i++) {
+      let code = result.rows[i].tscm_code;
+      console.log(code);
+      if (verification === code) {
+        verified = true;
+        tscm_id = result.rows[i].tscm_id;
+        break;
+      }
+    }
+    if (!verified) {
+      res
+        .status(403)
+        .send({ message: "You did not enter a valid verification code." });
+      return;
+    }
+
+    //Check to see if student email already exists
+    const results = await db.query(
+      `SELECT student_email FROM student WHERE student_email = $1`,
+      [email]
+    );
+
+    if (results.rows[0] && results.rows[0].student_email === email) {
+      //Student email exists - respond with email in use message
+      res.status(403).send({ message: "This email is in use!" });
+      return;
+    } else {
+      //Student email does not exists - insert student data into database
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const result = await db
+        .query(
+          "INSERT INTO student(student_first, student_last, student_email, student_password, cohort, sec_clearance, career_status, course_status, college_degree,cover_letter,resume,linkedin,personal_narrative,hunter_access, tscm_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12,$13,$14,$15) RETURNING *",
+          [
+            firstName,
+            lastName,
+            email,
+            hashedPassword,
+            cohort,
+            sercurityClearance,
+            careerStatus,
+            courseStatus,
+            collegeDegree,
+            coverLetter,
+            resume,
+            linkedin,
+            personalNarrative,
+            hunterAcess,
+            tscm_id,
+          ]
+        )
+        .catch(next);
+      res.send(result.rows[0]);
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.patch("/students/:id", async (req, res, next) => {
@@ -219,6 +256,17 @@ app.get("/managers/:id", async (req, res, next) => {
   res.send(results.rows);
 });
 
+function generateRandomCode(length) {
+  const alphanumericChars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let code = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * alphanumericChars.length);
+    code += alphanumericChars.charAt(randomIndex);
+  }
+  return code;
+}
+
 app.post("/managers", async (req, res, next) => {
   const firstName = req.body.tscm_first;
   const lastName = req.body.tscm_last;
@@ -226,11 +274,12 @@ app.post("/managers", async (req, res, next) => {
   const password = req.body.tscm_password;
   const email = req.body.tscm_email;
   const avatar = req.body.tscm_avatar;
+  const code = generateRandomCode(8);
 
   const result = await db
     .query(
-      "INSERT INTO service_manager(tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [firstName, lastName, login_id, password, email, avatar]
+      "INSERT INTO service_manager(tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar, tscm_code) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      [firstName, lastName, login_id, password, email, avatar, code]
     )
     .catch(next);
   res.send(result.rows[0]);
@@ -269,10 +318,11 @@ app.post("/managers/login", async (req, res, next) => {
     const user = {
       user: `${manager.tscm_first} ${manager.tscm_last}`,
       isAdmin: true,
+      authCode: manager.tscm_code,
     };
     const token = jwt.sign(user, process.env.SECRET_KEY);
 
-    res.json({ token: token });
+    res.json({ token: token, user: user });
   } else return res.status(401).json({ message: "Invalid Password 🤷" });
 });
 

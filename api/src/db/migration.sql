@@ -9,14 +9,9 @@ CREATE TYPE education AS ENUM ('Undetermined',
   'Masters in CS/STEM',
   'Masters Not in CS/STEM');
 
-
 CREATE TYPE career AS ENUM ('Searching', 'Hired', 'Not Currently Searching');
 
 CREATE TYPE course AS ENUM ('Student', 'Graduate');
-
-
-
-
 
 CREATE TABLE service_manager (
   tscm_id SERIAL PRIMARY KEY NOT NULL,
@@ -25,7 +20,8 @@ CREATE TABLE service_manager (
   login_id VARCHAR(50) NOT NULL,
   tscm_password TEXT NOT NULL,
   tscm_email TEXT NOT NULL,
-  tscm_avatar TEXT
+  tscm_avatar TEXT,
+  tscm_code VARCHAR(15) NOT NULL
 );
 
 CREATE TABLE student (
@@ -47,8 +43,6 @@ CREATE TABLE student (
   tscm_id INTEGER NOT NULL,
   FOREIGN KEY (tscm_id) REFERENCES service_manager (tscm_id)
 );
-
-
 
 CREATE TABLE calendar (
   event_id SERIAL PRIMARY KEY NOT NULL,
