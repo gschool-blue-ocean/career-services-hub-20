@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./loginPage.css";
 import galvanizeLogo from "./galvanizeLogo.webp";
-import RegisterForm from "./RegisterForm";
 import { useNavigate } from "react-router";
 
 const LogInPage = ({

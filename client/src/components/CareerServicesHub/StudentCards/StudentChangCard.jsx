@@ -1,85 +1,8 @@
-import React, { useState, useEffect,useRef } from "react";
-import { io } from "socket.io-client";
-import galvanizeLogo from "../../logIn/galvanizeLogo.webp";
-import "./StudentViewCard.css";
-
-import StudentChangeCard from "./StudentChangCard";
-
-const StudentViewCard = ({popUpLogOff,handleLogOff,studentInfo, url}) => {
-  if (!studentInfo.message) return <div>Loading</div>
-  const socketRef = useRef(null);
-  const [currentStudent, setCurrentStudent] = useState({});
-  const [studentChange,setStudentChange] = useState(false);
-   
-  useEffect(()=>{
-      socketRef.current = io(url,{
-      transports: ['websocket'],
-      reconnection: true,            // Enable reconnection attempts
-      reconnectionAttempts: 5,       // Limit the number of reconnection attempts
-      reconnectionDelay: 1000,       // Initial delay between reconnection attempts (in milliseconds)
-      reconnectionDelayMax: 5000,    // Maximum delay between reconnection attempts (in milliseconds)
-    });
-      socketRef.current.emit('connects',{id: studentInfo.message.id})
-      return ()=>{
-        socketRef.current.disconnect();
-      }
-  },[]) //triggers when page loads.
-  useEffect(() => {
-    
-    async function getUser() {
-      if (studentInfo.message) {
-
-        await fetch(`${url}/students/${studentInfo.message.id}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            setCurrentStudent(data[0]);
-            console.log(data); // Log the fetched data here
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
-    }
-    getUser();
-  }, [studentInfo]);
-  const handleSend=()=>{ 
-    if (socketRef.current) {
-      const students = studentInfo.message;
-      console.log(students);
-      console.log(students.tscm_id)
-    socketRef.current.emit('data',{studentId: students.id,tscm_id : students.tscm_id})
-
-    }
-    
-  }
-  const changeProfile = ()=>{
-    setstudentChange(true);
-  }
-  return (
-    <>
-    <div className='container'>
-    {popUpLogOff >0 ?<div className='login-popup'>Successfully logged off. Navigating in {popUpLogOff}s...</div>:null}
-      <nav className='student-nav'>
-        <img className="logo" src={galvanizeLogo} alt="Galvanize Logo" />
-        <div className='student-nav-selection'>Dashboard</div>
-      </nav>
-      <div style={{display:'flex',overflow:'auto'}}>
-        <nav className='student-setting-nav'>
-          <div style={{paddingLeft:'50px'}}>
-            <h1>Settings</h1>
-            <hr />
-            <p>My Profile</p>
-            <p onClick={changeProfile}>Change My Profile</p>
-            <p onClick={()=>handleSend()}>Notification</p>
-            <p onClick={handleLogOff}>Log Out</p>
-          </div>
-          <div>
-          </div>
-        </nav>
-         <div className='student-profile-data'>
+import React from 'react';
+export default function StudentChangeCard({currentStudent})
+{
+    return (
+        <div className='student-profile-data'>
           <div className='profile-background-img'>
             <img src='https://th.bing.com/th/id/R.b173d064715990e210a19f080fde122a?rik=wyy2%2bsDxPMBAGA&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f3%2fe%2fc%2f563599.jpg&ehk=IIlQVDqUjTmsDGCECQSTU1ogn28Flsaf2OWi74E3Ubk%3d&risl=&pid=ImgRaw&r=0'></img>
           </div>
@@ -91,7 +14,7 @@ const StudentViewCard = ({popUpLogOff,handleLogOff,studentInfo, url}) => {
           </div>
           </div>
           <div className='student-card-item'>
-            <h3>My Information</h3>
+            <h3>My wefewfwef</h3>
             <div>
               <div>
                 <h5>First Name</h5>
@@ -180,29 +103,5 @@ const StudentViewCard = ({popUpLogOff,handleLogOff,studentInfo, url}) => {
           </div> 
         </div> */}
           </div>
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default StudentViewCard;
-
-//career_status: "Searching"
-// cohort:  "MCSP-21"
-// college_degree:  "Masters in CS/STEM"
-// course_status:  "Graduate"
-// cover_letter:  "Un-Satisfactory"
-// hunter_access: "In-Progress"
-// linkedin:  "Un-Satisfactory"
-// personal_narrative : "Completed"
-// resume :  "In-Progress"
-// sec_clearance :  "TOP SECRET"
-// student_email :  "student@student.com"
-// student_first :  "Bill"
-// student_id : 100
-// student_last :  "Musk"
-// student_password :  "$2b$10$OSL6hfYGj8ZHFr86INDXR.NDZ/X6WZdnXymaVlsI94gl6VTDD86o2"
-// tscm_first :  "Guido"
-// tscm_id : 7
-// tscm_last : "Lindgren"
+    );
+}

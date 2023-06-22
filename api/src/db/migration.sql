@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS student, service_manager, calendar, sessions;
+DROP TABLE IF EXISTS student, service_manager, calendar, notification_message;
 CREATE TYPE status AS ENUM ('In-Progress', 'Completed', 'Un-Satisfactory');
 CREATE TYPE education AS ENUM ('Undetermined',
   'None',
@@ -22,6 +22,12 @@ CREATE TABLE service_manager (
   tscm_email TEXT NOT NULL,
   tscm_avatar TEXT,
   tscm_code VARCHAR(15) NOT NULL
+);
+CREATE TABLE notification_message (
+  message TEXT,
+  read BOOLEAN,
+  student_id INT,
+  admin_id INT
 );
 
 CREATE TABLE student (

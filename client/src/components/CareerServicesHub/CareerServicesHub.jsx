@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./CareerServicesHub.css";
-import StudentViewCard from "./StudentCards/StudentViewCard";
-import galvanizeLogo from "../logIn/galvanizeLogo.webp";
 
-import AdminViewCards from "./AdminViewCards";
+import galvanizeLogo from "../logIn/galvanizeLogo.webp";
+const StudentViewCard= React.lazy((()=> import("./StudentCards/StudentViewCard")));
+const AdminViewCards= React.lazy((() => import("./AdminViewCards")));
 
 
 export default function CareerServicesHub({
-  isTransitioning,
-  setIsTransitioning,
   loggedInfo,
   isStudent,
   studentInfo,
   managerInfo,
   setLoggedInfo,
+  setManagerInfo,
   setStudentInfo,
   setIsStudent,
   url
 }) {
-  console.log(managerInfo);
   // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState("");
   const [currentCohort, setCurrentCohort] = useState("");
@@ -79,9 +77,14 @@ export default function CareerServicesHub({
               setIsStudent(true);
               const result = await response.json(); console.log(result)
               setStudentInfo(result)
+              
               return result;
 
             }
+          }else {
+            const result = await response.json();
+            setManagerInfo(result.message);
+            setStudentInfo(result.message);
           }
         }
       fetchData().then(auth=>setLoggedInfo(true)).catch(e=>{
@@ -92,6 +95,7 @@ export default function CareerServicesHub({
       }) //fetches data, if no error set loggedInfo, else empty it.
       
   },[])
+
   useEffect(() => {
     const fetchData = async () => {
       const cookies = document.cookie.split(";");
@@ -363,17 +367,29 @@ export default function CareerServicesHub({
     isStudent,
     filterStudents,
     studentInfo,
-    managerInfo
+    managerInfo,
+    url
   }
 if(isStudent)
 {
- return <StudentViewCard popUpLogOff={popUpLogOff} studentInfo={studentInfo} handleLogOff={()=>handleLogOff()}/>
+ return (
+  <Suspense fallback={<div>Loading</div>}>
+        {
+          <StudentViewCard popUpLogOff={popUpLogOff} studentInfo={studentInfo} handleLogOff={()=>handleLogOff()} url={url}/>
+        }
+        
+      </Suspense>
+ );
 }
 else
 {
     return (
-      <AdminViewCards {...propData}/>
-
+      <Suspense fallback={<div>Loading</div>}>
+        {
+          <AdminViewCards {...propData}/>
+        }
+        
+      </Suspense>
     );
   }
 }

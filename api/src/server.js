@@ -494,11 +494,15 @@ io.on('connection',(socket)=>{
     addSocketId(data,socket.id);
   })
   socket.on('data',(studentData)=>{
-    const findObject = adminSocketList.find(socket=> studentData.tscm_id === socket.id)
-    if (findObject)
-    {
-      io.to(findObject.socketId).emit('changed',{message: 'modified'});
-    }
+    db.query(`INSERT INTO notification_message (message,read,student_id,admin_id) VALUES($1,$2,$3,$4) RETURNING *`,[`student ${studentData.id} modified profile`,false,studentData.id,studentData.tscm_id])
+    .then(res=>{
+      const findObject = adminSocketList.find(socket=> studentData.tscm_id === socket.id)
+      if (findObject)
+      {
+        io.to(findObject.socketId).emit('changed',{message: res.rows[0]});
+      }
+    })
+    
     
   })
   socket.on('disconnect', function () {
