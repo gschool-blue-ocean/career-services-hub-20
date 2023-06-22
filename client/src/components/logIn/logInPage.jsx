@@ -79,7 +79,6 @@ const LogInPage = ({
         const result = await response.json();
         setStudentInfo(result);
         console.log(result);
-        console.log(studentInfo);
       }
       setLoggedInfo(data);
       console.log(data);
@@ -109,6 +108,7 @@ const LogInPage = ({
       console.log(response);
       const responseData = await response.json();
       if (!isStudent) {
+        console.log(responseData);
         setManagerInfo(responseData.user);
       }
 

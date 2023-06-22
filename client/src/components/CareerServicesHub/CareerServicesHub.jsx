@@ -20,7 +20,7 @@ export default function CareerServicesHub({
   setIsStudent,
   url
 }) {
-  console.log(managerInfo);
+  // console.log(managerInfo);
   // Create local states that will be passed down to children components
   const [searchTerm, setSearchTerm] = useState("");
   const [currentCohort, setCurrentCohort] = useState("");

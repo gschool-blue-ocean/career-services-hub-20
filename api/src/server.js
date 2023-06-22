@@ -330,7 +330,7 @@ app.post("/managers/login", async (req, res, next) => {
     };
     const token = jwt.sign(user, process.env.SECRET_KEY);
 
-    res.json({ token: token, id:manager.tscm_id });
+    res.json({ token: token, user: user });
   } else return res.status(401).json({ message: "Invalid Password 🤷" });
 });
 
