@@ -14,7 +14,7 @@
   display: flex;
   margin: 0px;
   padding: 0px;
-  width:100%;
+  width: 100%;
 }
 
 .left_container {
@@ -24,13 +24,12 @@
   font-family: "KelsonSans-Bold";
   background-color: rgba(0, 0, 0, 0.6);
 }
-
-.login-popup{
-  position:absolute;
+.login-popup {
+  position: absolute;
   background-color: palegreen;
-  color:green;
-  width:100%;
-  padding:30px;
+  color: green;
+  width: 100%;
+  padding: 30px;
 }
 
 .logo {
@@ -141,4 +140,30 @@
 
 .profile-container {
   text-align: center;
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+  margin-left: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.auth-title {
+  color: white;
+  margin-bottom: 0;
+}
+.auth-code {
+  color: white;
+  margin-top: 0;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-weight: bold;
+  font-size: large;
+  font-family: "Times New Roman", Times, serif;
+  border: solid rgb(255, 255, 255) 1px;
+  border-radius: 5px;
+  width: fit-content;
 }

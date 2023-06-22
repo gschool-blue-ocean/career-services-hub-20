@@ -1,14 +1,14 @@
 module.exports = {
   transform: {
-    '^.+\\.jsx?$': 'babel-jest'
+    "^.+\\.jsx?$": "babel-jest",
   },
-  testEnvironment: 'jest-environment-jsdom', // Use jest-environment-jsdom
+  testEnvironment: "jest-environment-jsdom", // Use jest-environment-jsdom
   globals: {
-    'ts-jest': {
-      babelConfig: true
-    }
+    "ts-jest": {
+      babelConfig: true,
+    },
   },
   moduleNameMapper: {
-    '\\.css$': '<rootDir>/mocks/styleMock.js'
-  }
+    "\\.css$": "<rootDir>/mocks/styleMock.js",
+  },
 };
