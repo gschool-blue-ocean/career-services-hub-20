@@ -48,10 +48,11 @@ function AdminViewCards({opacity,
     handleLogOff,
     studentInfo,
     isStudent,
-    managerInfo
+    managerInfo,
+    url
   }) 
     {
-        const url = "http://localhost:8000";
+      if (!managerInfo) return <div>Loading</div>
         const socketRef = useRef(null);
         const [notificationsCount,setNotificationCount] = useState(0);
         useEffect(()=>{
@@ -132,6 +133,10 @@ function AdminViewCards({opacity,
                 <p className="auth-title">Authorization Code</p>
                 <p className="auth-code">{managerInfo.authCode}</p>
               </div>
+              {/* {managerInfo?<div className="auth-container">
+                <p className="auth-title">Authorization Code</p>
+                <p className="auth-code">{managerInfo.authCode}</p>
+              </div>:null} */}
               <Export
                 filterStudents={filterStudents}
                 currentCohort={currentCohort}
