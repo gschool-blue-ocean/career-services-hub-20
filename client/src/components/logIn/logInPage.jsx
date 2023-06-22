@@ -25,41 +25,6 @@ const LogInPage = ({
     return () => clearTimeout(timer); // cleanup timer on unmount
   }, []);
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
-  
-
-  // const handleLogin = async (data) => {
-  //   console.log('handle login reached')
-  //   const cookies = document.cookie.split(";");
-  //   const found = cookies.find(element=> element.trim().startsWith('jwt='))
-  //   try {
-  //     if(isStudent){
-  //       const response = await fetch(`${url}/students/login/isAuthorized`, {
-  //         method: "GET",
-        
-  //         headers: {
-  //           "Content-Type": "application/json", 
-  //           Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
-            
-  //         },//student_email student_password\
-         
-  //       });
-  //       const result = await response.json()
-  //       setStudentInfo(result)
-  //       setLoggedInfo(data);
-  //       console.log(result)
-  //     }
-  //     else
-  //     {
-  //       setStudentInfo({id:data.id});
-  //     }
-  //     setLoggedInfo(true);
-  //     console.log(data)
-  //   } catch (e) {
-  //     setLoggedInfo(false);
-  //     setStudentInfo({})
-  //   } //fetches data, if no error set loggedInfo, else empty it.
-
-  // };
 
   const handleLogin = async (data) => {
     console.log("handle login reached");
