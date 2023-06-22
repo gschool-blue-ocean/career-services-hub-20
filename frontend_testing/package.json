@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite serve --host",
     "build": "vite build",
-    "test": "jest"
+    "test": "jest",
+    "docker": "docker build -t client-image . && docker run -d -p 3000:3000 --name client-container client-image"
   },
   "devDependencies": {
     "@babel/core": "^7.21.8",

@@ -69,7 +69,11 @@ services:
       - database
     ports:
       - "${TEST_PORT}:8040"
-    command: /bin/sh -c "sleep 20 && npm test"
+    command: /bin/sh -c 'if [ "$RESET_DB" = "true" ]; then
+      sleep 40 && npm test;
+      else
+      sleep 10 && npm test;
+      fi'
 
 volumes:
   pg-data:
