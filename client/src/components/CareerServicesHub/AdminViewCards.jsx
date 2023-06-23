@@ -180,7 +180,12 @@ function AdminViewCards({
             &#8646;{" "}
           </button>
         </div>
-        <div className="right_container">
+        <div
+          className={
+            toggleFiltersBar ? "collapsed-right-container" : "right_container"
+          }
+        >
+
           <StudentCardsList
             filterStudents={filterStudents}
             currentCohort={currentCohort}

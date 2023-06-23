@@ -91,3 +91,17 @@
 .student-tracker-modal option {
   background-color: black;
 }
+
+@media (max-width: 420px) {
+  .student-tracker-modal {
+    width: 70vw;
+    height: 90%;
+    font-size: 20px;
+  }
+
+  .student-tracker-modal-status {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+  }
+}
