@@ -15,20 +15,6 @@
   gap: 3%;
 }
 
-.student-nav-selection {
-  display: none;
-}
-.student-nav-selection {
-  color: var(--student-text-color);
-  font-weight: bold;
-  cursor: pointer;
-  padding: 10px;
-}
-.student-nav-selection:hover {
-  background-color: var(--student-text-hover-color);
-  font-weight: bold;
-  border-radius: 5px;
-}
 .student-setting-nav {
   flex: 0 0 auto;
   width: 200px;
@@ -58,6 +44,7 @@
 .dropdown {
   display: none;
 }
+
 .student-profile-data {
   flex: 1 1 auto;
   margin-left: 10%;
@@ -116,27 +103,6 @@
 .student-card-item > div > div > h5 {
   font-weight: lighter;
   color: rgb(174, 145, 145);
-}
-/* .studentCard {
-  background-color: rgb(67, 61, 61);
-  border-width: 5px;
-  border-style: solid;
-  border-image: linear-gradient(to right, #4b23ff, #ff4b4b);
-  border-image-slice: 4;
-  border-image-repeat: repeat;
-  height: 75vh;
-  margin: auto;
-  margin-top: 10%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-gap: 1px;
-  padding-top: 10px;
-  padding-left: 10px;
-  overflow: hidden;
-  justify-items: left;
-  align-items: left;
-} */
 
 .card-item {
   /* background-color: #fff; */
@@ -276,4 +242,5 @@
   .dropdown:hover .dropdown-content {
     display: block;
   }
+
 }

@@ -7,7 +7,7 @@ export function StudentsContextProvider({
   loggedInfo,
   isStudent,
   studentInfo,
-  url
+  url,
 }) {
   //Update hook is used in the use effect for later so that when a component does a task the student state gets updated along with DB
   const [update, setUpdate] = useState(true);

@@ -12,7 +12,7 @@ export default function StudentModal({
   const url =
     process.env.NODE_ENV === "development"
       ? "http://localhost:8000"
-      : "https://career-services-server.onrender.com";
+      : "https://career-services-lmbc.onrender.com/";
 
   // Hook for the cohort
 

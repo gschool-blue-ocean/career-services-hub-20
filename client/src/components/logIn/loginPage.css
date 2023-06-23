@@ -115,6 +115,7 @@
   );
   background-attachment: fixed;
 }
+
 @media (max-width: 420px) {
   .login-value {
     margin-top: 50px;
@@ -164,3 +165,4 @@
     overflow: hidden;
   }
 }
+
