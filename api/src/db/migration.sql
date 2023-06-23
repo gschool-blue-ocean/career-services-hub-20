@@ -24,6 +24,7 @@ CREATE TABLE service_manager (
   tscm_code VARCHAR(15) NOT NULL
 );
 CREATE TABLE notification_message (
+  id serial PRIMARY KEY NOT NULL,
   message TEXT,
   read BOOLEAN,
   student_id INT,

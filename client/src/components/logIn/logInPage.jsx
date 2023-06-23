@@ -15,7 +15,6 @@ const LogInPage = ({
   const [pass, setPass] = useState("");
   const [errorRelay, setErrorRelay] = useState("");
   const [opacity, setOpacity] = useState(0);
-  const [register, setRegister] = useState(false);
 
   const nav = useNavigate();
 
@@ -66,20 +65,19 @@ const LogInPage = ({
     const cookies = document.cookie.split(";");
     const found = cookies.find((element) => element.trim().startsWith("jwt="));
     try {
-      if (isStudent) {
-        const response = await fetch(`${url}/students/login/isAuthorized`, {
-          method: "GET",
+      // if (isStudent) {
+      //   const response = await fetch(`${url}/students/login/isAuthorized`, {
+      //     method: "GET",
 
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
-          }, //student_email student_password\
-        });
-        const result = await response.json();
-        setStudentInfo(result);
-        console.log(result);
-        console.log(studentInfo);
-      }
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
+      //     }, //student_email student_password\
+      //   });
+      //   const result = await response.json();
+      //   setStudentInfo(result);
+      //   console.log(result);
+      // }
       setLoggedInfo(data);
       console.log(data);
     } catch (e) {
@@ -108,8 +106,9 @@ const LogInPage = ({
       console.log(response);
       const responseData = await response.json();
       if (!isStudent) {
-        setManagerInfo(responseData.user);
-      }
+        setManagerInfo(responseData.id);
+      } else
+        setStudentInfo({message: {id : responseData.id}});
 
       if (!response.ok) {
         throw new Error("Invalid email or password");
@@ -122,7 +121,6 @@ const LogInPage = ({
         ).toUTCString()}; path=/; SameSite=Strict;`;
         handleLogin(responseData); // Call the handleLogin function passed as a prop
         nav('/')
-        console.log('workin')
       } else {
         setErrorRelay("Something has gone horribly wrong 😢");
       }
@@ -159,11 +157,9 @@ const LogInPage = ({
           <button className="register-student" onClick={() => nav("/register")}>
             Register
           </button>
-          {register ? null : (
-            <button className="login-student" onClick={() => toggle()}>
-              {isStudent ? "Login as Admin" : "Login as Student"}
-            </button>
-          )}
+          <button className="login-student" onClick={() => toggle()}>
+            {isStudent ? "Login as Admin" : "Login as Student"}
+          </button>
         </nav>
       </div>
 

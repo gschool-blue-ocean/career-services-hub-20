@@ -3,19 +3,20 @@ import { io } from "socket.io-client";
 import galvanizeLogo from "../../logIn/galvanizeLogo.webp";
 import "./StudentViewCard.css";
 
-import StudentChangeCard from "./StudentChangCard";
+import StudentChangeCard from "./StudentChangeCard";
 
 const StudentViewCard = ({popUpLogOff,handleLogOff,studentInfo, url}) => {
   if (!studentInfo.message) return <div>Loading</div>
   const socketRef = useRef(null);
   const [currentStudent, setCurrentStudent] = useState({});
   const [studentChange,setStudentChange] = useState(false);
-   
+  const [update,setUpdate]= useState(false);
+  
   useEffect(()=>{
       socketRef.current = io(url,{
       transports: ['websocket'],
       reconnection: true,            // Enable reconnection attempts
-      reconnectionAttempts: 5,       // Limit the number of reconnection attempts
+      reconnectionAttempts: 1,       // Limit the number of reconnection attempts
       reconnectionDelay: 1000,       // Initial delay between reconnection attempts (in milliseconds)
       reconnectionDelayMax: 5000,    // Maximum delay between reconnection attempts (in milliseconds)
     });
@@ -44,19 +45,10 @@ const StudentViewCard = ({popUpLogOff,handleLogOff,studentInfo, url}) => {
       }
     }
     getUser();
-  }, [studentInfo]);
+  }, [studentInfo,update]);
   const handleSend=()=>{ 
-    if (socketRef.current) {
-      const students = studentInfo.message;
-      console.log(students);
-      console.log(students.tscm_id)
-    socketRef.current.emit('data',{studentId: students.id,tscm_id : students.tscm_id})
-
-    }
     
-  }
-  const changeProfile = ()=>{
-    setstudentChange(true);
+    
   }
   return (
     <>
@@ -71,15 +63,15 @@ const StudentViewCard = ({popUpLogOff,handleLogOff,studentInfo, url}) => {
           <div style={{paddingLeft:'50px'}}>
             <h1>Settings</h1>
             <hr />
-            <p>My Profile</p>
-            <p onClick={changeProfile}>Change My Profile</p>
+            <p onClick={()=>setStudentChange(false)}>My Profile</p>
+            <p onClick={()=>setStudentChange(true)}>Change My Profile</p>
             <p onClick={()=>handleSend()}>Notification</p>
             <p onClick={handleLogOff}>Log Out</p>
           </div>
           <div>
           </div>
         </nav>
-         <div className='student-profile-data'>
+         {studentChange?<StudentChangeCard currentStudent={currentStudent} socketRef={socketRef} url={url} setUpdate={setUpdate}/>:<div className='student-profile-data'>
           <div className='profile-background-img'>
             <img src='https://th.bing.com/th/id/R.b173d064715990e210a19f080fde122a?rik=wyy2%2bsDxPMBAGA&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f3%2fe%2fc%2f563599.jpg&ehk=IIlQVDqUjTmsDGCECQSTU1ogn28Flsaf2OWi74E3Ubk%3d&risl=&pid=ImgRaw&r=0'></img>
           </div>
@@ -103,7 +95,7 @@ const StudentViewCard = ({popUpLogOff,handleLogOff,studentInfo, url}) => {
               </div>
               <div>
                 <h5>Cohort</h5>
-                <p>{currentStudent.personal_narrative}</p>
+                <p>{currentStudent.cohort}</p>
               </div>
               <div>
                 <h5>Security Clearance</h5>
@@ -145,6 +137,10 @@ const StudentViewCard = ({popUpLogOff,handleLogOff,studentInfo, url}) => {
                 <h5>Personal Narrative</h5>
                 <p>{currentStudent.personal_narrative}</p>
               </div>
+              <div>
+                <h5>Career Status</h5>
+                <p>{currentStudent.career_status}</p>
+              </div>
             </div>
           </div>
           <div className='student-card-item'>
@@ -179,7 +175,7 @@ const StudentViewCard = ({popUpLogOff,handleLogOff,studentInfo, url}) => {
             <div>Contact your TSCM: {currentStudent.tscm_email}</div>
           </div> 
         </div> */}
-          </div>
+          </div>}
         </div>
       </div>
     </>

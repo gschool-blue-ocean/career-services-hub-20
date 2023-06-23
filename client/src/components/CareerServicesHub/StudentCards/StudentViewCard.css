@@ -14,6 +14,18 @@
     padding-left: 4%;
     gap:3%;
 }
+.student-submit-bt{
+    margin-right: 50px;
+    border-radius:10px;
+    border:2px solid white;
+    cursor:pointer;
+    display:flex;
+    align-items: center;
+    width:80px;
+    color: #fee4cd;
+    gap:10px;
+    padding:10px;
+}
 .student-nav-selection {
     color: var(--student-text-color);
     font-weight:bold;
