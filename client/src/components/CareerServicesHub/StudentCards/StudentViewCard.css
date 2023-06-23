@@ -103,6 +103,7 @@
 .student-card-item > div > div > h5 {
   font-weight: lighter;
   color: rgb(174, 145, 145);
+}
 
 .card-item {
   /* background-color: #fff; */
@@ -242,5 +243,4 @@
   .dropdown:hover .dropdown-content {
     display: block;
   }
-
 }
