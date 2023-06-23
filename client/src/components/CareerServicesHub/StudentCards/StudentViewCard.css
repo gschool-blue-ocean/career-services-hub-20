@@ -277,9 +277,3 @@
     display: block;
   }
 }
-
-@media (max-width: 380px) {
-  .profile-info {
-    transform: translate(60px, -150px);
-  }
-}
