@@ -67,9 +67,9 @@ const StudentViewCard = ({ popUpLogOff, handleLogOff, studentInfo, url }) => {
         ) : null}
         <nav className="student-nav">
           <img className="logo" src={galvanizeLogo} alt="Galvanize Logo" />
-          <div class="dropdown">
-            <button class="dropbtn">Menu</button>
-            <div class="dropdown-content">
+          <div className="dropdown">
+            <button className="dropbtn">Menu</button>
+            <div className="dropdown-content">
               <a onClick={changeProfile}>Change My Profile</a>
               <a onClick={() => handleSend()}>Notification</a>
               <a onClick={handleLogOff}>Log Out</a>
