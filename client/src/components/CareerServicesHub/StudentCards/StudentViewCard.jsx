@@ -59,39 +59,23 @@ const StudentViewCard = ({ popUpLogOff, handleLogOff, studentInfo, url }) => {
   };
   return (
     <>
-      <ul className="drawer">
-        <a href="#">
-          <span>Menu</span>
-        </a>
-        <ul>
-          <li>
-            <a onClick={changeProfile}>
-              <span>Change My Profile</span>
-            </a>
-          </li>
-          <li>
-            <a onClick={() => handleSend()}>
-              <span>Notification</span>
-            </a>
-          </li>
-          <li>
-            <a onClick={handleLogOff}>
-              <span>Log Out</span>
-            </a>
-          </li>
-        </ul>
-        {/* <p onClick={changeProfile}>Change My Profile</p>
-            <p onClick={() => handleSend()}>Notification</p>
-            <p onClick={handleLogOff}>Log Out</p> */}
-      </ul>
       <div className="container">
         {popUpLogOff > 0 ? (
           <div className="login-popup">
             Successfully logged off. Navigating in {popUpLogOff}s...
           </div>
         ) : null}
-        <img className="logo" src={galvanizeLogo} alt="Galvanize Logo" />
-
+        <nav className="student-nav">
+          <img className="logo" src={galvanizeLogo} alt="Galvanize Logo" />
+          <div class="dropdown">
+            <button class="dropbtn">Menu</button>
+            <div class="dropdown-content">
+              <a onClick={changeProfile}>Change My Profile</a>
+              <a onClick={() => handleSend()}>Notification</a>
+              <a onClick={handleLogOff}>Log Out</a>
+            </div>
+          </div>
+        </nav>
         <div style={{ display: "flex", overflow: "auto" }}>
           <nav className="student-setting-nav">
             <div style={{ paddingLeft: "50px" }}>

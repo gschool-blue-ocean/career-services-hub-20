@@ -54,6 +54,10 @@
   font-weight: bold;
   border-radius: 5px;
 }
+
+.dropdown {
+  display: none;
+}
 .student-profile-data {
   flex: 1 1 auto;
   margin-left: 10%;
@@ -230,149 +234,47 @@
     text-align: left;
     line-height: 0px;
   }
-  ul {
-    margin: 0;
-    padding: 0;
-  }
-  .drawer {
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    height: 100%;
-    padding: 0.4em 0;
-    background: #7d294e;
+  .dropbtn {
+    background-color: rgba(0, 0, 0, 0);
     color: white;
-    text-align: center;
-    /* Remove 4px gap between <li> */
-    font-size: 0;
-  }
-  .drawer li {
-    pointer-events: none;
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    list-style: none;
-    line-height: 100%;
-    transform: translateZ(0);
-  }
-  .drawer a {
-    pointer-events: auto;
-    position: relative;
-    display: block;
-    min-width: 5em;
-    margin-bottom: 0.4em;
-    padding: 0.4em;
-    line-height: 100%;
-    /* Reset font-size */
+    padding: 16px;
     font-size: 16px;
-    text-decoration: none;
-    color: white;
-    transition: all 0.3s;
-  }
-  .drawer a:active,
-  .drawer a:focus {
-    background: #b44659;
-  }
-  .drawer i {
-    display: block;
-    margin-bottom: 0.2em;
-    font-size: 2em;
-  }
-  .drawer span {
-    font-size: 0.625em;
-    font-family: sans-serif;
-    text-transform: uppercase;
-  }
-  .drawer li:hover ul {
-    /* Open the fly-out menu */
-    transform: translateX(0);
-    background: #b44659;
-    /* Enable this if you wish to replicate hoverIntent */
-  }
-  .drawer > li {
-    display: block;
-    /* Add a shadow to the top-level link */
-    /* Show the shadow when the link is hovered over */
-    /* Fly out menus */
-  }
-  .drawer > li > a {
-    background: #7d294e;
-  }
-  .drawer > li:hover {
-    z-index: 100;
-  }
-  .drawer > li:hover a {
-    background: #b44659;
-  }
-  .drawer > li a:hover {
-    background: #f56356;
-  }
-  .drawer > li > a:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 100%;
-    width: 4px;
-    opacity: 0;
-    transition: opacity 0.5s;
-  }
-  .drawer > li:hover a:after {
-    opacity: 1;
-  }
-  .drawer > li ul {
-    position: absolute;
-    /* Stack below the top level */
-    z-index: -1;
-    top: 0;
-    left: 100%;
-    height: 100%;
-    width: auto;
-    white-space: nowrap;
-    /* Close the menus */
-    transform: translateX(-100%);
-    background: #b44659;
-    transition: 0.5s transform;
+    border: none;
+    cursor: pointer;
   }
 
-  /**
-   * Not required for demo
-   */
-  @keyframes circle {
-    50% {
-      transform: scale(1.26923077);
-    }
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
   }
-  @keyframes initials {
-    50% {
-      transform: translateY(-8px) translateZ(0);
-    }
-  }
-  .ild-ident {
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
     position: absolute;
-    right: 20px;
-    bottom: 20px;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
   }
-  .ild-ident svg {
-    overflow: visible;
-    transform: translateZ(0);
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
   }
-  .ild-ident svg .circle-holder {
-    transform: translate(-7px, -7px);
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
   }
-  .ild-ident svg .circle {
-    transform: translate(7px, 7px);
-    fill: #7d294e;
-  }
-  .ild-ident svg.active .i {
-    animation: initials 0.4s ease-in-out;
-  }
-  .ild-ident svg.active .l {
-    animation: initials 0.4s 0.2s ease-in-out;
-  }
-  .ild-ident svg.active .circle {
-    animation: circle 0.5s 0.1s ease-in-out;
+
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
   }
 }
 
