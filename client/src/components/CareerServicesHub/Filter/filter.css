@@ -100,3 +100,9 @@
 #clear {
   margin: 10px;
 }
+
+@media (max-width: 420px) {
+  #filt_title {
+    font-size: x-large;
+  }
+}
