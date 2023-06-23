@@ -14,17 +14,7 @@
   padding-left: 4%;
   gap: 3%;
 }
-.student-nav-selection {
-  color: var(--student-text-color);
-  font-weight: bold;
-  cursor: pointer;
-  padding: 10px;
-}
-.student-nav-selection:hover {
-  background-color: var(--student-text-hover-color);
-  font-weight: bold;
-  border-radius: 5px;
-}
+
 .student-setting-nav {
   flex: 0 0 auto;
   width: 200px;
@@ -50,6 +40,11 @@
   font-weight: bold;
   border-radius: 5px;
 }
+
+.dropdown {
+  display: none;
+}
+
 .student-profile-data {
   flex: 1 1 auto;
   margin-left: 10%;
@@ -109,27 +104,6 @@
   font-weight: lighter;
   color: rgb(174, 145, 145);
 }
-.studentCard {
-  background-color: rgb(67, 61, 61);
-  border-width: 5px;
-  border-style: solid;
-  border-image: linear-gradient(to right, #4b23ff, #ff4b4b);
-  border-image-slice: 4;
-  border-image-repeat: repeat;
-  height: 75vh;
-  margin: auto;
-  margin-top: 10%;
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Two columns with equal width */
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-gap: 1px;
-  padding-top: 10px;
-  padding-left: 10px;
-  overflow: hidden;
-  /* border-radius: 40px; */
-  justify-items: left;
-  align-items: left;
-}
 
 .card-item {
   /* background-color: #fff; */
@@ -164,4 +138,109 @@
   align-items: center;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 420px) {
+  .student-nav-selection {
+    display: block;
+  }
+  .student-setting-nav {
+    display: none;
+  }
+
+  .student-profile-data {
+    margin-left: 0;
+  }
+
+  .student-profile-data > * {
+    margin-bottom: 25px;
+  }
+
+  .profile-background-img {
+    margin: auto;
+    height: 30vh;
+    width: 95%;
+  }
+  .profile-background-img > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 35px 35px 35px 35px;
+  }
+
+  .profile-info {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(60px, -190px);
+  }
+
+  .profile-info-data {
+    margin-left: 20px;
+  }
+
+  .profile-info > svg {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+  }
+
+  .student-card-item {
+    margin: auto;
+    margin-top: 25px;
+    background-color: rgb(64, 53, 71);
+    padding: 10px;
+    border-radius: 10px;
+    width: 90%;
+    font-size: 25px;
+    text-align: center;
+  }
+  .student-card-item > div {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    line-height: 0px;
+  }
+  .dropbtn {
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
 }
