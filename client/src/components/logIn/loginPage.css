@@ -115,3 +115,52 @@
   );
   background-attachment: fixed;
 }
+@media (max-width: 420px) {
+  .login-value {
+    margin-top: 50px;
+  }
+
+  .register-container {
+    margin-top: 20px;
+    padding-top: 0;
+  }
+
+  .register-form {
+    margin-top: 0;
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+    border-radius: 10%;
+    width: 50%;
+    padding: 0px;
+  }
+
+  .register-background {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 389px) {
+  .login-value {
+    margin-top: 30px;
+  }
+
+  .register-container {
+    margin-top: 10px;
+    padding-top: 0;
+  }
+
+  .register-form {
+    margin-top: 0;
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+    border-radius: 10%;
+    width: 50%;
+    padding: 0px;
+  }
+
+  .register-background {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
