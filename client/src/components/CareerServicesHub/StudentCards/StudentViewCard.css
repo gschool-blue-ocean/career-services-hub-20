@@ -7,12 +7,35 @@
   --student-text-hover-color: rgba(145, 145, 145, 0.119);
   --student-text-secondary-color: lightgray;
 }
-.student-nav {
-  display: flex;
-  align-items: center;
-  padding: 2%;
-  padding-left: 4%;
-  gap: 3%;
+.student-nav{
+    display: flex;
+    align-items: center;
+    padding:2%;
+    padding-left: 4%;
+    gap:3%;
+}
+.student-submit-bt{
+    margin-right: 50px;
+    border-radius:10px;
+    border:2px solid white;
+    cursor:pointer;
+    display:flex;
+    align-items: center;
+    width:80px;
+    color: #fee4cd;
+    gap:10px;
+    padding:10px;
+}
+.student-nav-selection {
+    color: var(--student-text-color);
+    font-weight:bold;
+    cursor:pointer;
+    padding:10px;
+}
+.student-nav-selection:hover{
+    background-color: var(--student-text-hover-color);
+    font-weight: bold;
+    border-radius: 5px;
 }
 
 .student-setting-nav {

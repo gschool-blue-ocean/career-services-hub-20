@@ -76,7 +76,7 @@ app.get("/students/:id", async (req, res, next) => {
       ,student.resume,student.linkedin,student.personal_narrative, student.hunter_access,student.tscm_id,service_manager.tscm_first, service_manager.tscm_last, service_manager.tscm_email 
                                   FROM student
                                   JOIN service_manager ON service_manager.tscm_id = student.tscm_id 
-                                  WHERE student.student_id = ${id}`
+                                  WHERE student.student_id = ${req.params.id}`
     )
     .catch(next);
 
@@ -217,13 +217,11 @@ app.delete("/students/:id", async (req, res, next) => {
     .catch(next);
   res.send({ message: "Sucessfully Deleted Student Record!" });
 });
-app.get("/students/login/isAuthorized", (req, res) => {
+app.get("/login/isAuthorized", (req, res, next) => {
   let user = isAuthorized(req, res);
 
-  // console.log(user);
   if (!user) return res.status(401).json({ message: "Unauthorized" });
-  else if (user.admin)
-    return res.status(204).json({ message: "This is an admin account!" });
+  else if (user.admin) return next(); // return res.status(204).json({ message: "This is an admin account!" });
   //console.log(`Welcome back, Student ${user.user}`)
   res.json({ message: user });
 });
@@ -244,7 +242,7 @@ app.post("/students/login", async (req, res, next) => {
       tscm_id: student.tscm_id,
     };
     const token = jwt.sign(user, process.env.SECRET_KEY);
-    res.json({ token: token });
+    res.json({ token: token, isAdmin: false, id: student.student_id });
   }
 });
 
@@ -424,11 +422,34 @@ app.delete("/events/:id", async (req, res, next) => {
   res.send("Sucessfully Deleted Event Record!");
 });
 
-app.get("/managers/login/isAuthorized", (req, res) => {
+app.get("/login/isAuthorized", (req, res) => {
   let user = isAuthorized(req, res);
-  if (!user.isAdmin) return res.status(401).json({ message: "Unauthorized" });
+  // if (!user.isAdmin) return res.status(401).json({ message: "Unauthorized" });
 
   res.json({ message: user });
+});
+
+app.get("/message/:id", (req, res) => {
+  db.query(
+    `SELECT * FROM notification_message WHERE admin_id = $1 AND read = false`,
+    [req.params.id]
+  )
+    .then((response) => {
+      res.send(response.rows);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+});
+app.delete("/message/:id", (req, res) => {
+  console.log("delete");
+  db.query(`DELETE FROM notification_message WHERE id = $1`, [req.params.id])
+    .then((response) => {
+      res.json({ message: "Successfully Removed READ notification" });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 });
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
@@ -458,6 +479,7 @@ function addSocketId(data, id) {
     socketList.push({ id: data.id, socketId: id, isAdmin: false });
     console.log("Student " + data.id + " joined");
   }
+  return true;
 }
 function addAdminSocketId(data, id) {
   if (!data.id) return null;
@@ -496,12 +518,13 @@ io.on("connection", (socket) => {
     addSocketId(data, socket.id);
   });
   socket.on("data", (studentData) => {
+    console.log(studentData);
     db.query(
       `INSERT INTO notification_message (message,read,student_id,admin_id) VALUES($1,$2,$3,$4) RETURNING *`,
       [
-        `student ${studentData.id} modified profile`,
+        `${studentData.name} modified profile`,
         false,
-        studentData.id,
+        studentData.studentId,
         studentData.tscm_id,
       ]
     ).then((res) => {
