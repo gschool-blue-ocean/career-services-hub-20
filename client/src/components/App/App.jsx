@@ -19,7 +19,10 @@ const App = () => {
   const [studentInfo, setStudentInfo] = useState({});
   const [managerInfo, setManagerInfo] = useState({});
 
-  const url = "http://localhost:8000";
+  const url =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:8000"
+      : "https://career-services-lmbc.onrender.com";
 
   useEffect(() => {
     if (!isStudent) document.body.classList.remove("student-background");
@@ -27,7 +30,6 @@ const App = () => {
   }, [isStudent]);
 
   return (
-    
     <EventsContextProvider loggedInfo={loggedInfo} url={url}>
       <StudentsContextProvider
         loggedInfo={loggedInfo}
@@ -72,7 +74,9 @@ const App = () => {
                 ></Route>
                 <Route
                   path="/register"
-                  element={<RegisterForm setIsStudent={setIsStudent} url={url}/>}
+                  element={
+                    <RegisterForm setIsStudent={setIsStudent} url={url} />
+                  }
                 />
               </Routes>
               {/* {loggedInfo ? (
@@ -83,7 +87,6 @@ const App = () => {
         </ManagersContextProvider>
       </StudentsContextProvider>
     </EventsContextProvider>
-  
   );
 };
 

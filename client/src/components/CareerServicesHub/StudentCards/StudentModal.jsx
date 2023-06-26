@@ -12,7 +12,7 @@ export default function StudentModal({
   const url =
     process.env.NODE_ENV === "development"
       ? "http://localhost:8000"
-      : "https://career-services-server.onrender.com";
+      : "https://career-services-lmbc.onrender.com/";
 
   // Hook for the cohort
 
@@ -129,7 +129,7 @@ export default function StudentModal({
             {student.student_first} {student.student_last}
           </div>
           <div className="student-tracker-modal-mcsp">{`MCSP-${cohort}`}</div>
-          <div className="student-tracker-modal-cover-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="cover-status">MCSP- </label>
             <input
               type="number"
@@ -142,7 +142,7 @@ export default function StudentModal({
           </div>
           <br />
           <div className="student-tracker-modal-milestones-div">Milestones</div>
-          <div className="student-tracker-modal-cover-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="cover-status">Cover Letter: </label>
             <select name="Cover Letter Status" ref={coverLetterInputRef}>
               <option value={student.cover_letter}>
@@ -159,7 +159,7 @@ export default function StudentModal({
               })}
             </select>
           </div>
-          <div className="student-tracker-modal-resume-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="resume-status">Resume: </label>
             <select name="Resume Status" ref={resumeInputRef}>
               <option value={student.resume}>{student.resume}</option>
@@ -174,7 +174,7 @@ export default function StudentModal({
               })}
             </select>
           </div>
-          <div className="student-tracker-modal-linked-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="linked-status">Linked In Profile: </label>
             <select name="Linked In Status" ref={linkedInInputRef}>
               <option value={student.linkedin}>{student.linkedin}</option>
@@ -189,7 +189,7 @@ export default function StudentModal({
               })}
             </select>
           </div>
-          <div className="student-tracker-modal-narrative-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="narrative-status">Personal Narrative: </label>
             <select name="Narrative Status" ref={narrativeInputRef}>
               <option value={student.personal_narrative}>
@@ -206,7 +206,7 @@ export default function StudentModal({
               })}
             </select>
           </div>
-          <div className="student-tracker-modal-huntr-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="huntr-status">Huntr Access: </label>
             <select name="Huntr Status" ref={huntrInputRef}>
               <option value={student.hunter_access}>
@@ -228,7 +228,7 @@ export default function StudentModal({
           <div className="student-tracker-modal-additional-information">
             Additional Information
           </div>
-          <div className="student-tracker-modal-career-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="career-status">Career Status: </label>
             <select name="Career Status" ref={careerInputRef}>
               <option value={student.career_status}>
@@ -245,7 +245,7 @@ export default function StudentModal({
               })}
             </select>
           </div>
-          <div className="student-tracker-modal-course-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="course-status">Course Status: </label>
             <select name="Course Status" ref={courseInputRef}>
               <option value={student.course_status}>
@@ -262,7 +262,7 @@ export default function StudentModal({
               })}
             </select>
           </div>
-          <div className="student-tracker-modal-clearance-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="clearance-status">Clearance Status: </label>
             <select name="Clearance Status" ref={clearanceInputRef}>
               <option value={student.sec_clearance}>
@@ -279,7 +279,7 @@ export default function StudentModal({
               })}
             </select>
           </div>
-          <div className="student-tracker-modal-degree-status">
+          <div className="student-tracker-modal-status">
             <label htmlFor="degree-status">Degree Status: </label>
             <select name="Degree Status" ref={degreeInputRef}>
               <option value={student.college_degree}>

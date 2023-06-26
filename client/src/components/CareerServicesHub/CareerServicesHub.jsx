@@ -1,12 +1,13 @@
-import React, { useState, useEffect,Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./CareerServicesHub.css";
 
 import galvanizeLogo from "../logIn/galvanizeLogo.webp";
-const StudentViewCard= React.lazy((()=> import("./StudentCards/StudentViewCard")));
-const AdminViewCards= React.lazy((() => import("./AdminViewCards")));
-
+const StudentViewCard = React.lazy(() =>
+  import("./StudentCards/StudentViewCard")
+);
+const AdminViewCards = React.lazy(() => import("./AdminViewCards"));
 
 export default function CareerServicesHub({
   loggedInfo,
@@ -17,73 +18,68 @@ export default function CareerServicesHub({
   setManagerInfo,
   setStudentInfo,
   setIsStudent,
-  url
+  url,
 }) {
   const [popUpLogOff, setPopUpLogOff] = useState(0);
   const [opacity, setOpacity] = useState(0);
   const nav = useNavigate();
 
   useEffect(() => {
-    const fetchData = async()=>{
+    const fetchData = async () => {
       const cookies = document.cookie.split(";");
-      const found = cookies.find(element=> element.trim().startsWith('jwt='))
+      const found = cookies.find((element) =>
+        element.trim().startsWith("jwt=")
+      );
       let response;
-      
-        //check if its manager token
-        response = await fetch(`${url}/login/isAuthorized`, {
-          method: "GET",
-        
-          headers: {
-            "Content-Type": "application/json", 
-            Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
-          },
-        });
-        //if not check if its student token
-        // if (!response.ok){
-        //   response = await fetch(`${url}/students/login/isAuthorized`, {
-        //     method: "GET",
-          
-        //     headers: {
-        //       "Content-Type": "application/json", 
-        //       Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
 
-              
-            // },//student_email student_password\
-           
-          // });
-          //if its still not ok, then throw an error.
-          if (!response.ok)  {
-              throw new Error('Not Authorized')
-          } else {
+      //check if its manager token
+      response = await fetch(`${url}/login/isAuthorized`, {
+        method: "GET",
 
-            
-            const result = await response.json(); 
-            console.log(result)
-            if (!result.message.isAdmin)
-            {
-              setIsStudent(true);
-              console.log(result);
-              setStudentInfo(result)
-            }
-            else
-              setManagerInfo(result.message);
-            return result;
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: found ? `Bearer ${found.split("jwt=")[1]}` : "",
+        }, //student_email student_password\
+      });
+      //if not check if its student token
+      // if (!response.ok){
+      //   response = await fetch(`${url}/students/login/isAuthorized`, {
+      //     method: "GET",
 
-          }
-          }
-          // else {
-          //   const result = await response.json();
-          //   setManagerInfo(result.message);
-          //   setStudentInfo(result.message);
-          // }
-        // }
-      fetchData().then(auth=>setLoggedInfo(true)).catch(e=>{
-        setLoggedInfo(false)
-        if(!loggedInfo) 
-        nav('/login');
-      }) //fetches data, if no error set loggedInfo, else empty it.
-      
-  },[])
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization:(found?`Bearer ${found.split('jwt=')[1]}`:''),
+
+      // },//student_email student_password\
+
+      // });
+      //if its still not ok, then throw an error.
+      if (!response.ok) {
+        throw new Error("Not Authorized");
+      } else {
+        const result = await response.json();
+        console.log(result);
+        if (!result.message.isAdmin) {
+          setIsStudent(true);
+          console.log(result);
+          setStudentInfo(result);
+        } else setManagerInfo(result.message);
+        return result;
+      }
+    };
+    // else {
+    //   const result = await response.json();
+    //   setManagerInfo(result.message);
+    //   setStudentInfo(result.message);
+    // }
+    // }
+    fetchData()
+      .then((auth) => setLoggedInfo(true))
+      .catch((e) => {
+        setLoggedInfo(false);
+        if (!loggedInfo) nav("/login");
+      }); //fetches data, if no error set loggedInfo, else empty it.
+  }, []);
 
   useEffect(() => {
     setOpacity(1);
@@ -120,87 +116,34 @@ export default function CareerServicesHub({
     }); //expires immediately. The day is the very beginning of the timeDate for first computer
   };
 
-
-  // const propData = {
-  //   opacity,
-  //   popUpLogOff,
-  //   galvanizeLogo,
-  //   setSearchTerm,
-  //   searchTerm,
-  //   currentCohort,
-  //   setCurrentCohort,
-  //   setCoverLetter,
-  //   setCurrentCoverStatus,
-  //   currentCoverStatus,
-  //   setStudentResume,
-  //   setCurrentResumeStatus,
-  //   currentResumeStatus,
-  //   setLinkedAccount,
-  //   linkedAccountStatus,
-  //   setLinkedAccountStatus,
-  //   setPersonalNarrative,
-  //   setNarrativeStatus,
-  //   narrativeStatus,
-  //   setHunterAccess,
-  //   currentAccess,
-  //   setCurrentAccess,
-  //   currentStatus,
-  //   setCurrentStatus,
-  //   currentClearance,
-  //   setCurrentClearance,
-  //   educationStatus,
-  //   setEducationStatus,
-  //   selectedManager,
-  //   setSelectedManager,
-  //   currentCohort,
-  //   coverLetter,
-  //   currentCoverStatus,
-  //   studentResume,
-  //   currentResumeStatus,
-  //   linkedAccount,
-  //   linkedAccountStatus,
-  //   personalNarrative,
-  //   narrativeStatus,
-  //   hunterAccess,
-  //   currentAccess,
-  //   currentStatus,
-  //   currentClearance,
-  //   educationStatus,
-  //   selectedManager,
-  //   handleLogOff,
-  //   isStudent,
-  //   filterStudents,
-  //   studentInfo,
-  //   managerInfo,
-  //   url
-  // }
-if(isStudent)
-{
- return (
-  <Suspense fallback={<div>Loading</div>}>
-        {
-          <StudentViewCard popUpLogOff={popUpLogOff} studentInfo={studentInfo} handleLogOff={()=>handleLogOff()} url={url}/>
-        }
-        
-      </Suspense>
- );
-}
-else
-{
+  if (isStudent) {
     return (
       <Suspense fallback={<div>Loading</div>}>
         {
-          <AdminViewCards url={url} 
-          managerInfo={managerInfo} 
-          setManagerInfo={setManagerInfo} 
-          popUpLogOff={popUpLogOff} 
-          galvanizeLogo={galvanizeLogo}
-          isStudent={isStudent}
-          opacity={opacity}
-          handleLogOff={()=>handleLogOff()}
+          <StudentViewCard
+            popUpLogOff={popUpLogOff}
+            studentInfo={studentInfo}
+            handleLogOff={() => handleLogOff()}
+            url={url}
           />
         }
-        
+      </Suspense>
+    );
+  } else {
+    return (
+      <Suspense fallback={<div>Loading</div>}>
+        {
+          <AdminViewCards
+            url={url}
+            managerInfo={managerInfo}
+            setManagerInfo={setManagerInfo}
+            popUpLogOff={popUpLogOff}
+            galvanizeLogo={galvanizeLogo}
+            isStudent={isStudent}
+            opacity={opacity}
+            handleLogOff={() => handleLogOff()}
+          />
+        }
       </Suspense>
     );
   }

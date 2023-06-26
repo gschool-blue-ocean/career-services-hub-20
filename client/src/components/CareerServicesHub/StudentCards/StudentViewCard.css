@@ -1,11 +1,11 @@
-.container{
-    background-color: rgb(29, 21, 34);
-    height: 100%;
-    overflow: hidden;
-    color:var(--student-text-color);
-    --student-text-color: white;
-    --student-text-hover-color:rgba(145, 145, 145, 0.119);
-    --student-text-secondary-color: lightgray;
+.container {
+  background-color: rgb(29, 21, 34);
+  height: 100%;
+  overflow: hidden;
+  color: var(--student-text-color);
+  --student-text-color: white;
+  --student-text-hover-color: rgba(145, 145, 145, 0.119);
+  --student-text-secondary-color: lightgray;
 }
 .student-nav{
     display: flex;
@@ -37,39 +37,45 @@
     font-weight: bold;
     border-radius: 5px;
 }
+
 .student-setting-nav {
-    flex:0 0 auto;
-    width:200px;
-    display:flex;
-    flex-direction: column;
-    color:var(--student-text-color);
-    overflow-y: auto;
+  flex: 0 0 auto;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  color: var(--student-text-color);
+  overflow-y: auto;
 }
-.student-setting-nav > div> hr {
-    margin-top: 30px;
-    margin-bottom: 30px;
-    background-color:var(--student-text-hover-color);
-    height:1px;
-    border: none;
+.student-setting-nav > div > hr {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  background-color: var(--student-text-hover-color);
+  height: 1px;
+  border: none;
 }
-.student-setting-nav > div> p {
-    cursor:pointer;
-    padding:10px;
-    margin:0;
+.student-setting-nav > div > p {
+  cursor: pointer;
+  padding: 10px;
+  margin: 0;
 }
-.student-setting-nav > div> p:hover {
-    background-color: var(--student-text-hover-color);
-    font-weight: bold;
-    border-radius: 5px;
+.student-setting-nav > div > p:hover {
+  background-color: var(--student-text-hover-color);
+  font-weight: bold;
+  border-radius: 5px;
 }
-.student-profile-data{
-    flex:1 1 auto;
-    margin-left:10%;
-    overflow-y: scroll;
-    overflow-x: hidden;
+
+.dropdown {
+  display: none;
+}
+
+.student-profile-data {
+  flex: 1 1 auto;
+  margin-left: 10%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .student-profile-data > * {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 .logoff:hover {
   box-shadow: 1px 1px rgb(97, 88, 88), 2px 2px rgb(97, 88, 88),
@@ -77,105 +83,187 @@
   transform: translateX(-3px);
 }
 
-.profile-background-img{
-    height:30vh;
-    width:90%;
+.profile-background-img {
+  height: 30vh;
+  width: 90%;
 }
-.profile-background-img > img{
-    width:100%;
-    height:100%;
-    border-radius: 75px 75px 0% 0%;
+.profile-background-img > img {
+  width: 100%;
+  height: 100%;
+  border-radius: 75px 75px 0% 0%;
+}
+.profile-info-data {
+  margin-left: 30px;
+  display: flex;
+  justify-content: end;
+  flex-direction: column;
+}
+.profile-info {
+  display: flex;
+  transform: translate(40px, -60px);
+}
+.profile-info > svg {
+  width: 100px;
+  height: 100px;
+  background-color: rgb(177, 177, 177);
+  padding: 10px;
 
-}
-.profile-info-data{
-    margin-left:30px;
-    display:flex;
-    justify-content:end;
-    flex-direction: column;
-}
-.profile-info{
-    display:flex;
-    transform:translate(40px,-60px);
-}
-.profile-info > svg{
-    width:100px;
-    height:100px;
-    background-color: rgb(177, 177, 177);
-    padding:10px;
-    
-    background: linear-gradient(white, white) padding-box
-                ,linear-gradient( #4b23ff, #ff4b4b) border-box;
-    border-radius: 100%;
-    border: 4px solid transparent
+  background: linear-gradient(white, white) padding-box,
+    linear-gradient(#4b23ff, #ff4b4b) border-box;
+  border-radius: 100%;
+  border: 4px solid transparent;
 }
 .student-card-item {
-    background-color: rgb(64, 53, 71);
-    padding:20px;
-    border-radius: 10px;
-    width:90%;
+  background-color: rgb(64, 53, 71);
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
 }
-.student-card-item > div{
-    display:grid;
-    grid-template-columns:auto auto;
+.student-card-item > div {
+  display: grid;
+  grid-template-columns: auto auto;
 }
 .student-card-item > div > div > h5 {
-    font-weight: lighter;
-    color:rgb(174, 145, 145);
-}
-.studentCard {
-background-color:  rgb(67, 61, 61);
-border-width: 5px;
-border-style: solid;
-border-image: linear-gradient(to right, #4b23ff, #ff4b4b);
-border-image-slice: 4;
-border-image-repeat: repeat;
-height: 75vh;
-margin: auto;
-margin-top: 10%;
-display: grid;
-grid-template-columns: 1fr 1fr; /* Two columns with equal width */
-grid-template-rows: 1fr 1fr 1fr; 
-grid-gap: 1px;
-padding-top: 10px;
-padding-left: 10px;
-overflow: hidden;
-/* border-radius: 40px; */
-justify-items: left;
-align-items: left;
-
+  font-weight: lighter;
+  color: rgb(174, 145, 145);
 }
 
 .card-item {
-    /* background-color: #fff; */
-    /* border: 1px solid #ccc; */
-    padding: 10px;
-    font-size: 30px;
-    justify-items: left;
-    align-items: left;
-    display: flex;
-    flex-direction: column;
-    gap: 55px;
-    color: var(--student-text-color);
+  /* background-color: #fff; */
+  /* border: 1px solid #ccc; */
+  padding: 10px;
+  font-size: 30px;
+  justify-items: left;
+  align-items: left;
+  display: flex;
+  flex-direction: column;
+  gap: 55px;
+  color: var(--student-text-color);
 }
 
-.contact{
-    background-color: rgb(67, 61, 61);
-    color: var(--student-text-color);
-    border-width: 5px;
-    border-style: solid;
-    border-image: linear-gradient(to right, #4b23ff, #ff4b4b);
-    border-image-slice: 4;
-    border-image-repeat: repeat;
-    width: 25%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    /* border-radius: 50px; */
-    padding: 10px;
-    font-size: 30px;
-    text-align: center;
-    justify-content: center;
+.contact {
+  background-color: rgb(67, 61, 61);
+  color: var(--student-text-color);
+  border-width: 5px;
+  border-style: solid;
+  border-image: linear-gradient(to right, #4b23ff, #ff4b4b);
+  border-image-slice: 4;
+  border-image-repeat: repeat;
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  /* border-radius: 50px; */
+  padding: 10px;
+  font-size: 30px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 420px) {
+  .student-nav-selection {
+    display: block;
+  }
+  .student-setting-nav {
+    display: none;
+  }
+
+  .student-profile-data {
+    margin-left: 0;
+  }
+
+  .student-profile-data > * {
+    margin-bottom: 25px;
+  }
+
+  .profile-background-img {
+    margin: auto;
+    height: 30vh;
+    width: 95%;
+  }
+  .profile-background-img > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 35px 35px 35px 35px;
+  }
+
+  .profile-info {
+    position: absolute;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    transform: translate(60px, -190px);
+  }
+
+  .profile-info-data {
+    margin-left: 20px;
+  }
+
+  .profile-info > svg {
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+  }
+
+  .student-card-item {
+    margin: auto;
+    margin-top: 25px;
+    background-color: rgb(64, 53, 71);
+    padding: 10px;
+    border-radius: 10px;
+    width: 90%;
+    font-size: 25px;
+    text-align: center;
+  }
+  .student-card-item > div {
     display: flex;
     flex-direction: column;
+    text-align: left;
+    line-height: 0px;
+  }
+  .dropbtn {
+    background-color: rgba(0, 0, 0, 0);
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
 }

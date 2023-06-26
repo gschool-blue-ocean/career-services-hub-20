@@ -135,7 +135,6 @@ describe("POST /students/login", () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         token: token,
-
       })
     );
   });
@@ -166,7 +165,7 @@ describe("GET /students/:id", () => {
         student_first: "John",
         student_last: "Doe",
         student_email: student_email,
-        student_password: hashedPassword,
+        // student_password: hashedPassword,
         cohort: "Undetermined",
         sec_clearance: "Undetermined",
         career_status: "Not Currently Searching",

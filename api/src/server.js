@@ -5,8 +5,8 @@ import pg from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
-import { Server } from 'socket.io';
-import http from 'http';
+import { Server } from "socket.io";
+import http from "http";
 
 const { Pool } = pg;
 
@@ -63,6 +63,12 @@ app.get("/students", async (req, res, next) => {
 });
 
 app.get("/students/:id", async (req, res, next) => {
+  let id = req.params.id;
+  const user = isAuthorized(req, res);
+
+  if (user) {
+    if (user.id) id = user.id;
+  }
   const result = await db
     .query(
       `SELECT student.student_id,student.student_first,student.student_last, student.student_email,student.cohort
@@ -211,12 +217,11 @@ app.delete("/students/:id", async (req, res, next) => {
     .catch(next);
   res.send({ message: "Sucessfully Deleted Student Record!" });
 });
-app.get("/login/isAuthorized", (req, res,next) => {
+app.get("/login/isAuthorized", (req, res, next) => {
   let user = isAuthorized(req, res);
 
   if (!user) return res.status(401).json({ message: "Unauthorized" });
-  else if (user.admin)
-    return next();// return res.status(204).json({ message: "This is an admin account!" });
+  else if (user.admin) return next(); // return res.status(204).json({ message: "This is an admin account!" });
   //console.log(`Welcome back, Student ${user.user}`)
   res.json({ message: user });
 });
@@ -234,7 +239,7 @@ app.post("/students/login", async (req, res, next) => {
     const user = {
       user: `${student.student_first} ${student.student_last}`,
       id: student.student_id,
-      tscm_id:student.tscm_id
+      tscm_id: student.tscm_id,
     };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     res.json({ token: token, isAdmin: false, id: student.student_id });
@@ -318,12 +323,12 @@ app.post("/managers/login", async (req, res, next) => {
     const user = {
       user: `${manager.tscm_first} ${manager.tscm_last}`,
       isAdmin: true,
-      id:manager.tscm_id,
+      id: manager.tscm_id,
       authCode: manager.tscm_code,
     };
     const token = jwt.sign(user, process.env.SECRET_KEY);
 
-    res.json({ token: token, id:manager.tscm_id });
+    res.json({ token: token, user: user });
   } else return res.status(401).json({ message: "Invalid Password 🤷" });
 });
 
@@ -425,18 +430,26 @@ app.get("/login/isAuthorized", (req, res) => {
 });
 
 app.get("/message/:id", (req, res) => {
-  db.query(`SELECT * FROM notification_message WHERE admin_id = $1 AND read = false`,[req.params.id]).then(response=>{
-    res.send(response.rows);
-  }).catch(e=>{
-    console.log(e)
-  })
+  db.query(
+    `SELECT * FROM notification_message WHERE admin_id = $1 AND read = false`,
+    [req.params.id]
+  )
+    .then((response) => {
+      res.send(response.rows);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 });
 app.delete("/message/:id", (req, res) => {
-  db.query(`DELETE FROM notification_message WHERE id = $1`,[req.params.id]).then(response=>{
-    res.json({message:'Successfully Removed READ notification'});
-  }).catch(e=>{
-    console.log(e)
-  })
+  console.log("delete");
+  db.query(`DELETE FROM notification_message WHERE id = $1`, [req.params.id])
+    .then((response) => {
+      res.json({ message: "Successfully Removed READ notification" });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 });
 
 // -----------------------------------------------------------------------------------------------------------------------------------------
@@ -455,86 +468,92 @@ function isAuthorized(req, res) {
   }
 }
 /////////////////////////////////////////////////////////////////
-    /* WebSocket for individual push notification */
+/* WebSocket for individual push notification */
 
 let socketList = [];
 let adminSocketList = [];
-function addSocketId(data,id)
-{
-  if (!data.id)  return null;
-  const findId = socketList.find(socket=> data.id === socket.id)
-  if (!findId){
-    socketList.push({id: data.id, socketId: id,isAdmin: false})
-    console.log('Student ' + data.id + ' joined')
+function addSocketId(data, id) {
+  if (!data.id) return null;
+  const findId = socketList.find((socket) => data.id === socket.id);
+  if (!findId) {
+    socketList.push({ id: data.id, socketId: id, isAdmin: false });
+    console.log("Student " + data.id + " joined");
   }
   return true;
 }
-function addAdminSocketId(data,id)
-{
-  if (!data.id)  return null;
-  const findId = adminSocketList.find(socket=> data.id === socket.id)
-  if (!findId){
-    adminSocketList.push({id: data.id, socketId: id, isAdmin:true})
-    console.log('Admin ' + data.id + ' joined')
+function addAdminSocketId(data, id) {
+  if (!data.id) return null;
+  const findId = adminSocketList.find((socket) => data.id === socket.id);
+  if (!findId) {
+    adminSocketList.push({ id: data.id, socketId: id, isAdmin: true });
+    console.log("Admin " + data.id + " joined");
   }
 }
 function removeAdminSocketId(findIndex) {
-  if (findIndex === adminSocketList.length-1)  //if at end of list
+  if (findIndex === adminSocketList.length - 1)
+    //if at end of list
     adminSocketList.pop();
-  else if (findIndex === 0)
-    adminSocketList.shift();
+  else if (findIndex === 0) adminSocketList.shift();
   else
-    adminSocketList = adminSocketList.slice(0,findIndex).join(adminSocketList.slice(findIndex+1));
+    adminSocketList = adminSocketList
+      .slice(0, findIndex)
+      .join(adminSocketList.slice(findIndex + 1));
 }
 function removeSocketId(findIndex) {
-  if (findIndex === socketList.length-1)  //if at end of list
-  socketList.pop();
-  else if (findIndex === 0)
-  socketList.shift();
+  console.log(findIndex);
+  if (findIndex === socketList.length - 1)
+    //if at end of list
+    socketList.pop();
+  else if (findIndex === 0) socketList.shift();
   else
-  socketList = socketList.slice(0,findIndex).join(socketList.slice(findIndex+1));
+    socketList = socketList
+      .slice(0, findIndex)
+      .join(socketList.slice(findIndex + 1));
 }
-io.on('connection',(socket)=>{
-  socket.on('adminConnects',(data)=>{
-    addAdminSocketId(data,socket.id);
-  })
-  socket.on('connects',(data)=>{
-    addSocketId(data,socket.id);
-  })
-  socket.on('data',(studentData)=>{
-    console.log(studentData)
-    db.query(`INSERT INTO notification_message (message,read,student_id,admin_id) VALUES($1,$2,$3,$4) RETURNING *`,
-    [`student ${studentData.studentId} modified profile`,false,studentData.studentId,studentData.tscm_id])
-    .then(res=>{
-      const findObject = adminSocketList.find(socket=> studentData.tscm_id === socket.id)
-      console.log(findObject)
-      if (findObject)
-      {
-        io.to(findObject.socketId).emit('changed',{message: res.rows[0]});
+io.on("connection", (socket) => {
+  socket.on("adminConnects", (data) => {
+    addAdminSocketId(data, socket.id);
+  });
+  socket.on("connects", (data) => {
+    addSocketId(data, socket.id);
+  });
+  socket.on("data", (studentData) => {
+    console.log(studentData);
+    db.query(
+      `INSERT INTO notification_message (message,read,student_id,admin_id) VALUES($1,$2,$3,$4) RETURNING *`,
+      [
+        `${studentData.name} modified profile`,
+        false,
+        studentData.studentId,
+        studentData.tscm_id,
+      ]
+    ).then((res) => {
+      const findObject = adminSocketList.find(
+        (socket) => studentData.tscm_id === socket.id
+      );
+      if (findObject) {
+        io.to(findObject.socketId).emit("changed", { message: res.rows[0] });
       }
-    })
-    
-    
-  })
-  socket.on('disconnect', function () {
-    
-    let findIndex = adminSocketList.findIndex(element=>element.socketId === socket.id)
-    if (findIndex===-1) 
-    {
-      findIndex = socketList.findIndex(element=>element.socketId === socket.id)
-      if (findIndex !==-1) {
-        
+    });
+  });
+  socket.on("disconnect", function () {
+    let findIndex = adminSocketList.findIndex(
+      (element) => element.socketId === socket.id
+    );
+    if (findIndex === -1) {
+      findIndex = socketList.findIndex(
+        (element) => element.socketId === socket.id
+      );
+      if (findIndex !== -1) {
         console.log(`Student ${socketList[findIndex].id} disconnected`);
         removeSocketId(findIndex);
       }
-    }
-    else{
+    } else {
       console.log(`Admin ${adminSocketList[findIndex].id} disconnected`);
       removeAdminSocketId(findIndex);
     }
-    
- });
-})
+  });
+});
 
 //////////////////////////////////////////////////////////////////
 app.use((err, req, res, next) => {
