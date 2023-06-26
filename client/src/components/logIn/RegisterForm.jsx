@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import galvanizeLogo from "./galvanizeLogo.webp";
 import { useNavigate } from "react-router-dom";
 
-function RegisterForm({ setIsStudent }) {
+function RegisterForm({ setIsStudent, url }) { 
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ function RegisterForm({ setIsStudent }) {
     verifyCode,
   };
   // switch between localhost8000 or your deployed site, hard coded career-services for now.
-  const url = "http://localhost:8000";
+ 
   useEffect(() => {
     setOpacity(1);
   }, [opacity]);

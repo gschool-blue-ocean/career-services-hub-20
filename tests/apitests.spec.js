@@ -12,6 +12,8 @@ let hashedPassword;
 let authCode;
 const student_email = `doe${Math.random() * 10}@gmail.com`;
 const student_password = "password";
+const manager_email = "admin@admin.com"
+const manager_password = "admin"
 
 describe("POST /managers", () => {
   it("creates a new manager", async () => {
@@ -45,6 +47,47 @@ describe("POST /managers", () => {
       })
     );
     newManagerId = response.body.tscm_id;
+  });
+});
+
+//Test manager login (valid)
+describe("POST /managers/login", () => {
+  it("logs in as created test manager", async () => {
+    const loginInfo = {
+      email: manager_email,
+      password: manager_password,
+    };
+
+    const response = await request(app)
+      .post("/managers/login")
+      .send(loginInfo)
+      .expect("Content-Type", /json/)
+      .expect(200);
+
+    const token = response.body.token;
+
+    // Check that the manager is returned in the response body
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        token: token,
+      })
+    );
+  });
+});
+
+//Test manager login (invalid)
+describe("POST /managers/login", () => {
+  it("invalid log in as created test manager", async () => {
+    const loginInfo = {
+      email: 'invalid@test.com',
+      password: 'invalidpass',
+    };
+
+    const response = await request(app)
+      .post("/managers/login")
+      .send(loginInfo)
+      .expect("Content-Type", /json/)
+      .expect(401);
   });
 });
 
@@ -116,6 +159,7 @@ describe("POST /students", () => {
   });
 });
 
+//test valid student login
 describe("POST /students/login", () => {
   it("logs in as created test student", async () => {
     const loginInfo = {
@@ -137,6 +181,22 @@ describe("POST /students/login", () => {
         token: token,
       })
     );
+  });
+});
+
+//test invalid student login
+describe("POST /students/login", () => {
+  it("invalid log in as created test student", async () => {
+    const loginInfo = {
+      email: 'invalid@test.com',
+      password: 'invalidpass',
+    };
+
+    const response = await request(app)
+      .post("/students/login")
+      .send(loginInfo)
+      .expect("Content-Type", /json/)
+      .expect(401);
   });
 });
 
