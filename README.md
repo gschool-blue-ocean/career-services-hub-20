@@ -58,20 +58,20 @@ Student Login : Login with the following Email and password or get list of users
 Email: student@student.com
 Password: student
 
-Student Registration: Click the "Register" button in the top right corner of the login page. You will then input the required fields wiht a valid email. You will also need to retrive the authoriztion code from one of the admin accounts to be allowed to register as a new student user. Once you see the registered notification at the bottom of the component, you can then login with the information you used to register.
+Student Registration: Click the "Register" button in the top right corner of the login page. You will then input the required fields with a valid email. You will also need to retrive the authoriztion code from one of the admin accounts to be allowed to register as a new student user. Once you see the registered notification at the bottom of the component, you can then login with the information you used to register.
 
 In the admin view, you will notice that the each student card has a certain color (Red, Yellow or Green). This is determined by the overall status of the career asset "milestones".
 If any of the milestones are "Unsatisfactory", then the card is red
 If none of the milestones are "Unsatisfactory" but atleast one is "In-Progress", then the card is yellow
 Else the card is green because all milestones must be "Completed"
 
-Additionally, if you click a student card then a modal will pop up allowing the user to update anyhting they want about the student using the provided drop down menus. Once the Update Student Button is clicked, the site must be refreshed to see any of the changes.
+Additionally, if you click a student card then a modal will pop up allowing the user to update anything they want about the student using the provided drop down menus. Once the Update Student Button is clicked, the site must be refreshed to see any of the changes.
 
 After logging in as a student, if you navigate to the change my profile tab on the left side of the page, you will see different fields that the user is authorized to edit. Once the user has finshed adding their changes, they can then hit the submit button. Utilizing Socket.io this will then send a notification to the students respective career services mmanager (admin) to notify them that the student has updated their information. The admin has a bell icon in the top right of the page which will show a number for how many unread notifcations they have. By clicking the bell they can display all unread notifications with an option to "mark as read" which will then delete the message from their notifications.
 
-For authorization and authentication, we are utilizing jasonwebtoken. When a user registers, their password is stored in the database after being encrypted using bcrypt. When a user logs in, if the email and password match the information in the databse, they will be given a JWT that is stored in their cookies. This is what allows a user to continue to navigate the web page. When the user logs out or the token expires they will be rerouted to the login page and blocked from accessing the page without re-authentication.
+For authorization and authentication, we are utilizing jsonwebtoken. When a user registers, their password is stored in the database after being encrypted using bcrypt. When a user logs in, if the email and password match the information in the databse, they will be given a JWT that is stored in their cookies. This is what allows a user to continue to navigate the web page. When the user logs out or the token expires they will be rerouted to the login page and blocked from accessing the page without re-authentication.
 
-Also on the mainhub, you can filter for certain students in a variety of ways (MSCP, Security Clearance, Education Background, Milestone Status and Career Service Manager) using the provided drop-down menus. Additionally, there is a search bar that is can be used to type a certin students name (first or last) and the cards container will filter for that student. Additionally, there is an export csv button that will export all CURRENT students being displayed (and will NOT export students that are currently filtered out). Finally, there is a clear filters button that will clear filters and reset the container to show all students cards again.
+Also on the mainhub, you can filter for certain students in a variety of ways (MSCP, Security Clearance, Education Background, Milestone Status and Career Service Manager) using the provided drop-down menus. Additionally, there is a search bar that is can be used to type a certain students name (first or last) and the cards container will filter for that student. Additionally, there is an export csv button that will export all CURRENT students being displayed (and will NOT export students that are currently filtered out). Finally, there is a clear filters button that will clear filters and reset the container to show all students cards again.
 
 ## Automated Testing
 
@@ -109,7 +109,7 @@ Additionally, please note that you need to wait for the API server to be up and 
 
 ## Deploying App (on Render)
 
-Should you choose Render for your deployment of this application then it should be fairly easy. The client side can be launched as a static site with ease, The database can be made and the connection link can be copied for later use, the API server can either be used as a node enviornment or can utilize the docker file to build in a container. You would just need to take the connection link and add it to the API settings in Render.
+Should you choose Render for your deployment of this application then it should be fairly easy. The client side can be launched as a static site with ease, The database can be made and the connection link can be copied for later use. The API server can either be used as a node enviornment or can utilize the docker file to build in a container. You would just need to take the connection link and add it to the API settings in Render.
 
 ## Possible Future Improvements to Consider
 
