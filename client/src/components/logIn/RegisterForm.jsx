@@ -145,4 +145,5 @@ function RegisterForm({ setIsStudent, url }) {
     </div>
   );
 }
+
 export default RegisterForm;

@@ -25,21 +25,20 @@
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 .notificationPanel {
-    position:absolute;
-    transform: translate(10px,30px);
-    padding:20px;
-    background-color: white;
-    border-radius: 20px;
-
+  position: absolute;
+  transform: translate(10px, 30px);
+  padding: 20px;
+  background-color: white;
+  border-radius: 20px;
 }
 .notificationPanel > div {
-    padding:20px;
+  padding: 20px;
 }
 .notificationPanel > div > p {
-    margin:0;
+  margin: 0;
 }
-#viewed-button{
-    text-decoration: underline;
-    color:darkblue;
-    cursor: pointer;
+#viewed-button {
+  text-decoration: underline;
+  color: darkblue;
+  cursor: pointer;
 }
