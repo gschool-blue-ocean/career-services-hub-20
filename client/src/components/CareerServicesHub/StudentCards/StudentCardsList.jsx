@@ -24,6 +24,7 @@ export default function StudentCardslist({
   educationStatus,
   selectedManager,
   isStudent,
+  url,
 }) {
   const studentContext = useContext(StudentsContext);
   let students = studentContext.studentsData;
@@ -95,6 +96,7 @@ export default function StudentCardslist({
                       currentStudents={currentStudents}
                       handleUpdateExistingStudent={handleUpdateExistingStudent}
                       student={student}
+                      url={url}
                     />
                   </div>
                 );

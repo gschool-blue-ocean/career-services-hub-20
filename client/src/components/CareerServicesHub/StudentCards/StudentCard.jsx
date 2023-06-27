@@ -7,6 +7,7 @@ export default function StudentCard({
   currentStudents,
   handleUpdateExistingStudent,
   student,
+  url,
 }) {
   const [milestoneProgress, setMilestoneProgress] = useState("Un-Satisfactory"); // State for milestone progress status
   const [modalToggle, setModalToggle] = useState(false); // State for modal toggle
@@ -72,6 +73,7 @@ export default function StudentCard({
           handleUpdateExistingStudent={handleUpdateExistingStudent}
           handleModalToggle={handleModalToggle}
           student={student}
+          url={url}
         />
       </div>
     </>
