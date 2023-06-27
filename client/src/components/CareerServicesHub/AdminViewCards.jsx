@@ -3,10 +3,10 @@ import Filter from "./Filter/Filter_Com";
 import Export from "./Export";
 import StudentCardsList from "./StudentCards/StudentCardsList";
 import io from "socket.io-client";
-
 import "./AdminViewCards.css";
 import "./Filter/filter.css";
-function AdminViewCards({
+
+export default function AdminViewCards({
   handleLogOff,
   setManagerInfo,
   managerInfo,
@@ -372,10 +372,11 @@ function AdminViewCards({
             selectedManager={selectedManager}
             handleClear={handleClear}
             isStudent={isStudent}
+            url={url}
           />
         </div>
       </div>
     </div>
   );
 }
-export default AdminViewCards;
+// export default AdminViewCards;

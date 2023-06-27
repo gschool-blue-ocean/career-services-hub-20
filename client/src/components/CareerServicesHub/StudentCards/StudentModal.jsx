@@ -7,12 +7,13 @@ export default function StudentModal({
   handleUpdateExistingStudent,
   handleModalToggle,
   student,
+  url,
 }) {
   // URL for API based on the environment (development or production)
-  const url =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:8000"
-      : "https://career-services-lmbc.onrender.com/";
+  // const url =
+  //   process.env.NODE_ENV === "development"
+  //     ? "http://localhost:8000"
+  //     : "https://career-services-lmbc.onrender.com/";
 
   // Hook for the cohort
 
