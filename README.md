@@ -116,6 +116,7 @@ Should you choose Render for your deployment of this application then it should 
 - Have an ability to sort the students on the app in a variety of ways (alphabetically, by Milestone Status, by Cohort, etc.)
 - Once logged in, the app should have a filter automatically set to only display the students tied to that career service manager
 - Create a way for admin's to send notifications to the student, for things like requesting changes or updates about their career services status.
+- The application is coded for mobile viewing on a iPhone 12 through the use of css @media queries to establish specific screen sizes.
 
 ## npm Scripts
 
