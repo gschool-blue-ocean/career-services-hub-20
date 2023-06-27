@@ -6,32 +6,70 @@ The purpose of this project is to present a student/graduate tracker for the Gal
 
 ## Current Architecture
 
-This repo contains an example of a full-stack application with an ExpressJS API backend, a React frontend, and a PostgresSQL database.
+This repo contains an example of a full-stack application utilizing a PERN stack, with an ExpressJS API backend, a React frontend, and a PostgresSQL database.
 
+## Tech Stack
+
+<div style="display: flex; align-items: center;">
+  <a href="https://www.postgresql.org/">
+    <img src="https://skillicons.dev/icons?i=postgres&theme=dark" alt="postgres" />
+  </a>
+  <span style="display: flex; align-items: center; margin-left: 10px;">
+    PostgreSQL: A relational database management system used for storing, managing, and manipulating structured data.
+  </span>
+</div>
+
+<div style="display: flex; align-items: center;">
+  <a href="https://expressjs.com/">
+    <img src="https://skillicons.dev/icons?i=express&theme=dark" alt="express" />
+  </a>
+  <span style="display: flex; align-items: center; margin-left: 10px;">
+    Express.js: A web application framework for Node.js used for building server-side web applications and APIs.
+  </span>
+</div>
+
+<div style="display: flex; align-items: center;">
+  <a href="https://react.dev/">
+    <img src="https://skillicons.dev/icons?i=react&theme=dark" alt="react" />
+  </a>
+  <span style="display: flex; align-items: center; margin-left: 10px;">
+    React: JavaScript library for building interactive UI components for web/mobile applications.
+  </span>
+</div>
+
+<div style="display: flex; align-items: center;">
+  <a href="https://nodejs.org/en">
+    <img src="https://skillicons.dev/icons?i=nodejs&theme=dark" alt="nodeJS" />
+  </a>
+  <span style="display: flex; align-items: center; margin-left: 10px;">
+    Node.js: A runtime environment used to execute JavaScript code on the server-side.
+  </span>
+</div>
+  
 ## Current Features
 
-For Admin Login : Login with the following Email and password or get list of users with localhost/8000/managers once running in Docker.
+Currently, the project has a login page for admin view, the student view and a registration option to register as a new student. In the main-hub, once logged in as an admin, you can see that there is a side bar and a main card container that comprises of all the student cards in the postgresSQL database. Once logged in as a student you will find a read only view of a students information and an option to edit certain fields of the students information. In addition, there is an option to register as a new student which then logs you in as the student once registered.
+
+Admin Login : Login with the following Email and password or get list of users with localhost/8000/managers once running in Docker.
 Email: admin@admin.com
 Password: admin
 
-For Student Login : Login with the following Email and password or get list of users with localhost/8000/students once running in Docker.
+Student Login : Login with the following Email and password or get list of users with localhost/8000/students once running in Docker.
 Email: student@student.com
 Password: student
 
-Currently, the project has a login page for admin view and student view. In the main-hub, once logged in as an admin, you can see that there is a side bar and a main card container that comprises of all the student cards in the postgresSQL database. Once logged in as a student you will find a read only view of a students information. In addition, there is an option to register as a new student which then logs you in as the student once registered.
+Student Registration: Click the "Register" button in the top right corner of the login page. You will then input the required fields wiht a valid email. You will also need to retrive the authoriztion code from one of the admin accounts to be allowed to register as a new student user. Once you see the registered notification at the bottom of the component, you can then login with the information you used to register.
 
-You will also notice that the each student card has a certain color (Red, Yellow or Green). This is determined by the overall status of the career asset "milestones".
+In the admin view, you will notice that the each student card has a certain color (Red, Yellow or Green). This is determined by the overall status of the career asset "milestones".
 If any of the milestones are "Unsatisfactory", then the card is red
 If none of the milestones are "Unsatisfactory" but atleast one is "In-Progress", then the card is yellow
 Else the card is green because all milestones must be "Completed"
 
 Additionally, if you click a student card then a modal will pop up allowing the user to update anyhting they want about the student using the provided drop down menus. Once the Update Student Button is clicked, the site must be refreshed to see any of the changes.
 
-For authorization and authentication, we are utilizing jasonwebtoken. When a user registers, their password is stored in the database after being encrypted using bcrypt. When a user logs in, if the email and password match the information in the databse, they will be given a JWT that is stored in their cookies. This is what allows a user to continue to navigate the web page. When the user logs out or the token expires they will be rerouted to the login page and blocked from accessing the page with out re-authentication.
+After logging in as a student, if you navigate to the change my profile tab on the left side of the page, you will see different fields that the user is authorized to edit. Once the user has finshed adding their changes, they can then hit the submit button. Utilizing Socket.io this will then send a notification to the students respective career services mmanager (admin) to notify them that the student has updated their information. The admin has a bell icon in the top right of the page which will show a number for how many unread notifcations they have. By clicking the bell they can display all unread notifications with an option to "mark as read" which will then delete the message from their notifications.
 
-Finally, in the student cards container you will also a card with a plus-sign, this can be used to add more students to the app. Once clicked, this will open the add-student modal. There are 2 ways to add students, Single-Add (one at a time using the modal) or Bulk-Import (using a imported csv). You can choose between which option using the colored buttons at the top of the student modal (note the button will be highlighted showing which option you are currently in).
-
-For the Bulk-Import, the structure of the import csv is ABSOLUTELY KEY, there must be only 3 columns (Student First, Student Last, Sec Clearance) and in that order. In the Bulk-Import modal there is an example csv template button that once clicked will download an example csv template the user can use and follow to import more students. Once the user fills out the MSCP and Career Service Manager field and clicks submit, a table will pop up in the modal to show what students are about to be added into the database (this allows the user to cancel if anything doesnt look right). If everything looks good, there is a final upload button at the bottom of the table to upload the students to the app. This should happen immediately and all students will be added to the bottom of the card container.
+For authorization and authentication, we are utilizing jasonwebtoken. When a user registers, their password is stored in the database after being encrypted using bcrypt. When a user logs in, if the email and password match the information in the databse, they will be given a JWT that is stored in their cookies. This is what allows a user to continue to navigate the web page. When the user logs out or the token expires they will be rerouted to the login page and blocked from accessing the page without re-authentication.
 
 Also on the mainhub, you can filter for certain students in a variety of ways (MSCP, Security Clearance, Education Background, Milestone Status and Career Service Manager) using the provided drop-down menus. Additionally, there is a search bar that is can be used to type a certin students name (first or last) and the cards container will filter for that student. Additionally, there is an export csv button that will export all CURRENT students being displayed (and will NOT export students that are currently filtered out). Finally, there is a clear filters button that will clear filters and reset the container to show all students cards again.
 
@@ -49,9 +87,9 @@ To start Front-End testing follow the below steps
 3. `run test` - This will run all tests inside the frontend-testing folder
 4. Currently the end-to-end testing and the filter component are being tested
 
-### Back-End
+### Backend
 
-Simple Express server, nothing too complicated or intense on this end. A Docker compose will build the server and have it listen.
+This repository contains a straightforward Express server, designed to provide efficient functionality. The server can be built using Docker compose, allowing it to run seamlessly and listen for incoming requests.
 
 ## Setting Up App Locally (with Docker)
 
@@ -77,6 +115,7 @@ Should you choose Render for your deployment of this application then it should 
 
 - Have an ability to sort the students on the app in a variety of ways (alphabetically, by Milestone Status, by Cohort, etc.)
 - Once logged in, the app should have a filter automatically set to only display the students tied to that career service manager
+- Create a way for admin's to send notifications to the student, for things like requesting changes or updates about their career services status.
 
 ## npm Scripts
 
@@ -104,15 +143,3 @@ Should you choose Render for your deployment of this application then it should 
 
 - `test` - Runs frontend tests
 
-## Tech used
-
-- [`vite`](https://vitejs.dev/) - Module bundler, transpiler and dev server.
-- [`vitest`](https://vitest.dev/) - Test runner.
-- [`prettier`](https://prettier.io/) - Code formatter/checker.
-- [`react-testing-library`](https://testing-library.com/docs/react-testing-library/api/) - React component test helper.
-- [`msw`](https://testing-library.com/docs/react-testing-library/api/) - Request mocking library for writing frontend tests.
-- [`supertest`](https://github.com/ladjs/supertest) - HTTP request simulator for backend testing.
-- [`docker`](https://www.docker.com/) - Containerization framework for dev and deployment.
-- [`jest`](https://jestjs.io/) - testing suite
-- [`JSONwebToken`](https://jwt.io/) - Used for authentication
-- [`bcrypt`](https://www.npmjs.com/package/bcrypt) - Used for password encryption
