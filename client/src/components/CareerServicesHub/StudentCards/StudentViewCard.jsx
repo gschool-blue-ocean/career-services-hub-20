@@ -3,19 +3,20 @@ import { io } from "socket.io-client";
 import galvanizeLogo from "../../logIn/galvanizeLogo.webp";
 import "./StudentViewCard.css";
 
-import StudentChangeCard from "./StudentChangCard";
+import StudentChangeCard from "./StudentChangeCard";
 
 const StudentViewCard = ({ popUpLogOff, handleLogOff, studentInfo, url }) => {
   if (!studentInfo.message) return <div>Loading</div>;
   const socketRef = useRef(null);
   const [currentStudent, setCurrentStudent] = useState({});
   const [studentChange, setStudentChange] = useState(false);
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     socketRef.current = io(url, {
       transports: ["websocket"],
       reconnection: true, // Enable reconnection attempts
-      reconnectionAttempts: 5, // Limit the number of reconnection attempts
+      reconnectionAttempts: 1, // Limit the number of reconnection attempts
       reconnectionDelay: 1000, // Initial delay between reconnection attempts (in milliseconds)
       reconnectionDelayMax: 5000, // Maximum delay between reconnection attempts (in milliseconds)
     });
@@ -42,21 +43,8 @@ const StudentViewCard = ({ popUpLogOff, handleLogOff, studentInfo, url }) => {
       }
     }
     getUser();
-  }, [studentInfo]);
-  const handleSend = () => {
-    if (socketRef.current) {
-      const students = studentInfo.message;
-      console.log(students);
-      console.log(students.tscm_id);
-      socketRef.current.emit("data", {
-        studentId: students.id,
-        tscm_id: students.tscm_id,
-      });
-    }
-  };
-  const changeProfile = () => {
-    setstudentChange(true);
-  };
+  }, [studentInfo, update]);
+  const handleSend = () => {};
   return (
     <>
       <div className="container">
@@ -70,7 +58,8 @@ const StudentViewCard = ({ popUpLogOff, handleLogOff, studentInfo, url }) => {
           <div className="dropdown">
             <button className="dropbtn">Menu</button>
             <div className="dropdown-content">
-              <a onClick={changeProfile}>Change My Profile</a>
+              <a onClick={() => setStudentChange(false)}>My Profile</a>
+              <a onClick={() => setStudentChange(true)}>Change My Profile</a>
               <a onClick={() => handleSend()}>Notification</a>
               <a onClick={handleLogOff}>Log Out</a>
             </div>
@@ -81,112 +70,125 @@ const StudentViewCard = ({ popUpLogOff, handleLogOff, studentInfo, url }) => {
             <div style={{ paddingLeft: "50px" }}>
               <h1>Settings</h1>
               <hr />
-              <p>My Profile</p>
-              <p onClick={changeProfile}>Change My Profile</p>
+              <p onClick={() => setStudentChange(false)}>My Profile</p>
+              <p onClick={() => setStudentChange(true)}>Change My Profile</p>
               <p onClick={() => handleSend()}>Notification</p>
               <p onClick={handleLogOff}>Log Out</p>
             </div>
           </nav>
-          <div className="student-profile-data">
-            <div className="profile-background-img">
-              <img src="https://th.bing.com/th/id/R.b173d064715990e210a19f080fde122a?rik=wyy2%2bsDxPMBAGA&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f3%2fe%2fc%2f563599.jpg&ehk=IIlQVDqUjTmsDGCECQSTU1ogn28Flsaf2OWi74E3Ubk%3d&risl=&pid=ImgRaw&r=0"></img>
-            </div>
-            <div className="profile-info">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="0"
-                viewBox="0 0 448 448"
-              >
-                <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
-              </svg>
-              <div className="profile-info-data">
-                <h1 style={{ margin: 0 }}>
-                  {currentStudent.student_first} {currentStudent.student_last}
-                </h1>
-                <p style={{ color: "var(--student-text-secondary-color)" }}>
-                  No Comments here
-                </p>
+          {studentChange ? (
+            <StudentChangeCard
+              currentStudent={currentStudent}
+              socketRef={socketRef}
+              url={url}
+              setUpdate={setUpdate}
+            />
+          ) : (
+            <div className="student-profile-data">
+              <div className="profile-background-img">
+                <img src="https://th.bing.com/th/id/R.b173d064715990e210a19f080fde122a?rik=wyy2%2bsDxPMBAGA&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2f3%2fe%2fc%2f563599.jpg&ehk=IIlQVDqUjTmsDGCECQSTU1ogn28Flsaf2OWi74E3Ubk%3d&risl=&pid=ImgRaw&r=0"></img>
               </div>
-            </div>
-            <div className="student-card-item">
-              <h3>My Information</h3>
-              <div>
-                <div>
-                  <h5>First Name</h5>
-                  <p>{currentStudent.student_first}</p>
-                </div>
-                <div>
-                  <h5>Last Name</h5>
-                  <p>{currentStudent.student_last}</p>
-                </div>
-                <div>
-                  <h5>Cohort</h5>
-                  <p>{currentStudent.personal_narrative}</p>
-                </div>
-                <div>
-                  <h5>Security Clearance</h5>
-                  <p>{currentStudent.sec_clearance}</p>
+              <div className="profile-info">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="1em"
+                  viewBox="0 0 448 512"
+                >
+                  <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
+                </svg>
+                <div className="profile-info-data">
+                  <h1 style={{ margin: 0 }}>
+                    {currentStudent.student_first} {currentStudent.student_last}
+                  </h1>
+                  <p style={{ color: "var(--student-text-secondary-color)" }}>
+                    No Comments here
+                  </p>
                 </div>
               </div>
-            </div>
+              <div className="student-card-item">
+                <h3>My Information</h3>
+                <div>
+                  <div>
+                    <h5>First Name</h5>
+                    <p>{currentStudent.student_first}</p>
+                  </div>
+                  <div>
+                    <h5>Last Name</h5>
+                    <p>{currentStudent.student_last}</p>
+                  </div>
+                  <div>
+                    <h5>Cohort</h5>
+                    <p>{currentStudent.personal_narrative}</p>
+                  </div>
+                  <div>
+                    <h5>Security Clearance</h5>
+                    <p>{currentStudent.sec_clearance}</p>
+                  </div>
+                </div>
+              </div>
 
-            <div className="student-card-item">
-              <h3>TSCM Information</h3>
-              <div>
+              <div className="student-card-item">
+                <h3>TSCM Information</h3>
                 <div>
-                  <h5>First Name</h5>
-                  <p>{currentStudent.tscm_first}</p>
-                </div>
-                <div>
-                  <h5>Last Name</h5>
-                  <p>{currentStudent.tscm_last}</p>
-                </div>
-                <div>
-                  <h5>Email</h5>
-                  <p>{currentStudent.tscm_email}</p>
+                  <div>
+                    <h5>First Name</h5>
+                    <p>{currentStudent.tscm_first}</p>
+                  </div>
+                  <div>
+                    <h5>Last Name</h5>
+                    <p>{currentStudent.tscm_last}</p>
+                  </div>
+                  <div>
+                    <h5>Email</h5>
+                    <p>{currentStudent.tscm_email}</p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="student-card-item">
-              <h3>Additional Information</h3>
-              <div>
+              <div className="student-card-item">
+                <h3>Additional Information</h3>
                 <div>
-                  <h5>Education Level</h5>
-                  <p>{currentStudent.college_degree}</p>
+                  <div>
+                    <h5>Education Level</h5>
+                    <p>{currentStudent.college_degree}</p>
+                  </div>
+                  <div>
+                    <h5>Course Standing</h5>
+                    <p>{currentStudent.course_status}</p>
+                  </div>
+                  <div>
+                    <h5>Personal Narrative</h5>
+                    <p>{currentStudent.personal_narrative}</p>
+                  </div>
+                  <div>
+                    <h5>Career Status</h5>
+                    <p>{currentStudent.career_status}</p>
+                  </div>
                 </div>
+              </div>
+              <div className="student-card-item">
+                <h3>My Resources</h3>
                 <div>
-                  <h5>Course Standing</h5>
-                  <p>{currentStudent.course_status}</p>
-                </div>
-                <div>
-                  <h5>Personal Narrative</h5>
-                  <p>{currentStudent.personal_narrative}</p>
+                  <div>
+                    <h5>Cover Letter</h5>
+                    <p>{currentStudent.cover_letter}</p>
+                  </div>
+                  <div>
+                    <h5>Resume</h5>
+                    <p>{currentStudent.resume}</p>
+                  </div>
+                  <div>
+                    <h5>LinkedIn Account</h5>
+                    <p>{currentStudent.linkedin}</p>
+                  </div>
+                  <div>
+                    <h5>Hunter Account</h5>
+                    <p>{currentStudent.hunter_access}</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="student-card-item">
-              <h3>My Resources</h3>
-              <div>
-                <div>
-                  <h5>Cover Letter</h5>
-                  <p>{currentStudent.cover_letter}</p>
-                </div>
-                <div>
-                  <h5>Resume</h5>
-                  <p>{currentStudent.resume}</p>
-                </div>
-                <div>
-                  <h5>LinkedIn Account</h5>
-                  <p>{currentStudent.linkedin}</p>
-                </div>
-                <div>
-                  <h5>Hunter Account</h5>
-                  <p>{currentStudent.hunter_access}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </>
