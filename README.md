@@ -52,6 +52,8 @@ The application is currently deployed to Render at https://career-services-front
 
 Currently, the project has a login page for admin view, the student view and a registration option to register as a new student. In the main-hub, once logged in as an admin, you can see that there is a side bar and a main card container that comprises of all the student cards in the postgresSQL database. Once logged in as a student you will find a read only view of a students information and an option to edit certain fields of the students information. In addition, there is an option to register as a new student which then logs you in as the student once registered.
 
+![new admin login page - Copy](https://github.com/gschool-blue-ocean/career-services-hub-20/assets/119142209/53a0fa6b-53ea-42bb-aa29-2677262102e9)
+
 Admin Login : Login with the following Email and password or get list of users with localhost/8000/managers once running in Docker.
 Email: admin@admin.com
 Password: admin
@@ -60,7 +62,13 @@ Student Login : Login with the following Email and password or get list of users
 Email: student@student.com
 Password: student
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Student Registration: Click the "Register" button in the top right corner of the login page. You will then input the required fields with a valid email. You will also need to retrive the authoriztion code from one of the admin accounts to be allowed to register as a new student user. Once you see the registered notification at the bottom of the component, you can then login with the information you used to register.
+
+![new registration view](https://github.com/gschool-blue-ocean/career-services-hub-20/assets/119142209/88205fb8-b79b-42cc-847f-2cbd6af408cf)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 In the admin view, you will notice that the each student card has a certain color (Red, Yellow or Green). This is determined by the overall status of the career asset "milestones".
 If any of the milestones are "Unsatisfactory", then the card is red
@@ -69,7 +77,27 @@ Else the card is green because all milestones must be "Completed"
 
 Additionally, if you click a student card then a modal will pop up allowing the user to update anything they want about the student using the provided drop down menus. Once the Update Student Button is clicked, the site must be refreshed to see any of the changes.
 
+![new admin view](https://github.com/gschool-blue-ocean/career-services-hub-20/assets/119142209/6240b55e-9e10-4b47-8526-166384090160)
+
+Admin View Filtered:
+
+![admin view filtered](https://github.com/gschool-blue-ocean/career-services-hub-20/assets/119142209/a241a916-c409-4ee3-b0ec-b25af6ebcb6a)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 After logging in as a student, if you navigate to the change my profile tab on the left side of the page, you will see different fields that the user is authorized to edit. Once the user has finshed adding their changes, they can then hit the submit button. Utilizing Socket.io this will then send a notification to the students respective career services mmanager (admin) to notify them that the student has updated their information. The admin has a bell icon in the top right of the page which will show a number for how many unread notifcations they have. By clicking the bell they can display all unread notifications with an option to "mark as read" which will then delete the message from their notifications.
+
+![new student view (read only)](https://github.com/gschool-blue-ocean/career-services-hub-20/assets/119142209/ef0baca7-ed5f-463a-99fa-321cec07ba35)
+
+Edit Student Info:
+
+![new student view (edit info)](https://github.com/gschool-blue-ocean/career-services-hub-20/assets/119142209/390e042f-6624-4dca-ade3-e1bcd62697c2)
+
+Admin Notification:
+
+![STUDENT EDITED PROFILE NOTI](https://github.com/gschool-blue-ocean/career-services-hub-20/assets/119142209/404e3267-5ef1-42ec-9966-61329152b374)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 For authorization and authentication, we are utilizing jsonwebtoken. When a user registers, their password is stored in the database after being encrypted using bcrypt. When a user logs in, if the email and password match the information in the databse, they will be given a JWT that is stored in their cookies. This is what allows a user to continue to navigate the web page. When the user logs out or the token expires they will be rerouted to the login page and blocked from accessing the page without re-authentication.
 
