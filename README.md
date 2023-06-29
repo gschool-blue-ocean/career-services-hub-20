@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The purpose of this project was to take an existing application, then meet with a client to discuss new features and expectations for the final product. The application innitially consisted of a managers login page which allowed the career services manager to view the status of their students job search process, with the ability to filter the students based on their cohort and milestone status. There are 5 milestones being tracked for every student/graduate: Resume, Cover Letter, LinkedIn Profile, Huntr Access, and Personal Narrative. The team was then resposible for adding additional features consisting of a student login, a student view page, a registration for new students and many more behind the scenes features that will be further explained down below.
+The purpose of this project was to take an existing application, then meet with a client to discuss new features and expectations for the final product. The application initially consisted of a managers login page which allowed the career services manager to view the status of their student's job search process, with the ability to filter the students based on their cohort and milestone status. There are 5 milestones being tracked for every student/graduate: Resume, Cover Letter, LinkedIn Profile, Huntr Access, and Personal Narrative. The team was then resposible for adding additional features consisting of a student login, a student view page, a registration for new students and many more behind the scenes features that will be further explained down below.
 
 ## Current Architecture
 
