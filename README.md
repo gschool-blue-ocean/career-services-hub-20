@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The purpose of this project is to present a student/graduate tracker for the Galvanize career service managers so that they can more easily track the status of each Galvanize student/graduate. Specically, tracking the status of the career asset "milestones". There are 5 milestones being tracked for every student/graduate: Resume, Cover Letter, LinkedIn Profile, Huntr Access, and Personal Narrative.
+The purpose of this project was to take an existing application, then meet with a client to discuss new features and expectations for the final product. The application innitially consisted of a managers login page which allowed the career services manager to view the status of their students job search process, with the ability to filter the students based on their cohort and milestone status. There are 5 milestones being tracked for every student/graduate: Resume, Cover Letter, LinkedIn Profile, Huntr Access, and Personal Narrative. The team was then resposible for adding additional features consisting of a student login, a student view page, a registration for new students and many more behind the scenes features that will be further explained down below.
 
 ## Current Architecture
 
@@ -47,6 +47,8 @@ This repo contains an example of a full-stack application utilizing a PERN stack
 </div>
   
 ## Current Features
+
+The application is currently deployed to Render at https://career-services-frontend.onrender.com/
 
 Currently, the project has a login page for admin view, the student view and a registration option to register as a new student. In the main-hub, once logged in as an admin, you can see that there is a side bar and a main card container that comprises of all the student cards in the postgresSQL database. Once logged in as a student you will find a read only view of a students information and an option to edit certain fields of the students information. In addition, there is an option to register as a new student which then logs you in as the student once registered.
 
