@@ -48,11 +48,7 @@
 .clear-filter-button:hover,
 .clear-filter-button:active {
   cursor: pointer;
-  background: linear-gradient(
-    135deg,
-    rgba(21, 4, 89, 1) 30%,
-    rgba(247, 130, 24, 1) 125%
-  );
+  transform: scale(1.05);
   transition: ease 0.4s;
 }
 

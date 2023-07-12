@@ -1,36 +1,33 @@
 .student-card {
   color: white;
-  height: 110px;
-  width: 140px;
-  border: none;
+  height: 10em;
+  width: 7em;
   padding: 5%;
   text-align: center;
   font-family: "kelsonsans-light";
   border-radius: 10px;
-  margin: 5px;
+  margin-bottom: 10px;
+  margin-right: 25px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .un-satisfactory-card {
-  background-color: rgb(120, 0, 0);
+  border: 4px solid rgb(207, 45, 45);
+  
 }
 
 .in-progress-card {
-  background-color: rgb(170, 100, 0);
+   border: 4px solid rgb(214, 136, 25);
 }
 
 .completed-card {
-  background-color: rgb(0, 87, 0);
+  border: 4px solid rgb(19, 134, 19);
 }
 
 .student-card:hover {
   cursor: pointer;
   transform: scale(1.05);
-  background: linear-gradient(
-    135deg,
-    rgba(21, 4, 89, 1) 30%,
-    rgba(247, 130, 24, 1) 125%
-  );
   transition: ease 0.4s;
 }
 

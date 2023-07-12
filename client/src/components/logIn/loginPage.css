@@ -1,6 +1,6 @@
 .login-Container {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -81,7 +81,7 @@
 }
 
 .error-message {
-  color: white;
+  color: black;
 }
 
 .easter-egg {
@@ -164,4 +164,10 @@
     height: 100vh;
     overflow: hidden;
   }
+}
+
+
+.login-logo{
+  width: 50vw;
+  margin-bottom: 20px;
 }

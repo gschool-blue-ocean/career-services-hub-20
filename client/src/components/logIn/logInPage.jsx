@@ -129,7 +129,13 @@ const LogInPage = ({
 
       <div className="login-background">
         <form className="login-Container" onSubmit={handleUserLogin}>
-          <img src={galvanizeLogo}></img>
+          <img
+            className="login-logo"
+            alt="logo"
+            src={
+              "https://www.galvanize.com/wp-content/uploads/2022/11/galvanize_logo_full-color_light-background.png"
+            }
+          ></img>
           <input
             className="login-value"
             value={email}

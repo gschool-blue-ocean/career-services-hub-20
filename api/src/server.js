@@ -273,18 +273,19 @@ function generateRandomCode(length) {
 }
 
 app.post("/managers", async (req, res, next) => {
-  const firstName = req.body.tscm_first;
-  const lastName = req.body.tscm_last;
-  const login_id = req.body.login_id;
-  const password = req.body.tscm_password;
-  const email = req.body.tscm_email;
-  const avatar = req.body.tscm_avatar;
+  const firstName = req.body.first;
+  const lastName = req.body.last;
+  const login_id = req.body.email;
+  const password = req.body.pass;
+  const email = req.body.email;
+  const avatar = null;
   const code = generateRandomCode(8);
 
+  const hashedPassword = bcrypt.hashSync(password, 10);
   const result = await db
     .query(
       "INSERT INTO service_manager(tscm_first, tscm_last, login_id, tscm_password, tscm_email, tscm_avatar, tscm_code) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-      [firstName, lastName, login_id, password, email, avatar, code]
+      [firstName, lastName, login_id, hashedPassword, email, avatar, code]
     )
     .catch(next);
   res.send(result.rows[0]);

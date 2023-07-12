@@ -11,6 +11,7 @@ function RegisterForm({ setIsStudent, url }) {
   const [confirmpass, setConfirmpass] = useState("");
   const [verifyCode, setVerifyCode] = useState("");
   const [opacity, setOpacity] = useState(0);
+  const [manager, setManager] = useState(false);
   const nav = useNavigate();
   const form = {
     first,
@@ -26,25 +27,52 @@ function RegisterForm({ setIsStudent, url }) {
     setOpacity(1);
   }, [opacity]);
 
+  useEffect(() => {
+    console.log(manager);
+  }, [manager]);
+
+  const handleCheck = () => {
+    setManager(!manager);
+  };
+
   const register = () => {
     const fetchData = async () => {
-      const response = await fetch(`${url}/students`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          first,
-          last,
-          email,
-          pass,
-          verifyCode,
-        }),
-      });
-      const result = await response.json();
-
-      if (!response.ok) setErrorRelay(result.message);
-      else {
-        setErrorRelay("You have successfully registered");
-        console.log(result);
+      if (manager) {
+        const response = await fetch(`${url}/managers`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            first,
+            last,
+            email,
+            pass,
+            verifyCode,
+          }),
+        });
+        const result = await response.json();
+        if (!response.ok) setErrorRelay(result.message);
+        else {
+          setErrorRelay("You have successfully registered");
+          console.log(result);
+        }
+      } else {
+        const response2 = await fetch(`${url}/students`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            first,
+            last,
+            email,
+            pass,
+            verifyCode,
+          }),
+        });
+        const result = await response2.json();
+        if (!response.ok) setErrorRelay(result.message);
+        else {
+          setErrorRelay("You have successfully registered");
+          console.log(result);
+        }
       }
     };
     fetchData();
@@ -132,6 +160,14 @@ function RegisterForm({ setIsStudent, url }) {
               placeholder="Enter Verification Code"
               id="verifyCode"
             ></input>
+            <label>
+              <input
+                type="checkbox"
+                className="manager_input"
+                onChange={handleCheck}
+              ></input>
+              I am a Career Service Manager
+            </label>
 
             <button className="login-button">Register</button>
             {errorRelay ? (

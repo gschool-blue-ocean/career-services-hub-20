@@ -10,19 +10,17 @@
   align-items: center;
 }
 
-.body_container {
-  display: flex;
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
-}
-
 .left_container {
   flex: 0 0 auto;
   padding-right: 0px;
   display: flex;
+  flex-direction: column;
   font-family: "KelsonSans-Bold";
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  height: fit-content;
+  width: 13.5em;
+  min-width: fit-content;
 }
 .login-popup {
   position: absolute;
@@ -55,20 +53,22 @@
 
 /*For mobile view to work correctly, right_container and collapsed view need to be identical here... sorry for the hacky solution */
 .right_container {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  width: 100vw;
-  margin: 0px;
+  width: 75vw;
+  min-height: 80vh;
+  height: fit-content;
   padding: 0px;
-  background-color: rgba(0, 0, 0, 0.3);
+  min-width: fit-content;
+  margin-right: 5px;
+  display: flex;
+  flex-direction: column;
 }
 .collapsed-right-container {
-  flex: 1 1 auto;
-  overflow-y: auto;
   width: 100vw;
-  margin: 0px;
-  padding: 0px;
-  background-color: rgba(0, 0, 0, 0.3);
+  min-height: 80vh;
+  height: fit-content;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .collapse-filter-button {
@@ -94,7 +94,6 @@
 .left-container-filters {
   text-align: left;
   display: inline-block;
-  width: 100%;
   height: 100%;
   overflow: auto;
 }

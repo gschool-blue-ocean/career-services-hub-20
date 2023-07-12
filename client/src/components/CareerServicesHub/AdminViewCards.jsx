@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import Filter from "./Filter/Filter_Com";
 import Export from "./Export";
 import StudentCardsList from "./StudentCards/StudentCardsList";
 import io from "socket.io-client";
 import "./AdminViewCards.css";
 import "./Filter/filter.css";
+import { FieldsContext } from "../../context/fieldsContext";
 
-export default function AdminViewCards({
+function AdminViewCards({
   handleLogOff,
   setManagerInfo,
   managerInfo,
@@ -15,8 +16,9 @@ export default function AdminViewCards({
   galvanizeLogo,
   isStudent,
   opacity,
-}) {
-  if (!managerInfo) return <div>Loading</div>;
+}) 
+
+  {  if (!managerInfo) return <div>Loading</div>; 
   const [toggleFiltersBar, setToggleFiltersBar] = useState(true);
   const [messageList, setMessageList] = useState([]);
   const [showNotify, setShowNotify] = useState(false);
@@ -40,6 +42,12 @@ export default function AdminViewCards({
   const socketRef = useRef(null);
   const buttonRef = useRef(null);
   console.log(socketRef);
+
+  //state to display MCSP cohorts to choose from and to be the landing page of the admin view
+  let [selectedCohort, SetSelectedCohort] = useState("");
+  let fieldsContext = useContext(FieldsContext);
+  let cohorts = fieldsContext.fieldsData.cohort;
+  console.log(cohorts);
 
   useEffect(() => {
     if (managerInfo.id) {
@@ -171,6 +179,16 @@ export default function AdminViewCards({
 
     return filteredStudent;
   };
+  const handleCohortSelect = (e, cohortValue) => { 
+    console.log(cohortValue);
+    setCurrentCohort(cohortValue);
+    SetSelectedCohort(cohortValue);
+  };
+
+  const handleAllCohorts = () => {
+    const all = "all"
+    SetSelectedCohort(all)
+  };
 
   const handleRead = (index) => {
     console.log(index);
@@ -229,6 +247,12 @@ export default function AdminViewCards({
         </div>
       ) : null}
       <div className="admin-view-notification">
+        <img
+          className="logo"
+          src={
+            "https://www.galvanize.com/wp-content/uploads/2022/11/galvanize_logo_full-color_light-background.png"
+          }
+        ></img>
         <div
           id="notification-bell"
           onClick={() => setShowNotify((prev) => !prev)}
@@ -267,17 +291,41 @@ export default function AdminViewCards({
           </div>
         )}
       </div>
-      <div className="body_container">
-        <div className="left_container">
-          <div
-            className={
-              toggleFiltersBar
-                ? "left-container-filters"
-                : "collapsed-filters-container"
-            }
-          >
-            <img className="logo" src={galvanizeLogo}></img>
-
+      {selectedCohort === "" && currentCohort === "" ? (
+        <div className="body_container">
+          {cohorts.map((cohort, index) => {
+            return (
+              <div className="cohort-container">
+                <div
+                  className="cohort-card"
+                  key={index}
+                  value={cohort}
+                  onClick={(e) => handleCohortSelect(e, cohort)}
+                >
+                  <div
+                    key={index}
+                    value={cohort}
+                    className="cohort-selector"
+                    onClick={(e) => handleCohortSelect(e, cohort)}
+                  >
+                    {cohort}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          <button className="all-cohort-button" onClick={handleAllCohorts}>View all cohorts</button>
+        </div>
+      ) : (
+        <div className="body_container">
+          <div className="left_container">
+            <div
+              className={
+                toggleFiltersBar
+                  ? "left-container-filters"
+                  : "collapsed-filters-container"
+              }
+            />
             <Filter
               setSearchTerm={setSearchTerm}
               searchTerm={searchTerm}
@@ -339,44 +387,47 @@ export default function AdminViewCards({
                 Logout
               </button>
             </div>
+
+            <button
+              className="collapse-filter-button"
+              onClick={handleFilterToggle}
+            >
+              {" "}
+              &#8646;{" "}
+            </button>
           </div>
-          <button
-            className="collapse-filter-button"
-            onClick={handleFilterToggle}
+          <div
+            className={
+              toggleFiltersBar ? "collapsed-right-container" : "right_container"
+            }
           >
-            {" "}
-            &#8646;{" "}
-          </button>
+            <StudentCardsList
+              filterStudents={filterStudents}
+              currentCohort={currentCohort}
+              coverLetter={coverLetter}
+              currentCoverStatus={currentCoverStatus}
+              studentResume={studentResume}
+              currentResumeStatus={currentResumeStatus}
+              linkedAccount={linkedAccount}
+              linkedAccountStatus={linkedAccountStatus}
+              personalNarrative={personalNarrative}
+              narrativeStatus={narrativeStatus}
+              hunterAccess={hunterAccess}
+              currentAccess={currentAccess}
+              currentStatus={currentStatus}
+              currentClearance={currentClearance}
+              educationStatus={educationStatus}
+              selectedManager={selectedManager}
+              handleClear={handleClear}
+              isStudent={isStudent}
+              url={url}
+            />
+          </div>
         </div>
-        <div
-          className={
-            toggleFiltersBar ? "collapsed-right-container" : "right_container"
-          }
-        >
-          <StudentCardsList
-            filterStudents={filterStudents}
-            currentCohort={currentCohort}
-            coverLetter={coverLetter}
-            currentCoverStatus={currentCoverStatus}
-            studentResume={studentResume}
-            currentResumeStatus={currentResumeStatus}
-            linkedAccount={linkedAccount}
-            linkedAccountStatus={linkedAccountStatus}
-            personalNarrative={personalNarrative}
-            narrativeStatus={narrativeStatus}
-            hunterAccess={hunterAccess}
-            currentAccess={currentAccess}
-            currentStatus={currentStatus}
-            currentClearance={currentClearance}
-            educationStatus={educationStatus}
-            selectedManager={selectedManager}
-            handleClear={handleClear}
-            isStudent={isStudent}
-            url={url}
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
-}
-// export default AdminViewCards;
+};
+
+        
+export default AdminViewCards;

@@ -1,10 +1,12 @@
 .student-card-container {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
   width: 100%;
   border: none;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  /* grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); */
   align-content: start;
-  justify-content: space-around;
+  /* justify-content: space-around; */
 }
 
 .student-card-container::-webkit-scrollbar {

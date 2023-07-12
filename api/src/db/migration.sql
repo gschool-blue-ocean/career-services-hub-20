@@ -1,27 +1,27 @@
 DROP TABLE IF EXISTS student, service_manager, calendar, notification_message;
-CREATE TYPE status AS ENUM ('In-Progress', 'Completed', 'Un-Satisfactory');
-CREATE TYPE education AS ENUM ('Undetermined',
-  'None',
-  'Associate in CS/STEM',
-  'Associate Not in CS/STEM',
-  'Bachelor in CS/STEM',
-  'Bachelor Not in CS/STEM',
-  'Masters in CS/STEM',
-  'Masters Not in CS/STEM');
+-- CREATE TYPE status AS ENUM ('In-Progress', 'Completed', 'Un-Satisfactory');
+-- CREATE TYPE education AS ENUM ('Undetermined',
+--   'None',
+--   'Associate in CS/STEM',
+--   'Associate Not in CS/STEM',
+--   'Bachelor in CS/STEM',
+--   'Bachelor Not in CS/STEM',
+--   'Masters in CS/STEM',
+--   'Masters Not in CS/STEM');
 
-CREATE TYPE career AS ENUM ('Searching', 'Hired', 'Not Currently Searching');
+-- CREATE TYPE career AS ENUM ('Searching', 'Hired', 'Not Currently Searching');
 
-CREATE TYPE course AS ENUM ('Student', 'Graduate');
+-- CREATE TYPE course AS ENUM ('Student', 'Graduate');
 
 CREATE TABLE service_manager (
-  tscm_id SERIAL PRIMARY KEY NOT NULL,
+  tscm_id SERIAL PRIMARY KEY ,
   tscm_first VARCHAR(50) NOT NULL,
   tscm_last VARCHAR(50) NOT NULL,
   login_id VARCHAR(50) NOT NULL,
   tscm_password TEXT NOT NULL,
   tscm_email TEXT NOT NULL,
   tscm_avatar TEXT,
-  tscm_code VARCHAR(15) NOT NULL
+  tscm_code TEXT
 );
 CREATE TABLE notification_message (
   id serial PRIMARY KEY NOT NULL,
@@ -47,8 +47,9 @@ CREATE TABLE student (
   linkedin status,
   personal_narrative status,
   hunter_access status,
-  tscm_id INTEGER NOT NULL,
-  FOREIGN KEY (tscm_id) REFERENCES service_manager (tscm_id)
+  tscm_id INTEGER,
+  FOREIGN KEY (tscm_id) REFERENCES service_manager(tscm_id)
+  
 );
 
 CREATE TABLE calendar (

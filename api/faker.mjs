@@ -160,7 +160,7 @@ const seedStudents = async () => {
       progress_stat[Math.floor(Math.random() * 3)],
       progress_stat[Math.floor(Math.random() * 3)],
       progress_stat[Math.floor(Math.random() * 3)],
-      faker.datatype.number({ min: 1, max: SEED_CAREER_MANAGER }),
+      faker.datatype.number({ min: 1, max: 1 }),
     ]);
     console.log("Students seeded successfully");
   } catch (err) {
@@ -198,7 +198,7 @@ const seedServiceManager = async () => {
       process.env.PASSWD,
       process.env.ADMIN_EMAIL,
       faker.internet.avatar(),
-      faker.random.alphaNumeric(8),
+      "eghhf",
     ]);
     //For each manager, query SQL database with INSERT statement to add manager
     for (let i = 0; i < SEED_CAREER_MANAGER; i++) {
